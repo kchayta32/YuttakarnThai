@@ -177,14 +177,19 @@ function initLazyLoading() {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const img = entry.target;
-
-                    // Add loading animation
-                    img.style.opacity = '0';
                     img.style.transition = 'opacity 0.5s ease';
 
-                    img.onload = () => {
+                    // Check if image is already loaded
+                    if (img.complete && img.naturalWidth > 0) {
+                        // Image already loaded, show immediately
                         img.style.opacity = '1';
-                    };
+                    } else {
+                        // Image still loading, fade in when ready
+                        img.style.opacity = '0';
+                        img.onload = () => {
+                            img.style.opacity = '1';
+                        };
+                    }
 
                     imageObserver.unobserve(img);
                 }
