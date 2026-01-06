@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTS: ยุทธการไทย - Game Storybook</title>
+    <meta name="description"
+        content="สตอรี่บุ๊คเกม RTS: ยุทธการไทย - เกมกลยุทธ์เรียลไทม์ที่พาคุณไปสู่สมรภูมิประวัติศาสตร์ไทย 9 ยุค">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">⚔️</span>
+                <span class="logo-text">ยุทธการไทย</span>
+            </a>
+            <button class="mobile-menu-btn" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#overview">ภาพรวม</a></li>
+                <li><a href="#campaigns">แคมเปญ</a></li>
+                <li><a href="#units">หน่วยรบ</a></li>
+                <li><a href="#gameplay">ระบบเกม</a></li>
+                <li><a href="#features">คุณสมบัติ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+        <div class="hero-overlay"></div>
+        <img src="images/hero.png" alt="RTS ยุทธการไทย Hero" class="hero-image">
+        <div class="hero-content">
+            <div class="hero-badge">Historical Real-Time Strategy</div>
+            <h1 class="hero-title">
+                <span class="title-main">RTS: ยุทธการไทย</span>
+                <span class="title-sub">Yutthakan Thailand</span>
+            </h1>
+            <p class="hero-description">
+                พลิกประวัติศาสตร์ไทย 9 ยุคสมัย จากสงครามช้างเผือกถึงปฏิบัติการอนาคต
+                <br>บัญชาการกองทัพ วางกลยุทธ์ และพิชิตสมรภูมิ
+            </p>
+            <div class="hero-buttons">
+                <a href="#campaigns" class="btn btn-primary">สำรวจแคมเปญ</a>
+                <a href="#gameplay" class="btn btn-secondary">ดูระบบเกม</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">9</span>
+                    <span class="stat-label">แคมเปญ</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">ปี</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">หน่วยรบ</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>เลื่อนลง</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="section overview-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Game Overview</span>
+                <h2 class="section-title">ภาพรวมเกม</h2>
+                <p class="section-subtitle">เกมกลยุทธ์เรียลไทม์ที่พาคุณย้อนรอยประวัติศาสตร์การทหารไทย</p>
+            </div>
+
+            <div class="overview-grid">
+                <div class="overview-card glass-card">
+                    <div class="card-icon">📜</div>
+                    <h3>ความแม่นยำทางประวัติศาสตร์</h3>
+                    <p>เครื่องแบบ อาวุธ และยุทธวิธีอ้างอิงจากพิพิธภัณฑ์กองทัพไทย พร้อม "Museum Mode" ให้ความรู้เพิ่มเติม
+                    </p>
+                </div>
+                <div class="overview-card glass-card">
+                    <div class="card-icon">⚔️</div>
+                    <h3>วิวัฒนาการสงคราม</h3>
+                    <p>จากช้างศึกและดาบในปี 1547 สู่ยุคโดรนและยานเกราะในปี 2025 กลไกเปลี่ยนตามยุคสมัย</p>
+                </div>
+                <div class="overview-card glass-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>กลยุทธ์เชิงลึก</h3>
+                    <p>ระบบ Rock-Paper-Scissors, ภูมิประเทศให้ข้อได้เปรียบ, ระบบขวัญกำลังใจ และการจัดการทรัพยากร</p>
+                </div>
+                <div class="overview-card glass-card">
+                    <div class="card-icon">🎓</div>
+                    <h3>คุณค่าทางการศึกษา</h3>
+                    <p>เหมาะสำหรับผู้ชื่นชอบประวัติศาสตร์และการศึกษาในระดับมัธยมถึงมหาวิทยาลัย</p>
+                </div>
+            </div>
+
+            <div class="executive-summary glass-card">
+                <div class="summary-content">
+                    <h3>Executive Summary</h3>
+                    <p><strong>RTS: Yutthakan Thailand</strong> เป็นเกมกลยุทธ์เรียลไทม์ผู้เล่นคนเดียว
+                        ที่พาผู้เล่นผ่านความขัดแย้งทางทหารและการเมืองที่สำคัญ 9 ครั้งในประวัติศาสตร์ไทย ตั้งแต่ศตวรรษที่
+                        16 จนถึงสถานการณ์สมมติในอนาคตอันใกล้ เกมเน้นความสมจริงเชิงยุทธวิธี ความถูกต้องทางประวัติศาสตร์
+                        และการจัดการทรัพยากรเชิงกลยุทธ์</p>
+                </div>
+                <div class="summary-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">แพลตฟอร์ม</span>
+                        <span class="meta-value">PC (Windows, macOS)</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">ประเภท</span>
+                        <span class="meta-value">Historical Real-Time Strategy</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">กลุ่มเป้าหมาย</span>
+                        <span class="meta-value">Strategy gamers, History enthusiasts</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Campaigns Section -->
+    <section id="campaigns" class="section campaigns-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Campaigns</span>
+                <h2 class="section-title">9 แคมเปญประวัติศาสตร์</h2>
+                <p class="section-subtitle">เดินทางผ่านสมรภูมิสำคัญในประวัติศาสตร์ชาติไทย</p>
+            </div>
+
+            <div class="timeline">
+                <!-- Campaign 1 -->
+                <div class="campaign-card" data-campaign="1">
+                    <div class="campaign-image">
+                        <img src="images/campaign1.png" alt="สงครามช้างเผือก 1547" loading="lazy">
+                        <div class="campaign-year">1547-1549</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">ยุคอยุธยา</div>
+                        <h3 class="campaign-title">สงครามช้างเผือก</h3>
+                        <p class="campaign-subtitle">The War of the White Elephants</p>
+                        <p class="campaign-desc">พระเจ้าตะเบ็งชเวตี้แห่งตองอูบุกสยามผ่านด่านเจดีย์สามองค์
+                            สมเด็จพระสุริโยทัยทรงช้างเข้าสู้รบเพื่อปกป้องพระราชสวามี</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ที่ราบกาญจนบุรี → กำแพงอยุธยา</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ดาบ, หอก, ช้างศึก, เรือพระที่นั่ง</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Elephant Duel</span>
+                            <span class="mechanic-tag">River Transport</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 2 -->
+                <div class="campaign-card" data-campaign="2">
+                    <div class="campaign-image">
+                        <img src="images/campaign2.png" alt="สงครามท่าดินแดง 1786" loading="lazy">
+                        <div class="campaign-year">1786</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">ยุครัตนโกสินทร์ตอนต้น</div>
+                        <h3 class="campaign-title">สงครามท่าดินแดง</h3>
+                        <p class="campaign-subtitle">The Battle of Tha Din Daeng</p>
+                        <p class="campaign-desc">
+                            พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกทรงนำทัพรัตนโกสินทร์สกัดกองทัพพม่าของพระเจ้าปดุง
+                            การรบครั้งนี้เน้นการส่งกำลังบำรุงและสงครามป่า</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ป่าหุบเขากาญจนบุรี เส้นทางแคบ</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ทหารลาดตระเวน, ปืนคาบศิลา, ครก</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Supply Lines</span>
+                            <span class="mechanic-tag">Ambush +50%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 3 -->
+                <div class="campaign-card" data-campaign="3">
+                    <div class="campaign-image">
+                        <img src="images/campaign3.png" alt="วิกฤตการณ์ปากน้ำ 1893" loading="lazy">
+                        <div class="campaign-year">1893</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">ยุคปฏิรูป</div>
+                        <h3 class="campaign-title">วิกฤตการณ์ปากน้ำ</h3>
+                        <p class="campaign-subtitle">The Paknam Incident</p>
+                        <p class="campaign-desc">เรือปืนฝรั่งเศสบุกขึ้นแม่น้ำเจ้าพระยา
+                            สยามต้องป้องกันเมืองหลวงขณะเผชิญวิกฤตการณ์ทางการทูตที่ละเอียดอ่อน</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ปากแม่น้ำเจ้าพระยา, ป้อมพระจุลจอมเกล้า</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ปืนอาร์มสตรอง, ทหารปืนเล็กยาว, เรือปืน</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Diplomatic Timer</span>
+                            <span class="mechanic-tag">Fort Batteries</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 4 -->
+                <div class="campaign-card" data-campaign="4">
+                    <div class="campaign-image">
+                        <img src="images/campaign4.png" alt="กองกำลังทหารอาสา WWI 1918" loading="lazy">
+                        <div class="campaign-year">1918</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">สงครามโลกครั้งที่ 1</div>
+                        <h3 class="campaign-title">กองกำลังทหารอาสา</h3>
+                        <p class="campaign-subtitle">The Expeditionary Force</p>
+                        <p class="campaign-desc">กองกำลังสำรวจสยามเดินทางไปฝรั่งเศส ต้องปรับตัวเข้ากับสงครามอุตสาหกรรม
+                            การโจมตีด้วยแก๊สพิษ และการโจมตีสนามเพลาะ</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ภูมิภาคชองปาญ ฝรั่งเศส สนามเพลาะโคลน</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ทหารจู่โจมสนามเพลาะ, คนขับรถ, แพทย์สนาม</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Gas Attack</span>
+                            <span class="mechanic-tag">Artillery Support</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 5 -->
+                <div class="campaign-card" data-campaign="5">
+                    <div class="campaign-image">
+                        <img src="images/campaign5.png" alt="กบฏบวรเดช 1933" loading="lazy">
+                        <div class="campaign-year">1933</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">ยุคเปลี่ยนแปลงการปกครอง</div>
+                        <h3 class="campaign-title">กบฏบวรเดช</h3>
+                        <p class="campaign-subtitle">The Battle for the Constitution</p>
+                        <p class="campaign-desc">
+                            พลเอกพระองค์เจ้าบวรเดชนำทหารจากโคราชมุ่งหน้าสู่กรุงเทพฯเพื่อท้าทายรัฐบาลใหม่
+                            เป็นสงครามกลางเมืองเพื่ออุดมการณ์ทางการเมือง</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>เส้นทางรถไฟดอนเมือง-หลักสี่</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ปืนต่อสู้อากาศยาน, กองอาสา, รถหุ้มเกราะ</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Armored Train</span>
+                            <span class="mechanic-tag">Propaganda</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 6 -->
+                <div class="campaign-card" data-campaign="6">
+                    <div class="campaign-image">
+                        <img src="images/campaign6.png" alt="สงครามไทย-ฝรั่งเศส 1940-41" loading="lazy">
+                        <div class="campaign-year">1940-1941</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">สงครามโลกครั้งที่ 2</div>
+                        <h3 class="campaign-title">ยุทธนาวีเกาะช้าง</h3>
+                        <p class="campaign-subtitle">Battle of Koh Chang</p>
+                        <p class="campaign-desc">ไทยรุกเข้าอินโดจีนของฝรั่งเศสเพื่อเรียกร้องดินแดนที่เสียไป
+                            กองทัพอากาศไทยต่อสู้กับเครื่องบินวิชีฝรั่งเศส</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ชายแดนกัมพูชา และอ่าวไทย (นาวี)</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>รถถังวิคเกอร์, เครื่องบิน Hawk III, เรือตอร์ปิโด</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Air Superiority</span>
+                            <span class="mechanic-tag">Combined Arms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 7 -->
+                <div class="campaign-card" data-campaign="7">
+                    <div class="campaign-image">
+                        <img src="images/campaign7.png" alt="วีรชนอ่าวมะนาว 1941" loading="lazy">
+                        <div class="campaign-year">1941</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">สงครามโลกครั้งที่ 2</div>
+                        <h3 class="campaign-title">วีรชนอ่าวมะนาว</h3>
+                        <p class="campaign-subtitle">The Heroes of Ao Manao</p>
+                        <p class="campaign-desc">8 ธันวาคม 1941 กองทัพจักรวรรดิญี่ปุ่นยกพลขึ้นบกที่ประจวบคีรีขันธ์
+                            กองบินและตำรวจต้องยึดชายหาด</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>อ่าวมะนาว (ยกพลขึ้นบก → ป้องกันสนามบิน)</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>นักเรียนตำรวจ, ลูกเรือภาคพื้น, ปืนกลหนัก</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Ammo Scarcity</span>
+                            <span class="mechanic-tag">Survival Timer</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 8 -->
+                <div class="campaign-card" data-campaign="8">
+                    <div class="campaign-image">
+                        <img src="images/campaign8.png" alt="พยัคฆ์น้อยเกาหลี 1950-53" loading="lazy">
+                        <div class="campaign-year">1950-1953</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">สงครามเกาหลี</div>
+                        <h3 class="campaign-title">พยัคฆ์น้อย</h3>
+                        <p class="campaign-subtitle">Little Tigers of Pork Chop Hill</p>
+                        <p class="campaign-desc">กรมทหารราบที่ 21 เข้าร่วมกองกำลังสหประชาชาติ
+                            ต้องป้องกันภูเขายุทธศาสตร์จากคลื่นกองทัพจีน/เกาหลีเหนือในฤดูหนาวที่หนาวเหน็บ</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>Pork Chop Hill ระดับความสูง หิมะตก</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>M1 Garand, บาซูก้า, M24 Chaffee</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Freezing Damage</span>
+                            <span class="mechanic-tag">Hand-to-Hand Bonus</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campaign 9 -->
+                <div class="campaign-card" data-campaign="9">
+                    <div class="campaign-image">
+                        <img src="images/campaign9.png" alt="ปฏิบัติการนาคราช 2025" loading="lazy">
+                        <div class="campaign-year">2025</div>
+                    </div>
+                    <div class="campaign-content">
+                        <div class="campaign-era">อนาคตอันใกล้</div>
+                        <h3 class="campaign-title">ปฏิบัติการนาคราช</h3>
+                        <p class="campaign-subtitle">Operation Naga Protect</p>
+                        <p class="campaign-desc">ข้อพิพาทชายแดนสมมติขยายตัว กลุ่มติดอาวุธคุกคามเสถียรภาพภูมิภาค
+                            กองทัพบกไทยส่งกองกำลังรักษาสันติภาพสมัยใหม่</p>
+                        <div class="campaign-details">
+                            <div class="detail-item">
+                                <span class="detail-icon">📍</span>
+                                <span>ใจกลางเมือง + ด่านชายแดน</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-icon">⚔️</span>
+                                <span>ทหารราบสมัยใหม่, โดรน, Stryker APC</span>
+                            </div>
+                        </div>
+                        <div class="campaign-mechanics">
+                            <span class="mechanic-tag">Drone Warfare</span>
+                            <span class="mechanic-tag">Rules of Engagement</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Units Section -->
+    <section id="units" class="section units-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Unit Roster</span>
+                <h2 class="section-title">หน่วยรบและตัวละคร</h2>
+                <p class="section-subtitle">หน่วยรบหลากหลายประเภทที่วิวัฒนาการตามยุคสมัย</p>
+            </div>
+
+            <div class="units-showcase">
+                <div class="units-image glass-card">
+                    <img src="images/units.png" alt="Unit Showcase" loading="lazy">
+                </div>
+
+                <div class="units-table-container glass-card">
+                    <h3>ตัวอย่างหน่วยรบ</h3>
+                    <table class="units-table">
+                        <thead>
+                            <tr>
+                                <th>หน่วย</th>
+                                <th>บทบาท</th>
+                                <th>สถิติ (HP/Dmg/Arm/Rg)</th>
+                                <th>ความสามารถพิเศษ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="unit-name">พลหอก</span><br><span class="unit-name-en">Pike
+                                        Infantry</span></td>
+                                <td>Anti-Cavalry</td>
+                                <td>100 / 10 / 0 / 1</td>
+                                <td><span class="ability-tag">Phalanx: +Def, -Speed</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="unit-name">ช้างศึก</span><br><span class="unit-name-en">War
+                                        Elephant</span></td>
+                                <td>Tank/Siege</td>
+                                <td>1000 / 50 / 5 / 1</td>
+                                <td><span class="ability-tag">Trample: AOE Knockback</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="unit-name">ปืนกล</span><br><span class="unit-name-en">Gatling
+                                        Gun</span></td>
+                                <td>Suppression</td>
+                                <td>200 / 5 / 1 / 10</td>
+                                <td><span class="ability-tag">Suppress: Slows enemies</span></td>
+                            </tr>
+                            <tr>
+                                <td><span class="unit-name">รถถังหลัก</span><br><span class="unit-name-en">MBT-30</span>
+                                </td>
+                                <td>Main Battle</td>
+                                <td>800 / 80 / 10 / 8</td>
+                                <td><span class="ability-tag">Smoke Screen: Blocks LOS</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="era-units">
+                <h3 class="era-title">หน่วยแบ่งตามยุค</h3>
+                <div class="era-grid">
+                    <div class="era-card glass-card">
+                        <div class="era-icon">⚔️</div>
+                        <h4>ยุคโบราณ (1547-1786)</h4>
+                        <ul>
+                            <li>ดาบมือ / ทหารหอก / นักธนู</li>
+                            <li>ช้างศึก / ม้าศึก</li>
+                            <li>เรือพระที่นั่ง / ลาดตระเวนป่า</li>
+                        </ul>
+                    </div>
+                    <div class="era-card glass-card">
+                        <div class="era-icon">🔫</div>
+                        <h4>ยุคอาวุธปืน (1893-1941)</h4>
+                        <ul>
+                            <li>ทหารปืนเล็กยาว / ทหารจู่โจม</li>
+                            <li>ปืนใหญ่ชายฝั่ง / ครกสนาม</li>
+                            <li>เครื่องบินรบ / รถถังเบา</li>
+                        </ul>
+                    </div>
+                    <div class="era-card glass-card">
+                        <div class="era-icon">🚀</div>
+                        <h4>ยุคสมัยใหม่ (1950-2025)</h4>
+                        <ul>
+                            <li>ทหารราบสมัยใหม่ / หน่วยรบพิเศษ</li>
+                            <li>รถถังหลัก / โดรนลาดตระเวน</li>
+                            <li>ขีปนาวุธนำวิถี / APC</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gameplay Section -->
+    <section id="gameplay" class="section gameplay-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Game Systems</span>
+                <h2 class="section-title">ระบบเกม</h2>
+                <p class="section-subtitle">กลไกหลักที่สร้างประสบการณ์การเล่นที่ลึกซึ้ง</p>
+            </div>
+
+            <div class="gameplay-showcase glass-card">
+                <img src="images/gameplay.png" alt="Gameplay Interface" loading="lazy">
+                <div class="gameplay-overlay">
+                    <div class="ui-label" style="top: 5%; right: 15%;">Resource Bar - ข้าว, เสบียง, เชื้อเพลิง</div>
+                    <div class="ui-label" style="bottom: 35%; left: 5%;">Minimap - แผนที่ขนาดเล็ก</div>
+                    <div class="ui-label" style="bottom: 15%; left: 40%;">Unit Info - ข้อมูลหน่วย</div>
+                    <div class="ui-label" style="bottom: 25%; right: 10%;">Commands - คำสั่งต่างๆ</div>
+                </div>
+            </div>
+
+            <div class="mechanics-grid">
+                <!-- Core Loop -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">🔄</span> Core Game Loop</h3>
+                    <ol class="core-loop">
+                        <li><strong>Briefing</strong> - รับบริบททางประวัติศาสตร์และภารกิจ</li>
+                        <li><strong>Base/Army Management</strong> - รวบรวมทรัพยากร สร้างอาคาร ฝึกหน่วย</li>
+                        <li><strong>Exploration</strong> - สำรวจแผนที่ เปิดหมอกสงคราม ยึดจุดยุทธศาสตร์</li>
+                        <li><strong>Combat</strong> - ต่อสู้ศัตรูด้วยระบบ Counter และภูมิประเทศ</li>
+                        <li><strong>Victory/Loss</strong> - บรรลุหรือล้มเหลวในภารกิจ</li>
+                    </ol>
+                </div>
+
+                <!-- Resource System -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">💰</span> ระบบทรัพยากร</h3>
+                    <div class="resource-list">
+                        <div class="resource-item">
+                            <span class="resource-icon food">🌾</span>
+                            <div>
+                                <strong>อาหาร/ข้าว</strong>
+                                <p>หน่วยชีวภาพใช้อาหาร เก็บจากฟาร์มหรือนาข้าว</p>
+                            </div>
+                        </div>
+                        <div class="resource-item">
+                            <span class="resource-icon gold">📦</span>
+                            <div>
+                                <strong>เสบียง/ทอง</strong>
+                                <p>อุปกรณ์/อาวุธใช้เสบียง เก็บจากจุดค้าขายหรือการส่งเสบียง</p>
+                            </div>
+                        </div>
+                        <div class="resource-item">
+                            <span class="resource-icon fuel">⛽</span>
+                            <div>
+                                <strong>เชื้อเพลิง (ยุคสมัยใหม่)</strong>
+                                <p>ยานพาหนะต้องการเชื้อเพลิง เก็บจากคลังน้ำมัน</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Combat System -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">⚔️</span> ระบบการต่อสู้</h3>
+                    <div class="combat-formulas">
+                        <div class="formula">
+                            <span class="formula-label">Damage</span>
+                            <code>FinalDamage = BaseDamage × (100 / (100 + TargetArmor)) × RangeMultiplier</code>
+                        </div>
+                        <div class="formula">
+                            <span class="formula-label">Accuracy</span>
+                            <code>HitChance = BaseAccuracy - (Distance × FalloffFactor) - CoverBonus</code>
+                        </div>
+                    </div>
+                    <div class="morale-system">
+                        <h4>ระบบขวัญกำลังใจ (Morale)</h4>
+                        <ul>
+                            <li>&lt; 50% Morale = -20% อัตรายิง/ความเร็ว</li>
+                            <li>0% Morale = หน่วยหนีไม่สามารถควบคุมได้</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visibility -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">👁️</span> ระบบการมองเห็น</h3>
+                    <div class="visibility-types">
+                        <div class="vis-type">
+                            <div class="vis-icon shroud"></div>
+                            <span><strong>Shroud</strong> - ยังไม่สำรวจ</span>
+                        </div>
+                        <div class="vis-type">
+                            <div class="vis-icon fog"></div>
+                            <span><strong>Fog</strong> - สำรวจแล้วแต่ไม่เห็นปัจจุบัน</span>
+                        </div>
+                        <div class="vis-type">
+                            <div class="vis-icon visible"></div>
+                            <span><strong>Visible</strong> - มองเห็นชัดเจน</span>
+                        </div>
+                    </div>
+                    <p class="stealth-note">หน่วยบางประเภท (กองโจร, สไนเปอร์) ซ่อนตัวในป่าจนกว่าจะโจมตีหรือถูกตรวจจับ
+                    </p>
+                </div>
+
+                <!-- Terrain -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">🗺️</span> ภูมิประเทศและสภาพอากาศ</h3>
+                    <div class="terrain-grid">
+                        <div class="terrain-item">
+                            <span class="terrain-icon">⛰️</span>
+                            <div>
+                                <strong>เนินสูง</strong>
+                                <p>+20% ความเสียหาย, +25% ระยะมองเห็น</p>
+                            </div>
+                        </div>
+                        <div class="terrain-item">
+                            <span class="terrain-icon">🌲</span>
+                            <div>
+                                <strong>ป่า</strong>
+                                <p>-30% ความเร็ว, +10 ป้องกัน, ซ่อนทหารราบ</p>
+                            </div>
+                        </div>
+                        <div class="terrain-item">
+                            <span class="terrain-icon">🛤️</span>
+                            <div>
+                                <strong>ถนน</strong>
+                                <p>+20% ความเร็วการเคลื่อนที่</p>
+                            </div>
+                        </div>
+                        <div class="terrain-item">
+                            <span class="terrain-icon">🌧️</span>
+                            <div>
+                                <strong>ฝน/มรสุม</strong>
+                                <p>ชะลอยานพาหนะ, ลดระยะมองเห็น</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Design -->
+                <div class="mechanic-card glass-card">
+                    <h3><span class="mechanic-icon">🤖</span> ระบบ AI</h3>
+                    <div class="ai-difficulty">
+                        <div class="diff-level easy">
+                            <h4>Easy</h4>
+                            <ul>
+                                <li>โจมตีไม่บ่อย</li>
+                                <li>ไม่มี Bonus</li>
+                                <li>ฐานเดียว</li>
+                            </ul>
+                        </div>
+                        <div class="diff-level medium">
+                            <h4>Normal</h4>
+                            <ul>
+                                <li>Counter หน่วยผู้เล่น</li>
+                                <li>ไม่มี Bonus</li>
+                                <li>2 ฐาน</li>
+                            </ul>
+                        </div>
+                        <div class="diff-level hard">
+                            <h4>Hard</h4>
+                            <ul>
+                                <li>Rush เร็ว</li>
+                                <li>+20% ทรัพยากร</li>
+                                <li>ควบคุมแผนที่</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="section features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-badge">Key Features</span>
+                <h2 class="section-title">คุณสมบัติเด่น</h2>
+                <p class="section-subtitle">สิ่งที่ทำให้ RTS: ยุทธการไทย โดดเด่น</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">📚</div>
+                    <h3>Museum Mode</h3>
+                    <p>โหมดพิพิธภัณฑ์ให้ความรู้เพิ่มเติมเกี่ยวกับประวัติศาสตร์ เครื่องแบบ และอาวุธจริง</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">🌍</div>
+                    <h3>Localization</h3>
+                    <p>รองรับหลายภาษา (TH/EN/CN) สามารถเปลี่ยนได้ทันทีในเกม</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">👁️</div>
+                    <h3>Accessibility</h3>
+                    <p>UI Scale ปรับได้ 80%-150%, โหมดสำหรับผู้บกพร่องการมองเห็นสี</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">🎵</div>
+                    <h3>Adaptive Music</h3>
+                    <p>เพลงประกอบปรับตามยุคสมัย - ดนตรีไทยโบราณถึงออเคสตราสมัยใหม่</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3>Control Groups</h3>
+                    <p>เลือกหน่วยด้วย Box select, Double click, Ctrl+1-9</p>
+                </div>
+                <div class="feature-card glass-card">
+                    <div class="feature-icon">💾</div>
+                    <h3>Save/Load</h3>
+                    <p>ระบบบันทึก/โหลดเกมด้วย JSON serialization</p>
+                </div>
+            </div>
+
+            <div class="tech-stack glass-card">
+                <h3>Technical Stack</h3>
+                <div class="tech-items">
+                    <div class="tech-item">
+                        <span class="tech-icon">🎮</span>
+                        <span class="tech-name">Unity 2022.3 LTS</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-icon">📦</span>
+                        <span class="tech-name">ScriptableObjects</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-icon">🗺️</span>
+                        <span class="tech-name">NavMesh Agent</span>
+                    </div>
+                    <div class="tech-item">
+                        <span class="tech-icon">📄</span>
+                        <span class="tech-name">JSON Serialization</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">⚔️</span>
+                    <span class="logo-text">RTS: ยุทธการไทย</span>
+                    <p class="footer-tagline">Historical Real-Time Strategy Game</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#overview">ภาพรวม</a>
+                    <a href="#campaigns">แคมเปญ</a>
+                    <a href="#units">หน่วยรบ</a>
+                    <a href="#gameplay">ระบบเกม</a>
+                    <a href="#features">คุณสมบัติ</a>
+                </div>
+                <div class="footer-disclaimer">
+                    <p><strong>DISCLAIMER:</strong> This game is a historical fiction work based on real events.
+                        Liberties have been taken for gameplay balance. It does not intend to promote violence or hatred
+                        against any nation.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 RTS: Yutthakan Thailand - Game Design Document v1.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
