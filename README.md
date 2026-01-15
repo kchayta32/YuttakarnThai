@@ -16,6 +16,62 @@
 
 ---
 
+## 🎮 การเปิดโปรเจค Unity
+
+### ความต้องการของระบบ
+
+- **Unity Version**: 2022.3 LTS หรือสูงกว่า
+- **Unity Hub**: เวอร์ชันล่าสุด
+- **Render Pipeline**: Universal Render Pipeline (URP)
+
+### ขั้นตอนการติดตั้ง
+
+1. **เปิด Unity Hub**
+   - ดาวน์โหลดและติดตั้ง [Unity Hub](https://unity.com/download) หากยังไม่มี
+
+2. **เพิ่มโปรเจค**
+   - คลิก `Add` > `Add project from disk`
+   - เลือกโฟลเดอร์ `RTS_Yutthakan_Thailand_Delivery/UnityProject`
+
+3. **เลือกเวอร์ชัน Unity**
+   - หากถูกถามให้เลือกเวอร์ชัน ให้เลือก **2022.3 LTS** หรือสูงกว่า
+   - Unity จะ import โปรเจคโดยอัตโนมัติ
+
+4. **เปิด Scene หลัก**
+   - ไปที่ `Assets/_Scenes/`
+   - ดับเบิลคลิก `Prototype_WWI.unity` หรือ Scene ที่ต้องการ
+
+### โครงสร้างโปรเจค Unity
+
+```
+UnityProject/
+├── Assets/
+│   ├── _Scenes/           # Scene files
+│   ├── _Scripts/          # C# scripts
+│   │   ├── Core/          # Unit, Structure, Formation
+│   │   ├── AI/            # AI behaviors
+│   │   ├── Input/         # Camera, Selection
+│   │   ├── Systems/       # Resources, Tech Tree, Objectives
+│   │   ├── UI/            # HUD, Minimap, Menus
+│   │   └── Visuals/       # Fog of War, Health Bars
+│   ├── Data/              # ScriptableObject assets
+│   ├── Prefabs/           # Unit and building prefabs
+│   └── Fonts/             # Kanit, Sarabun fonts
+├── Packages/              # Package dependencies
+└── ProjectSettings/       # Unity settings
+```
+
+### การ Build เกม
+
+```bash
+# ใน Unity Editor
+File > Build Settings > เลือก Platform > Build
+```
+
+> ⚠️ **หมายเหตุ**: โฟลเดอร์ `Library/` และ `Temp/` ไม่ได้รวมอยู่ใน Git เนื่องจากเป็นไฟล์ที่ Unity สร้างขึ้นเอง Unity จะสร้างใหม่โดยอัตโนมัติเมื่อเปิดโปรเจค
+
+---
+
 ## 📁 โครงสร้างไฟล์
 
 ```
