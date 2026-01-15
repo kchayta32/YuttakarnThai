@@ -1,0 +1,14 @@
+UnitID,Name_EN,Name_TH,Era,Type,Cost_Food,Cost_Supplies,Cost_Fuel,HP,Armor,Damage,Range,Speed,BuildTime,Counters
+U001,Swordsman,ดาบเล็ว,Ancient,Infantry,50,0,0,80,0,12,1,5,10,Light Inf
+U002,Pikeman,พลหอก,Ancient,Infantry,60,10,0,100,1,10,2,4,12,Cavalry
+U003,Archer,พลธนู,Ancient,Infantry,40,20,0,60,0,8,12,5,10,Infantry
+U004,War Elephant,ช้างศึก,Ancient,Heavy Cav,300,50,0,1200,5,60,2,6,45,Infantry/Structures
+U005,Musketeer,ทหารปืนคาบศิลา,Colonial,Infantry,70,30,0,90,0,25,10,4,15,Infantry
+U006,Armstrong Gun,ปืนใหญ่อาร์มสตรอง,Colonial,Artillery,0,300,0,200,2,150,30,1,40,Ships/Structures
+U007,Trench Raider,หน่วยจู่โจม,WWI,Infantry,80,40,0,120,1,30,5,6,18,Infantry
+U008,Vickers Tank,รถถังวิคเกอร์,WWII,Vehicle,0,150,50,400,15,40,15,8,35,Infantry
+U009,M1 Garand Inf,ทหารราบนาวิกโยธิน,Cold War,Infantry,100,50,0,150,2,25,18,5,20,Infantry
+U010,M24 Chaffee,รถถังเบา M24,Cold War,Vehicle,0,300,100,600,20,120,20,10,50,Vehicle
+U011,Modern Inf,ทหารราบสมัยใหม่,Modern,Infantry,120,80,0,200,5,35,22,5,20,Infantry
+U012,Main Battle Tank,รถถังหลัก,Modern,Vehicle,0,600,300,1500,50,300,35,9,60,Vehicle
+U013,Drone,โดรนลาดตระเวน,Modern,Air,0,100,20,50,0,0,50,20,15,Stealth

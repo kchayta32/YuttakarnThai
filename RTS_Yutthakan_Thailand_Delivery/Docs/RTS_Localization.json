@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "version": "1.0",
+    "languages": ["en", "th", "cn"]
+  },
+  "keys": {
+    "MAIN_MENU_START": {
+      "en": "Start Campaign",
+      "th": "เริ่มแคมเปญ",
+      "cn": "开始战役"
+    },
+    "MAIN_MENU_OPTIONS": {
+      "en": "Options",
+      "th": "ตัวเลือก",
+      "cn": "选项"
+    },
+    "UNIT_INFANTRY_NAME": {
+      "en": "Rifleman",
+      "th": "ทหารราบ",
+      "cn": "步兵"
+    },
+    "UNIT_TANK_NAME": {
+      "en": "Light Tank",
+      "th": "รถถังเบา",
+      "cn": "轻型坦克"
+    },
+    "MSG_NOT_ENOUGH_RESOURCES": {
+      "en": "Not enough resources!",
+      "th": "ทรัพยากรไม่เพียงพอ!",
+      "cn": "资源不足！"
+    },
+    "BRIEFING_CAMPAIGN_1_TITLE": {
+      "en": "The War of the White Elephants",
+      "th": "สงครามช้างเผือก",
+      "cn": "白象之战"
+    },
+    "TUTORIAL_MOVE": {
+      "en": "Right-click to move your unit.",
+      "th": "คลิกขวาเพื่อเคลื่อนย้ายยูนิต",
+      "cn": "右键点击移动单位"
+    }
+  }
+}
