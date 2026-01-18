@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe4e8d9e45c867e45a03ecf1aa6f9084, type: 3}
+  m_Name: Swordsman
+  m_EditorClassIdentifier: 
+  UnitName: "\u0E14\u0E32\u0E1A\u0E40\u0E25\u0E47\u0E27"
+  Icon: {fileID: 0}
+  CostRice: 50
+  CostSupplies: 0
+  MaxHP: 80
+  Armor: 0
+  Damage: 12
+  AttackRange: 1
+  AttackRate: 1.5
+  MoveSpeed: 5
+  AttackSounds: []
+  SelectSounds: []
+  MoveSounds: []

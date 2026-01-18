@@ -112,9 +112,9 @@ public class FontFallbackSetup : EditorWindow
         // Check for numbers
         bool hasNumbers = true;
         string missingNumbers = "";
-        for (uint i = 0x30; i <= 0x39; i++) // 0-9
+        for (int i = 0x30; i <= 0x39; i++) // 0-9
         {
-            if (!sarabunFont.HasCharacter(i))
+            if (!sarabunFont.HasCharacter((char)i))
             {
                 hasNumbers = false;
                 missingNumbers += (char)i + " ";
