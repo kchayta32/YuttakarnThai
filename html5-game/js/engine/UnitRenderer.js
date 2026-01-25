@@ -132,6 +132,9 @@ export class UnitRenderer {
             // Apply hit flash with filter
             if (isFlashing) {
                 ctx.filter = 'brightness(2)';
+            } else if (unit.isEnemy) {
+                // Apply a more subtle red tint for enemy units
+                ctx.filter = 'sepia(0.4) saturate(2.5) hue-rotate(-50deg) brightness(0.9)';
             }
 
             // Flip based on facing direction

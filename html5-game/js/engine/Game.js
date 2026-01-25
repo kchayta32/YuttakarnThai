@@ -13,6 +13,7 @@ import { StoryCutscene } from './StoryCutscene.js';
 import { BuildingSystem } from '../systems/BuildingSystem.js';
 import { WorkerSystem } from '../systems/WorkerSystem.js';
 import { MAPS, CURRENT_MAP } from '../data/maps.js';
+import { spriteManager } from './SpriteManager.js';
 
 export class Game {
     constructor() {
@@ -130,8 +131,12 @@ export class Game {
         const progressBar = document.getElementById('loading-progress');
         const loadingText = document.getElementById('loading-text');
 
+        // Preload sprites
+        if (loadingText) loadingText.textContent = 'กำลังโหลดหน่วยรบ...';
+        await spriteManager.preloadAll();
+        if (progressBar) progressBar.style.width = '15%';
+
         const steps = [
-            { progress: 15, text: 'กำลังโหลดหน่วยรบ...' },
             { progress: 35, text: 'กำลังโหลดแผนที่...' },
             { progress: 55, text: 'กำลังสร้าง Pathfinding Grid...' },
             { progress: 75, text: 'กำลังเตรียม AI...' },

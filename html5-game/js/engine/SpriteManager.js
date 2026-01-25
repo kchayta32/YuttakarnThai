@@ -16,12 +16,12 @@ export class SpriteManager {
             'spearman': 'images/units/spearman.png',
             'archer': 'images/units/archer.png',
             'elephant': 'images/units/elephant.png',
-            'cavalry': 'images/units/swordsman.png', // fallback
-            'worker': 'images/units/swordsman.png', // fallback
+            'cavalry': 'images/units/swordsman.png', // missing horse asset
+            'worker': 'images/units/swordsman.png',
             'enemy_swordsman': 'images/units/enemy_swordsman.png',
-            'enemy_spearman': 'images/units/enemy_swordsman.png', // fallback
-            'enemy_archer': 'images/units/enemy_swordsman.png', // fallback
-            'enemy_elephant': 'images/units/elephant.png', // fallback with tint
+            'enemy_spearman': 'images/units/spearman.png',
+            'enemy_archer': 'images/units/archer.png',
+            'enemy_elephant': 'images/units/elephant.png',
 
             // Terrain
             'grass': 'images/terrain/grass.png',
