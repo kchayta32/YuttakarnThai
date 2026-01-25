@@ -135,17 +135,17 @@ public class GamePolishSetup : EditorWindow
             new Vector2(0, 1), new Vector2(10, -5), new Vector2(230, 25), 18, Color.yellow);
         
         // Rice
-        var riceText = CreateUIText(panel.transform, "RiceText", "🌾 ข้าว: 500", 
+        var riceText = CreateUIText(panel.transform, "RiceText", "[R] ข้าว: 500", 
             new Vector2(0, 1), new Vector2(10, -30), new Vector2(230, 20), 14, Color.white);
         uiMgr.riceText = riceText;
         
         // Supplies
-        var suppliesText = CreateUIText(panel.transform, "SuppliesText", "📦 เสบียง: 300", 
+        var suppliesText = CreateUIText(panel.transform, "SuppliesText", "[S] เสบียง: 300", 
             new Vector2(0, 1), new Vector2(10, -52), new Vector2(230, 20), 14, Color.white);
         uiMgr.suppliesText = suppliesText;
         
         // Population
-        var popText = CreateUIText(panel.transform, "PopText", "⚔️ ทหาร: 0/50", 
+        var popText = CreateUIText(panel.transform, "PopText", "[U] ทหาร: 0/50", 
             new Vector2(0, 1), new Vector2(10, -74), new Vector2(230, 20), 14, Color.white);
         uiMgr.populationText = popText;
     }
@@ -162,7 +162,7 @@ public class GamePolishSetup : EditorWindow
         
         // Objective text
         var objText = CreateUIText(panel.transform, "ObjectiveText", 
-            "🎯 ภารกิจ: ปกป้องหมู่บ้านจากกองทัพพม่า", 
+            "ภารกิจ: ปกป้องหมู่บ้านจากกองทัพพม่า", 
             new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(380, 40), 16, Color.white);
         uiMgr.objectiveText = objText;
     }
@@ -254,60 +254,22 @@ public class GamePolishSetup : EditorWindow
     
     static void AddAmbientEffects()
     {
-        // Create particle systems for ambience
-        GameObject effects = new GameObject("AmbientEffects");
+        // Skip particle effects - package may be disabled
+        // Just create placeholder for ambient audio
+        GameObject effects = GameObject.Find("AmbientEffects");
+        if (effects == null)
+        {
+            effects = new GameObject("AmbientEffects");
+        }
         
-        // Dust particles
-        CreateDustParticles(effects.transform);
+        // Audio placeholder (no actual audio in editor)
+        if (effects.transform.Find("AmbientAudio") == null)
+        {
+            GameObject audio = new GameObject("AmbientAudio");
+            audio.transform.parent = effects.transform;
+        }
         
-        // Bird sounds marker (no audio in editor, just placeholder)
-        GameObject audio = new GameObject("AmbientAudio");
-        audio.transform.parent = effects.transform;
-        
-        Debug.Log("[Polish] Added ambient effects");
-    }
-    
-    static void CreateDustParticles(Transform parent)
-    {
-        GameObject dustObj = new GameObject("DustParticles");
-        dustObj.transform.parent = parent;
-        dustObj.transform.position = new Vector3(0, 5, 0);
-        
-        var ps = dustObj.AddComponent<ParticleSystem>();
-        var main = ps.main;
-        main.startLifetime = 8f;
-        main.startSpeed = 0.5f;
-        main.startSize = 0.3f;
-        main.startColor = new Color(0.9f, 0.85f, 0.7f, 0.3f);
-        main.maxParticles = 100;
-        main.simulationSpace = ParticleSystemSimulationSpace.World;
-        
-        var emission = ps.emission;
-        emission.rateOverTime = 10;
-        
-        var shape = ps.shape;
-        shape.shapeType = ParticleSystemShapeType.Box;
-        shape.scale = new Vector3(150, 10, 150);
-        
-        var colorOverLifetime = ps.colorOverLifetime;
-        colorOverLifetime.enabled = true;
-        Gradient grad = new Gradient();
-        grad.SetKeys(
-            new GradientColorKey[] { 
-                new GradientColorKey(Color.white, 0), 
-                new GradientColorKey(Color.white, 1) 
-            },
-            new GradientAlphaKey[] { 
-                new GradientAlphaKey(0, 0), 
-                new GradientAlphaKey(0.3f, 0.3f), 
-                new GradientAlphaKey(0, 1) 
-            }
-        );
-        colorOverLifetime.color = grad;
-        
-        // Renderer
-        var renderer = dustObj.GetComponent<ParticleSystemRenderer>();
-        renderer.material = new Material(Shader.Find("Particles/Standard Unlit"));
+        Debug.Log("[Polish] Added ambient effects (no particles - package disabled)");
     }
     
     static void ImproveVisuals()
