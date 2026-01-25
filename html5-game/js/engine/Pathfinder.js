@@ -39,7 +39,7 @@ export class Pathfinder {
      * Mark an area as blocked
      */
     markObstacle(obs) {
-        if (obs.type === 'water' || obs.type === 'mountain' || obs.type === 'forest') {
+        if (obs.type === 'water' || obs.type === 'mountain') {
             const startX = Math.floor(obs.x / this.gridSize);
             const startY = Math.floor(obs.y / this.gridSize);
             const endX = Math.ceil((obs.x + obs.width) / this.gridSize);
@@ -50,6 +50,24 @@ export class Pathfinder {
                     if (y >= 0 && x >= 0) {
                         this.grid[y][x] = 1;
                     }
+                }
+            }
+        } else if (obs.type === 'forest') {
+            // Mark individual trees as obstacles based on deterministic layout
+            const treeDensity = 9000; // Match TerrainRenderer
+            const treeCount = Math.floor((obs.width * obs.height) / treeDensity);
+            const seed = obs.x * 7 + obs.y * 13;
+
+            for (let i = 0; i < treeCount; i++) {
+                const padding = 80;
+                const treeX = obs.x - padding + this.pseudoRandomFloat(seed + i * 3) * (obs.width + padding * 2);
+                const treeY = obs.y - padding + this.pseudoRandomFloat(seed + i * 5) * (obs.height + padding * 2);
+
+                const gx = Math.floor(treeX / this.gridSize);
+                const gy = Math.floor(treeY / this.gridSize);
+
+                if (gy >= 0 && gy < this.gridHeight && gx >= 0 && gx < this.gridWidth) {
+                    this.grid[gy][gx] = 1;
                 }
             }
         }

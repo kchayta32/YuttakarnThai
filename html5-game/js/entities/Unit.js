@@ -43,8 +43,8 @@ export class Unit {
         this.path = [];
         this.pathIndex = 0;
 
-        // Visual
-        this.size = this.typeId.includes('elephant') ? 45 : 28;
+        // Visual & Collision Size (Adjusted to ~2.25x original)
+        this.size = this.typeId.includes('elephant') ? 100 : 63;
         this.angle = 0;
 
         // Animation

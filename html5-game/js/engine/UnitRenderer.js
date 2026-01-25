@@ -125,9 +125,9 @@ export class UnitRenderer {
         ctx.scale(scaleX, scaleY);
 
         if (sprite && this.settings.useSpriteImages) {
-            // Draw sprite image
-            const spriteWidth = size * 1.5;
-            const spriteHeight = size * 1.5;
+            // Draw sprite image - SCALED (Reduced slightly)
+            const spriteWidth = size * 1.65;
+            const spriteHeight = size * 1.65;
 
             // Apply hit flash with filter
             if (isFlashing) {

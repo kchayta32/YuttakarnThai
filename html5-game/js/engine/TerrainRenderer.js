@@ -149,12 +149,12 @@ export class TerrainRenderer {
         const treeSmall = spriteManager.get('tree_small');
 
         // Draw trees
-        const treeDensity = 4500; // Lower density for larger trees and walkable paths
+        const treeDensity = 9000; // Even lower density for MUCH larger trees
         const treeCount = Math.floor((feature.width * feature.height) / treeDensity);
         const seed = feature.x * 7 + feature.y * 13;
 
         for (let i = 0; i < treeCount; i++) {
-            const padding = 40 * zoom;
+            const padding = 80 * zoom;
             const treeX = x - padding + this.pseudoRandomFloat(seed + i * 3) * (width + padding * 2);
             const treeY = y - padding + this.pseudoRandomFloat(seed + i * 5) * (height + padding * 2);
 
@@ -163,15 +163,15 @@ export class TerrainRenderer {
             const sprite = useLarge ? treeLarge : treeSmall;
 
             if (sprite) {
-                // Determine size based on sprite type, SCALED by zoom - NOW DOUBLED
-                const baseSize = useLarge ? 130 : 90;
-                const variation = this.pseudoRandomFloat(seed + i * 7) * 40;
+                // Determine size based on sprite type, SCALED by zoom - NOW DOUBLED AGAIN (260/180)
+                const baseSize = useLarge ? 260 : 180;
+                const variation = this.pseudoRandomFloat(seed + i * 7) * 80;
                 const treeWidth = (baseSize + variation) * zoom;
                 const treeHeight = treeWidth * (sprite.height / sprite.width);
 
                 // Draw tree shadow
                 ctx.beginPath();
-                ctx.ellipse(treeX + 8 * zoom, treeY + treeHeight / 2.5, treeWidth / 2.5, treeWidth / 5, 0, 0, Math.PI * 2);
+                ctx.ellipse(treeX + 15 * zoom, treeY + treeHeight / 2.5, treeWidth / 2.5, treeWidth / 5, 0, 0, Math.PI * 2);
                 ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
                 ctx.fill();
 
@@ -185,7 +185,7 @@ export class TerrainRenderer {
                 );
             } else {
                 // Fallback to green circles if sprites not loaded
-                const treeSize = (40 + this.pseudoRandomFloat(seed + i * 7) * 30) * zoom;
+                const treeSize = (80 + this.pseudoRandomFloat(seed + i * 7) * 60) * zoom;
                 ctx.beginPath();
                 ctx.arc(treeX, treeY, treeSize, 0, Math.PI * 2);
                 ctx.fillStyle = '#1a4d2e';
