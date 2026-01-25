@@ -10,6 +10,7 @@ export class Pathfinder {
         this.grid = null;
         this.gridWidth = 0;
         this.gridHeight = 0;
+        this.noiseSeed = 42.42; // Must match TerrainRenderer
     }
 
     /**
@@ -38,7 +39,7 @@ export class Pathfinder {
      * Mark an area as blocked
      */
     markObstacle(obs) {
-        if (obs.type === 'water' || obs.type === 'mountain') {
+        if (obs.type === 'water' || obs.type === 'mountain' || obs.type === 'forest') {
             const startX = Math.floor(obs.x / this.gridSize);
             const startY = Math.floor(obs.y / this.gridSize);
             const endX = Math.ceil((obs.x + obs.width) / this.gridSize);
@@ -310,5 +311,15 @@ export class Pathfinder {
         }
 
         ctx.globalAlpha = 1;
+    }
+
+    // Pseudo-random utilities (Must match TerrainRenderer)
+    pseudoRandom(seed) {
+        const x = Math.sin(seed + this.noiseSeed) * 10000;
+        return Math.floor((x - Math.floor(x)) * 1000);
+    }
+
+    pseudoRandomFloat(seed) {
+        return (this.pseudoRandom(seed) % 1000) / 1000;
     }
 }

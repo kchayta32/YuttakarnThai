@@ -25,6 +25,8 @@ export class SpriteManager {
 
             // Terrain
             'grass': 'images/terrain/grass.png',
+            'tree': 'images/terrain/thee.png',
+            'tree_small': 'images/terrain/tree-sm.png',
 
             // Buildings
             'barracks': 'images/buildings/barracks.png',

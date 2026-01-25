@@ -39,8 +39,8 @@ export class TerrainRenderer {
             useTextureTiles: true
         };
 
-        // Generate noise seed
-        this.noiseSeed = Math.random() * 1000;
+        // Constant noise seed for deterministic tree generation
+        this.noiseSeed = 42.42;
     }
 
     /**
@@ -142,47 +142,55 @@ export class TerrainRenderer {
      * Render forest with individual trees
      */
     renderForest(ctx, x, y, width, height, feature) {
-        // Base forest floor
-        const gradient = ctx.createLinearGradient(x, y, x, y + height);
-        gradient.addColorStop(0, '#2d5a3d');
-        gradient.addColorStop(0.5, '#234a31');
-        gradient.addColorStop(1, '#1a3a24');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, y, width, height);
+        const zoom = this.game.camera.zoom || 1;
+
+        // Get tree textures
+        const treeLarge = spriteManager.get('tree');
+        const treeSmall = spriteManager.get('tree_small');
 
         // Draw trees
-        const treeCount = Math.floor((feature.width * feature.height) / 3000);
+        const treeDensity = 4500; // Lower density for larger trees and walkable paths
+        const treeCount = Math.floor((feature.width * feature.height) / treeDensity);
         const seed = feature.x * 7 + feature.y * 13;
 
         for (let i = 0; i < treeCount; i++) {
-            const treeX = x + this.pseudoRandomFloat(seed + i * 3) * width;
-            const treeY = y + this.pseudoRandomFloat(seed + i * 5) * height;
-            const treeSize = 12 + this.pseudoRandomFloat(seed + i * 7) * 10;
+            const padding = 40 * zoom;
+            const treeX = x - padding + this.pseudoRandomFloat(seed + i * 3) * (width + padding * 2);
+            const treeY = y - padding + this.pseudoRandomFloat(seed + i * 5) * (height + padding * 2);
 
-            // Tree shadow
-            ctx.beginPath();
-            ctx.ellipse(treeX + 5, treeY + treeSize * 0.6, treeSize * 0.8, treeSize * 0.4, 0, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
-            ctx.fill();
+            // Randomly choose which tree sprite to use
+            const useLarge = this.pseudoRandom(seed + i * 9) % 10 > 3;
+            const sprite = useLarge ? treeLarge : treeSmall;
 
-            // Tree top (dark green)
-            ctx.beginPath();
-            ctx.arc(treeX, treeY, treeSize, 0, Math.PI * 2);
-            const treeGradient = ctx.createRadialGradient(
-                treeX - treeSize * 0.3, treeY - treeSize * 0.3, 0,
-                treeX, treeY, treeSize
-            );
-            treeGradient.addColorStop(0, '#3d8a5e');
-            treeGradient.addColorStop(0.6, '#2d6b48');
-            treeGradient.addColorStop(1, '#1a4d2e');
-            ctx.fillStyle = treeGradient;
-            ctx.fill();
+            if (sprite) {
+                // Determine size based on sprite type, SCALED by zoom - NOW DOUBLED
+                const baseSize = useLarge ? 130 : 90;
+                const variation = this.pseudoRandomFloat(seed + i * 7) * 40;
+                const treeWidth = (baseSize + variation) * zoom;
+                const treeHeight = treeWidth * (sprite.height / sprite.width);
 
-            // Highlight
-            ctx.beginPath();
-            ctx.arc(treeX - treeSize * 0.3, treeY - treeSize * 0.3, treeSize * 0.3, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
-            ctx.fill();
+                // Draw tree shadow
+                ctx.beginPath();
+                ctx.ellipse(treeX + 8 * zoom, treeY + treeHeight / 2.5, treeWidth / 2.5, treeWidth / 5, 0, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.fill();
+
+                // Draw tree sprite
+                ctx.drawImage(
+                    sprite,
+                    treeX - treeWidth / 2,
+                    treeY - treeHeight / 2,
+                    treeWidth,
+                    treeHeight
+                );
+            } else {
+                // Fallback to green circles if sprites not loaded
+                const treeSize = (40 + this.pseudoRandomFloat(seed + i * 7) * 30) * zoom;
+                ctx.beginPath();
+                ctx.arc(treeX, treeY, treeSize, 0, Math.PI * 2);
+                ctx.fillStyle = '#1a4d2e';
+                ctx.fill();
+            }
         }
     }
 
