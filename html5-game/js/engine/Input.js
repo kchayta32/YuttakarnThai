@@ -113,6 +113,15 @@ export class InputHandler {
     }
 
     onWheel(e) {
+        e.preventDefault();
+
+        // Ensure mouse position is up to date
+        this.updateMousePosition(e);
+
+        // Capture mouse world position BEFORE zoom
+        const mouseWorldXBefore = this.mouse.worldX;
+        const mouseWorldYBefore = this.mouse.worldY;
+
         // Zoom camera
         const zoomSpeed = 0.15;
         const oldZoom = this.game.camera.zoom;
@@ -123,10 +132,13 @@ export class InputHandler {
             this.game.camera.zoom = Math.max(0.4, this.game.camera.zoom - zoomSpeed);
         }
 
-        // Zoom towards mouse position
+        // Adjust camera position so that the world coordinates under the mouse stay the same
         if (oldZoom !== this.game.camera.zoom) {
-            const zoomRatio = this.game.camera.zoom / oldZoom;
-            // Keep mouse position stable (optional, can be complex)
+            this.game.camera.x = mouseWorldXBefore - (this.mouse.x / this.game.camera.zoom);
+            this.game.camera.y = mouseWorldYBefore - (this.mouse.y / this.game.camera.zoom);
+
+            // Sync mouse world coordinates immediately
+            this.updateMousePosition(e);
         }
     }
 
