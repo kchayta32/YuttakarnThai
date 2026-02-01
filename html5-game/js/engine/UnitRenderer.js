@@ -135,7 +135,24 @@ export class UnitRenderer {
             }
 
             // Flip based on facing direction
-            if (unit.angle && Math.abs(unit.angle) > Math.PI / 2) {
+            // Original assets (swordsman, elephant, spearman, archer) face Left by default.
+            // New cavalry assets face Right by default.
+            let shouldFlip = unit.angle && Math.abs(unit.angle) > Math.PI / 2;
+
+            const typeId = unit.typeId?.toLowerCase() || "";
+            // Assets that face Left by default:
+            // - Original player units: swordsman, elephant, worker
+            // - New enemy assets: enemy_elephant (enemy_war_elephant.png faces left)
+            const facesLeftByDefault = typeId === 'swordsman' ||
+                typeId === 'elephant' ||
+                typeId === 'worker' ||
+                typeId === 'enemy_elephant';
+
+            if (facesLeftByDefault) {
+                shouldFlip = !shouldFlip;
+            }
+
+            if (shouldFlip) {
                 ctx.scale(-1, 1);
             }
 

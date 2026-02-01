@@ -19,8 +19,8 @@ export class SpriteManager {
             'cavalry': 'images/units/cavalry.png',
             'worker': 'images/units/swordsman.png',
             'enemy_swordsman': 'images/units/enemy_swordsman.png',
-            'enemy_spearman': 'images/units/spearman.png',
-            'enemy_archer': 'images/units/archer.png',
+            'enemy_spearman': 'images/units/enemy_spearman.png',
+            'enemy_archer': 'images/units/enemy_archer.png',
             'enemy_elephant': 'images/units/enemy_war_elephant.png',
             'enemy_cavalry': 'images/units/enemy_cavalry.png',
 
@@ -101,46 +101,25 @@ export class SpriteManager {
      * Get unit sprite key based on unit type
      */
     getUnitSpriteKey(unit) {
+        const id = (unit.typeId || unit.id || unit.type || "").toLowerCase();
+
         if (unit.isEnemy) {
             // Enemy variants
-            switch (unit.id?.toLowerCase() || unit.type?.toLowerCase()) {
-                case 'enemy_swordsman':
-                case 'swordsman':
-                    return 'enemy_swordsman';
-                case 'enemy_spearman':
-                case 'spearman':
-                    return 'enemy_spearman';
-                case 'enemy_archer':
-                case 'archer':
-                    return 'enemy_archer';
-                case 'enemy_elephant':
-                case 'elephant':
-                    return 'enemy_elephant';
-                case 'enemy_cavalry':
-                case 'cavalry':
-                    return 'enemy_cavalry';
-                default:
-                    return 'enemy_swordsman';
-            }
+            if (id.includes('swordsman')) return 'enemy_swordsman';
+            if (id.includes('spearman')) return 'enemy_spearman';
+            if (id.includes('archer')) return 'enemy_archer';
+            if (id.includes('elephant')) return 'enemy_elephant';
+            if (id.includes('cavalry')) return 'enemy_cavalry';
+            return 'enemy_swordsman';
         } else {
             // Player units
-            switch (unit.id?.toLowerCase() || unit.type?.toLowerCase()) {
-                case 'swordsman':
-                    return 'swordsman';
-                case 'spearman':
-                    return 'spearman';
-                case 'archer':
-                    return 'archer';
-                case 'elephant':
-                case 'war_elephant':
-                    return 'elephant';
-                case 'cavalry':
-                    return 'cavalry';
-                case 'worker':
-                    return 'worker';
-                default:
-                    return 'swordsman';
-            }
+            if (id.includes('swordsman')) return 'swordsman';
+            if (id.includes('spearman')) return 'spearman';
+            if (id.includes('archer')) return 'archer';
+            if (id.includes('elephant')) return 'elephant';
+            if (id.includes('cavalry')) return 'cavalry';
+            if (id.includes('worker')) return 'worker';
+            return 'swordsman';
         }
     }
 }

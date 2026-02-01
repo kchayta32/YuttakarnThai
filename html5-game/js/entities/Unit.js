@@ -63,7 +63,8 @@ export class Unit {
             'enemy_swordsman': 'ENEMY_SWORDSMAN',
             'enemy_spearman': 'ENEMY_SPEARMAN',
             'enemy_archer': 'ENEMY_ARCHER',
-            'enemy_elephant': 'ENEMY_ELEPHANT'
+            'enemy_elephant': 'ENEMY_ELEPHANT',
+            'enemy_cavalry': 'ENEMY_CAVALRY'
         };
         return mapping[typeId] || typeId.toUpperCase();
     }
