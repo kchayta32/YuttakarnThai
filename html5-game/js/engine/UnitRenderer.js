@@ -126,8 +126,14 @@ export class UnitRenderer {
 
         if (sprite && this.settings.useSpriteImages) {
             // Draw sprite image - SCALED (Reduced slightly)
-            const spriteWidth = size * 1.65;
-            const spriteHeight = size * 1.65;
+            let spriteWidth = size * 1.65;
+            let spriteHeight = size * 1.65;
+
+            // Fix swordsman squishing (narrow the width further to fix distortion)
+            const typeId = unit.typeId?.toLowerCase() || "";
+            if (typeId === 'swordsman' || typeId === 'enemy_swordsman') {
+                spriteWidth = size * 1.15;
+            }
 
             // Apply hit flash with filter
             if (isFlashing) {
@@ -139,7 +145,6 @@ export class UnitRenderer {
             // New cavalry assets face Right by default.
             let shouldFlip = unit.angle && Math.abs(unit.angle) > Math.PI / 2;
 
-            const typeId = unit.typeId?.toLowerCase() || "";
             // Assets that face Left by default:
             // - Original player units: swordsman, elephant, worker
             // - New enemy assets: enemy_elephant (enemy_war_elephant.png faces left)

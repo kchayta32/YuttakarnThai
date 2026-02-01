@@ -44,6 +44,14 @@ export class TerrainRenderer {
     }
 
     /**
+     * Simple seeded pseudo-random
+     */
+    pseudoRandom(seed) {
+        const x = Math.sin(seed) * 10000;
+        return Math.floor((x - Math.floor(x)) * 1000);
+    }
+
+    /**
      * Render all terrain layers
      */
     renderTerrain(ctx, camera, mapData) {
@@ -352,41 +360,197 @@ export class TerrainRenderer {
      * Render road/bridge
      */
     renderRoad(ctx, x, y, width, height) {
-        // Base road
-        ctx.fillStyle = '#8b7355';
+        const zoom = this.game.camera.zoom || 1;
+
+        // --- 1. THE UNDER-STRUCTURE (Arches in the water) ---
+        // This adds massive depth, making it feel like a real bridge
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+        const archWidth = width / 3;
+        for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.ellipse(x + (i + 0.5) * archWidth, y + height, archWidth * 0.4, 20 * zoom, 0, 0, Math.PI, true);
+            ctx.fill();
+        }
+
+        // --- 2. DEEP SHADOW ---
+        ctx.shadowBlur = 20 * zoom;
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fillRect(x + 10 * zoom, y + 10 * zoom, width, height);
+        ctx.shadowBlur = 0;
+
+        // --- 3. MAIN DECK (Horizontal Planks Focus) ---
+        // Base Teak Gradient
+        const deckGrad = ctx.createLinearGradient(x, y, x, y + height);
+        deckGrad.addColorStop(0, '#2b1d16');
+        deckGrad.addColorStop(0.5, '#4e342e');
+        deckGrad.addColorStop(1, '#2b1d16');
+        ctx.fillStyle = deckGrad;
         ctx.fillRect(x, y, width, height);
 
-        // Road texture lines
-        ctx.fillStyle = '#7a6548';
-        for (let i = 0; i < Math.max(width, height); i += 20) {
-            if (width > height) {
-                ctx.fillRect(x + i, y, 10, height);
-            } else {
-                ctx.fillRect(x, y + i, width, 10);
-            }
-        }
+        // Individual Horizontal Planks
+        const plankSize = 18 * zoom;
+        for (let px = 0; px < width; px += plankSize) {
+            const seed = x + px;
+            const pWidth = plankSize - (1.5 * zoom);
 
-        // Border
-        ctx.strokeStyle = '#5a4838';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x, y, width, height);
+            // Randomize plank color slightly for "hand-made" feel
+            const shade = (this.pseudoRandom(seed) % 30) - 15;
+            ctx.fillStyle = `rgb(${93 + shade}, ${64 + shade}, ${55 + shade})`;
+            ctx.fillRect(x + px, y + 2 * zoom, pWidth, height - 4 * zoom);
 
-        // Center line (if wide enough)
-        if (Math.min(width, height) > 50) {
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-            ctx.lineWidth = 2;
-            ctx.setLineDash([10, 10]);
+            // Fine Grain Detail
+            ctx.strokeStyle = 'rgba(255,255,255,0.05)';
             ctx.beginPath();
-            if (width > height) {
-                ctx.moveTo(x, y + height / 2);
-                ctx.lineTo(x + width, y + height / 2);
-            } else {
-                ctx.moveTo(x + width / 2, y);
-                ctx.lineTo(x + width / 2, y + height);
-            }
+            ctx.moveTo(x + px + 4 * zoom, y + 10 * zoom);
+            ctx.lineTo(x + px + 4 * zoom, y + height - 10 * zoom);
             ctx.stroke();
-            ctx.setLineDash([]);
+
+            // Iron Nails/Bolts
+            ctx.fillStyle = '#1a1a1a';
+            const nailY1 = y + height * 0.15;
+            const nailY2 = y + height * 0.85;
+            ctx.beginPath();
+            ctx.arc(x + px + pWidth / 2, nailY1, 1.2 * zoom, 0, Math.PI * 2);
+            ctx.arc(x + px + pWidth / 2, nailY2, 1.2 * zoom, 0, Math.PI * 2);
+            ctx.fill();
         }
+
+        // --- 4. ORNATE SIDE BALUSTRADES (Left-Right Rails) ---
+        const railHeight = 14 * zoom;
+        const balusterSpacing = 22 * zoom;
+
+        // Rail Frames
+        const railColor = '#3e2723';
+        ctx.fillStyle = railColor;
+        ctx.fillRect(x, y - railHeight / 2, width, railHeight); // Top Rail
+        ctx.fillRect(x, y + height - railHeight / 2, width, railHeight); // Bottom Rail
+
+        // Balusters (The decorative vertical posts on rails)
+        for (let bx = 0; bx <= width; bx += balusterSpacing) {
+            this.drawRoyalBaluster(ctx, x + bx, y, zoom);
+            this.drawRoyalBaluster(ctx, x + bx, y + height, zoom);
+        }
+
+        // --- 5. THE "KRANOK" GOLDEN ORNAMENTS ---
+        // Special Thai patterns at the center of the rails
+        this.drawKranokOrnament(ctx, x + width / 2, y, zoom);
+        this.drawKranokOrnament(ctx, x + width / 2, y + height, zoom);
+
+        // --- 6. MASTER CORNER COLUMNS (Imperial Style) ---
+        this.drawImperialPost(ctx, x, y, zoom);
+        this.drawImperialPost(ctx, x + width, y, zoom);
+        this.drawImperialPost(ctx, x, y + height, zoom);
+        this.drawImperialPost(ctx, x + width, y + height, zoom);
+
+        // Final Polish: Edge highlighting
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(x, y, width, height);
+    }
+
+    /**
+     * Royal Thai Baluster with curve
+     */
+    drawRoyalBaluster(ctx, x, y, zoom) {
+        const w = 8 * zoom;
+        const h = 20 * zoom;
+        ctx.save();
+        ctx.translate(x, y);
+
+        // Body
+        ctx.fillStyle = '#1b110c';
+        ctx.fillRect(-w / 2, -h / 2, w, h);
+
+        // Golden Band
+        ctx.fillStyle = '#d4af37';
+        ctx.fillRect(-w / 2, -2 * zoom, w, 4 * zoom);
+
+        ctx.restore();
+    }
+
+    /**
+     * Traditional Kranok pattern (simplified for Canvas)
+     */
+    drawKranokOrnament(ctx, x, y, zoom) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.fillStyle = '#f1c40f';
+
+        // Symmetrical Flame Pattern
+        for (let i = -1; i <= 1; i += 2) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.bezierCurveTo(10 * i * zoom, -15 * zoom, 25 * i * zoom, -5 * zoom, 5 * i * zoom, 5 * zoom);
+            ctx.fill();
+        }
+
+        // Center Jewel
+        ctx.beginPath();
+        ctx.arc(0, 0, 4 * zoom, 0, Math.PI * 2);
+        ctx.fillStyle = '#e74c3c'; // Ruby red center
+        ctx.fill();
+        ctx.restore();
+    }
+
+    /**
+     * The most elaborate corner post
+     */
+    drawImperialPost(ctx, x, y, zoom) {
+        const size = 22 * zoom;
+        ctx.save();
+        ctx.translate(x, y);
+
+        // 1. Column Base
+        ctx.fillStyle = '#1b110c';
+        ctx.fillRect(-size / 2, -size / 2, size, size);
+
+        // 2. Tapered Middle
+        ctx.fillStyle = '#3e2723';
+        ctx.fillRect(-size / 2 + 3 * zoom, -size / 2 - 5 * zoom, size - 6 * zoom, 10 * zoom);
+
+        // 3. Golden "Thepphanom" style cap
+        for (let i = 0; i < 4; i++) {
+            const layerW = size * (1.2 - i * 0.25);
+            const layerH = 4 * zoom;
+            const yPos = -8 * zoom - (i * 4 * zoom);
+
+            const g = ctx.createLinearGradient(-layerW / 2, 0, layerW / 2, 0);
+            g.addColorStop(0, '#b8860b');
+            g.addColorStop(0.5, '#f4d03f');
+            g.addColorStop(1, '#b8860b');
+
+            ctx.fillStyle = g;
+            this.drawRoundedRect(ctx, -layerW / 2, yPos, layerW, layerH, 2 * zoom);
+        }
+
+        // 4. Top Flame (Tip)
+        ctx.beginPath();
+        ctx.moveTo(0, -35 * zoom);
+        ctx.quadraticCurveTo(5 * zoom, -25 * zoom, 0, -20 * zoom);
+        ctx.quadraticCurveTo(-5 * zoom, -25 * zoom, 0, -35 * zoom);
+        ctx.fillStyle = '#f1c40f';
+        ctx.fill();
+
+        ctx.restore();
+    }
+
+    /**
+     * Utility for rounded rectangles
+     */
+    drawRoundedRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + w - r, y);
+        ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+        ctx.lineTo(x + w, y + h - r);
+        ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+        ctx.lineTo(x + r, y + h);
+        ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+        ctx.fill();
     }
 
     /**

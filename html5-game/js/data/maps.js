@@ -23,33 +23,25 @@ export const MAPS = {
 
         // Player starting units (Siam - Team 0)
         playerUnits: [
-            // Main army group
+            // Main army group (Moved closer but NOT overlapping)
+            { type: 'swordsman', x: 1750, y: 800, team: 0 },
             { type: 'swordsman', x: 1800, y: 800, team: 0 },
             { type: 'swordsman', x: 1850, y: 800, team: 0 },
-            { type: 'swordsman', x: 1900, y: 800, team: 0 },
+            { type: 'swordsman', x: 1750, y: 850, team: 0 },
             { type: 'swordsman', x: 1800, y: 850, team: 0 },
             { type: 'swordsman', x: 1850, y: 850, team: 0 },
-            { type: 'swordsman', x: 1900, y: 850, team: 0 },
-
-            // Spearmen
-            { type: 'spearman', x: 1750, y: 800, team: 0 },
-            { type: 'spearman', x: 1750, y: 850, team: 0 },
-            { type: 'spearman', x: 1750, y: 900, team: 0 },
-
-            // Archers
-            { type: 'archer', x: 1950, y: 750, team: 0 },
-            { type: 'archer', x: 2000, y: 750, team: 0 },
-            { type: 'archer', x: 1950, y: 800, team: 0 },
-            { type: 'archer', x: 2000, y: 800, team: 0 },
-
-            // War Elephants
+            { type: 'spearman', x: 1700, y: 800, team: 0 },
+            { type: 'spearman', x: 1700, y: 850, team: 0 },
+            { type: 'spearman', x: 1700, y: 900, team: 0 },
+            { type: 'archer', x: 1850, y: 750, team: 0 },
+            { type: 'archer', x: 1900, y: 750, team: 0 },
+            { type: 'archer', x: 1850, y: 800, team: 0 },
+            { type: 'archer', x: 1900, y: 800, team: 0 },
+            { type: 'elephant', x: 1750, y: 950, team: 0 },
             { type: 'elephant', x: 1850, y: 950, team: 0 },
-            { type: 'elephant', x: 1950, y: 950, team: 0 },
-
-            // Cavalry
-            { type: 'cavalry', x: 1700, y: 750, team: 0 },
-            { type: 'cavalry', x: 1700, y: 800, team: 0 },
-            { type: 'cavalry', x: 1700, y: 850, team: 0 }
+            { type: 'cavalry', x: 1650, y: 750, team: 0 },
+            { type: 'cavalry', x: 1650, y: 800, team: 0 },
+            { type: 'cavalry', x: 1650, y: 850, team: 0 }
         ],
 
         // Enemy units (Burma - Team 1)
@@ -89,10 +81,10 @@ export const MAPS = {
 
         // Buildings
         buildings: [
-            { type: 'barracks', x: 2100, y: 850, team: 0 },
-            { type: 'farm', x: 2200, y: 700, team: 0 },
-            { type: 'farm', x: 2200, y: 850, team: 0 },
-            { type: 'farm', x: 2200, y: 1000, team: 0 }
+            { type: 'barracks', x: 2000, y: 850, team: 0 },
+            { type: 'farm', x: 2250, y: 700, team: 0 },
+            { type: 'farm', x: 2250, y: 850, team: 0 },
+            { type: 'farm', x: 2250, y: 1000, team: 0 }
         ],
 
         // Terrain features (obstacles, forests, water)

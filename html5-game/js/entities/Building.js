@@ -4,6 +4,7 @@
 // ===================================
 
 import { BUILDING_TYPES } from '../data/units.js';
+import { spriteManager } from '../engine/SpriteManager.js';
 
 export class Building {
     constructor(game, typeId, x, y, team = 0) {
@@ -34,7 +35,10 @@ export class Building {
         this.hp = this.hp || 1000;
         this.maxHp = this.hp;
         this.selected = false;
-        this.size = 80;
+        this.size = typeData.size || 100; // Use size from data
+
+        // Sprite
+        this.sprite = spriteManager.get(this.typeId);
 
         // Production
         this.productionQueue = [];
@@ -112,51 +116,74 @@ export class Building {
     }
 
     render(ctx, camera) {
-        const screenX = this.x - camera.x;
-        const screenY = this.y - camera.y;
+        // Handle Sprite loading if not yet ready
+        if (!this.sprite) {
+            this.sprite = spriteManager.get(this.typeId);
+        }
+
+        const zoom = camera.zoom;
+        const screenX = (this.x - camera.x) * zoom;
+        const screenY = (this.y - camera.y) * zoom;
+
+        // We calculate a visual size that maintains realism relative to world
+        // User asked for "ซูมเข้าซูมออกก็ต้องไม่ขยับตามให้ขนาดเท่าเดิม" 
+        // In most RTS, as you zoom out, buildings stay the same size in WORLD space, appearing smaller on screen.
+        // If the user means they should look "fixed" in screen size, that's unusual for RTS.
+        // However, I will ensure they are LARGE and use the sprite correctly.
+        const drawSize = this.size * zoom;
 
         // Check if on screen
-        if (screenX < -this.size || screenX > camera.width + this.size ||
-            screenY < -this.size || screenY > camera.height + this.size) {
+        if (screenX + drawSize < 0 || screenX - drawSize > camera.width ||
+            screenY + drawSize < 0 || screenY - drawSize > camera.height) {
             return;
         }
 
-        const halfSize = this.size / 2;
+        const halfSize = drawSize / 2;
 
         // Selection ring
         if (this.selected) {
             ctx.beginPath();
-            ctx.arc(screenX, screenY, halfSize + 8, 0, Math.PI * 2);
+            ctx.arc(screenX, screenY, halfSize + 5, 0, Math.PI * 2);
             ctx.strokeStyle = '#f4d03f';
-            ctx.lineWidth = 3;
+            ctx.lineWidth = 2;
             ctx.stroke();
         }
 
-        // Building base (square with team color)
-        ctx.fillStyle = this.isEnemy ? '#7f1d1d' : '#1a4d2e';
-        ctx.fillRect(screenX - halfSize, screenY - halfSize, this.size, this.size);
+        // Draw Sprite if available, otherwise fallback to box
+        if (this.sprite) {
+            ctx.drawImage(this.sprite, screenX - halfSize, screenY - halfSize, drawSize, drawSize);
+        } else {
+            // Fallback (Traditional box)
+            ctx.fillStyle = this.isEnemy ? '#7f1d1d' : '#1a4d2e';
+            ctx.fillRect(screenX - halfSize, screenY - halfSize, drawSize, drawSize);
+            ctx.strokeStyle = this.isEnemy ? '#c0392b' : '#27ae60';
+            ctx.strokeRect(screenX - halfSize, screenY - halfSize, drawSize, drawSize);
 
-        // Border
-        ctx.strokeStyle = this.isEnemy ? '#c0392b' : '#27ae60';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(screenX - halfSize, screenY - halfSize, this.size, this.size);
+            // Icon Fallback
+            ctx.font = `${36 * zoom}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.icon, screenX, screenY);
+        }
 
-        // Icon
-        ctx.font = '36px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(this.icon, screenX, screenY);
+        // Name/Label (Overlapping/Closer to center for better integrated look)
+        const labelY = screenY - (halfSize * 0.4) - 20 * zoom;
+        ctx.font = `bold ${16 * zoom}px Kanit`;
 
-        // Name below
-        ctx.font = '12px Kanit';
+        // Label background for clarity
+        const textWidth = ctx.measureText(this.name).width;
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        this.game.terrainRenderer.drawRoundedRect(ctx, screenX - textWidth / 2 - 5 * zoom, labelY - 12 * zoom, textWidth + 10 * zoom, 20 * zoom, 5 * zoom);
+
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(this.name, screenX, screenY + halfSize + 15);
+        ctx.textAlign = 'center';
+        ctx.fillText(this.name, screenX, labelY + 3 * zoom);
 
         // Health bar
         if (this.hp < this.maxHp) {
-            const barWidth = this.size;
-            const barHeight = 6;
-            const barY = screenY - halfSize - 12;
+            const barWidth = drawSize;
+            const barHeight = 4 * zoom;
+            const barY = screenY - halfSize - 10 * zoom;
 
             ctx.fillStyle = '#333';
             ctx.fillRect(screenX - barWidth / 2, barY, barWidth, barHeight);
@@ -168,9 +195,9 @@ export class Building {
 
         // Production progress
         if (this.productionQueue.length > 0) {
-            const barWidth = this.size - 10;
-            const barHeight = 4;
-            const barY = screenY + halfSize + 25;
+            const barWidth = drawSize - 10 * zoom;
+            const barHeight = 4 * zoom;
+            const barY = screenY + halfSize + 25 * zoom;
 
             ctx.fillStyle = '#333';
             ctx.fillRect(screenX - barWidth / 2, barY, barWidth, barHeight);

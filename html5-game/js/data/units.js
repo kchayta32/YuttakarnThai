@@ -198,9 +198,9 @@ export const BUILDING_TYPES = {
         id: 'barracks',
         name: 'ค่ายทหาร',
         icon: '🏛️',
-        hp: 1000,
         builds: ['swordsman', 'spearman', 'archer'],
-        cost: { food: 0, gold: 150 }
+        cost: { food: 0, gold: 150 },
+        size: 225 // Increased 1.5x from 150
     },
     STABLE: {
         id: 'stable',
@@ -225,7 +225,8 @@ export const BUILDING_TYPES = {
         hp: 300,
         produces: 'food',
         rate: 10,
-        cost: { food: 0, gold: 50 }
+        cost: { food: 0, gold: 50 },
+        size: 180 // Increased 1.5x from 120
     },
     MARKET: {
         id: 'market',
