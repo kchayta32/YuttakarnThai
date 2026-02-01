@@ -81,10 +81,16 @@ export const MAPS = {
 
         // Buildings
         buildings: [
+            // Player base (Siam - Team 0) - ฝั่งขวาของแผนที่
             { type: 'barracks', x: 2000, y: 850, team: 0 },
             { type: 'farm', x: 2250, y: 700, team: 0 },
             { type: 'farm', x: 2250, y: 850, team: 0 },
-            { type: 'farm', x: 2250, y: 1000, team: 0 }
+            { type: 'farm', x: 2250, y: 1000, team: 0 },
+
+            // Enemy base (Burma - Team 1) - ฝั่งซ้ายของแผนที่
+            { type: 'barracks', x: 150, y: 600, team: 1 },   // ค่ายทหารพม่า
+            { type: 'farm', x: 100, y: 450, team: 1 },       // นาข้าวพม่า 1
+            { type: 'farm', x: 100, y: 750, team: 1 }        // นาข้าวพม่า 2
         ],
 
         // Terrain features (obstacles, forests, water)
@@ -112,8 +118,8 @@ export const MAPS = {
             { type: 'mountain', x: 700, y: 1200, width: 120, height: 180 },
 
             // === RIVER (impassable except bridge) ===
-            { type: 'water', x: 1000, y: 0, width: 100, height: 700 },
-            { type: 'water', x: 1000, y: 950, width: 100, height: 850 },
+            { type: 'water', x: 1000, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน
+            { type: 'water', x: 1000, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง
 
             // === BRIDGE (road over river - passable) ===
             { type: 'road', x: 1000, y: 700, width: 100, height: 250 }
