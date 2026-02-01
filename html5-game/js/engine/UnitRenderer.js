@@ -125,15 +125,13 @@ export class UnitRenderer {
         ctx.scale(scaleX, scaleY);
 
         if (sprite && this.settings.useSpriteImages) {
-            // Draw sprite image - SCALED (Reduced slightly)
-            let spriteWidth = size * 1.65;
-            let spriteHeight = size * 1.65;
-
-            // Fix swordsman squishing (narrow the width further to fix distortion)
             const typeId = unit.typeId?.toLowerCase() || "";
-            if (typeId === 'swordsman' || typeId === 'enemy_swordsman') {
-                spriteWidth = size * 1.15;
-            }
+            // Draw sprite image - height is fixed (locked), width follows aspect ratio
+            let spriteHeight = size * 1.65;
+            // Safety check: Ensure dimensions are loaded to avoid NaN/Infinity
+            let spriteWidth = (sprite.width && sprite.height) ?
+                spriteHeight * (sprite.width / sprite.height) :
+                spriteHeight;
 
             // Apply hit flash with filter
             if (isFlashing) {
