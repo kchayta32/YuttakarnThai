@@ -46,23 +46,23 @@ export const MAPS = {
 
         // Enemy units (Burma - Team 1)
         enemyUnits: [
-            // Wave 1 - West main force
-            { type: 'enemy_cavalry', x: 300, y: 700, team: 1 },
-            { type: 'enemy_cavalry', x: 350, y: 700, team: 1 },
-            { type: 'enemy_cavalry', x: 400, y: 700, team: 1 },
-            { type: 'enemy_swordsman', x: 300, y: 750, team: 1 },
-            { type: 'enemy_swordsman', x: 350, y: 750, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 750, team: 1 },
-            { type: 'enemy_spearman', x: 250, y: 700, team: 1 },
-            { type: 'enemy_spearman', x: 250, y: 750, team: 1 },
-            { type: 'enemy_archer', x: 200, y: 725, team: 1 },
-            { type: 'enemy_archer', x: 200, y: 775, team: 1 },
+            // Wave 1 - West main force (เขยิบไปทางขวา)
+            { type: 'enemy_cavalry', x: 400, y: 850, team: 1 },
+            { type: 'enemy_cavalry', x: 450, y: 850, team: 1 },
+            { type: 'enemy_cavalry', x: 500, y: 850, team: 1 },
+            { type: 'enemy_swordsman', x: 400, y: 900, team: 1 },
+            { type: 'enemy_swordsman', x: 450, y: 900, team: 1 },
+            { type: 'enemy_swordsman', x: 500, y: 900, team: 1 },
+            { type: 'enemy_spearman', x: 350, y: 850, team: 1 },
+            { type: 'enemy_spearman', x: 350, y: 900, team: 1 },
+            { type: 'enemy_archer', x: 300, y: 875, team: 1 },
+            { type: 'enemy_archer', x: 300, y: 925, team: 1 },
 
-            // Wave 2 - Northwest forest
-            { type: 'enemy_swordsman', x: 450, y: 400, team: 1 },
-            { type: 'enemy_swordsman', x: 500, y: 400, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 450, team: 1 },
-            { type: 'enemy_elephant', x: 400, y: 425, team: 1 },
+            // Wave 2 - ย้ายลงมาและเขยิบขวาให้พ้นต้นไม้
+            { type: 'enemy_swordsman', x: 800, y: 550, team: 1 },
+            { type: 'enemy_swordsman', x: 850, y: 550, team: 1 },
+            { type: 'enemy_swordsman', x: 800, y: 600, team: 1 },
+            { type: 'enemy_elephant', x: 750, y: 575, team: 1 },
 
             // Wave 3 - Southwest
             { type: 'enemy_swordsman', x: 400, y: 1100, team: 1 },
@@ -87,10 +87,11 @@ export const MAPS = {
             { type: 'farm', x: 2250, y: 850, team: 0 },
             { type: 'farm', x: 2250, y: 1000, team: 0 },
 
-            // Enemy base (Burma - Team 1) - ฝั่งซ้ายของแผนที่
-            { type: 'barracks', x: 150, y: 600, team: 1 },   // ค่ายทหารพม่า
-            { type: 'farm', x: 100, y: 450, team: 1 },       // นาข้าวพม่า 1
-            { type: 'farm', x: 100, y: 750, team: 1 }        // นาข้าวพม่า 2
+            // Enemy base (Burma - Team 1) - ย้ายลงล่างไม่ให้ติดหิน
+            { type: 'barracks', x: 150, y: 900, team: 1 },   // ค่ายทหารพม่า
+            { type: 'farm', x: 100, y: 750, team: 1 },       // นาข้าวพม่า 1
+            { type: 'farm', x: 100, y: 1050, team: 1 },      // นาข้าวพม่า 2
+            { type: 'farm', x: 100, y: 1200, team: 1 }       // นาข้าวพม่า 3 (เพิ่มใหม่)
         ],
 
         // Terrain features (obstacles, forests, water)

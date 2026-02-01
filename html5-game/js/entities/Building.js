@@ -38,7 +38,11 @@ export class Building {
         this.size = typeData.size || 100; // Use size from data
 
         // Sprite
-        this.sprite = spriteManager.get(this.typeId);
+        let spriteKey = this.typeId;
+        if (this.typeId === 'barracks') {
+            spriteKey = this.team === 0 ? 'wood_factory' : 'barracks';
+        }
+        this.sprite = spriteManager.get(spriteKey);
 
         // Production
         this.productionQueue = [];

@@ -32,7 +32,8 @@ export class SpriteManager {
             'ocean_wave': 'images/terrain/ocean-wave.png',
 
             // Buildings
-            'barracks': 'images/buildings/wood_factory.png',
+            'barracks': 'images/buildings/barracks.png',
+            'wood_factory': 'images/buildings/wood_factory.png',
             'elephant_pen': 'images/buildings/elephant_stable.png',
             'farm': 'images/buildings/vegetable_plot.png'
         };
