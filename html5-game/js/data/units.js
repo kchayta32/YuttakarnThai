@@ -68,7 +68,7 @@ export const UNIT_TYPES = {
         attack: 35,
         defense: 8,
         range: 1.5,
-        speed: 1.2,
+        speed: 1.7,
         attackSpeed: 2.0,
         cost: { food: 200, gold: 100 },
         buildTime: 20,
@@ -171,10 +171,25 @@ export const UNIT_TYPES = {
         attack: 30,
         defense: 7,
         range: 1.5,
-        speed: 1.2,
+        speed: 1.6,
         attackSpeed: 2.0,
         isEnemy: true,
         aoe: true
+    },
+    ENEMY_CAVALRY: {
+        id: 'enemy_cavalry',
+        name: 'ม้าศึกพม่า',
+        nameEn: 'Burmese Cavalry',
+        icon: '🐴',
+        color: '#c0392b',
+        hp: 110,
+        maxHp: 110,
+        attack: 14,
+        defense: 2,
+        range: 1,
+        speed: 4,
+        attackSpeed: 1.0,
+        isEnemy: true
     }
 };
 

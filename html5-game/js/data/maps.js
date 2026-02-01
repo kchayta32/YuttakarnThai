@@ -55,9 +55,9 @@ export const MAPS = {
         // Enemy units (Burma - Team 1)
         enemyUnits: [
             // Wave 1 - West main force
-            { type: 'enemy_swordsman', x: 300, y: 700, team: 1 },
-            { type: 'enemy_swordsman', x: 350, y: 700, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 700, team: 1 },
+            { type: 'enemy_cavalry', x: 300, y: 700, team: 1 },
+            { type: 'enemy_cavalry', x: 350, y: 700, team: 1 },
+            { type: 'enemy_cavalry', x: 400, y: 700, team: 1 },
             { type: 'enemy_swordsman', x: 300, y: 750, team: 1 },
             { type: 'enemy_swordsman', x: 350, y: 750, team: 1 },
             { type: 'enemy_swordsman', x: 400, y: 750, team: 1 },
