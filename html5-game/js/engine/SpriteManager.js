@@ -16,12 +16,13 @@ export class SpriteManager {
             'spearman': 'images/units/spearman.png',
             'archer': 'images/units/archer.png',
             'elephant': 'images/units/elephant.png',
-            'cavalry': 'images/units/swordsman.png', // missing horse asset
+            'cavalry': 'images/units/cavalry.png',
             'worker': 'images/units/swordsman.png',
             'enemy_swordsman': 'images/units/enemy_swordsman.png',
             'enemy_spearman': 'images/units/spearman.png',
             'enemy_archer': 'images/units/archer.png',
-            'enemy_elephant': 'images/units/elephant.png',
+            'enemy_elephant': 'images/units/enemy_war_elephant.png',
+            'enemy_cavalry': 'images/units/enemy_cavalry.png',
 
             // Terrain
             'grass': 'images/terrain/grass.png',
@@ -115,6 +116,9 @@ export class SpriteManager {
                 case 'enemy_elephant':
                 case 'elephant':
                     return 'enemy_elephant';
+                case 'enemy_cavalry':
+                case 'cavalry':
+                    return 'enemy_cavalry';
                 default:
                     return 'enemy_swordsman';
             }
