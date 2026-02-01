@@ -28,6 +28,7 @@ export class SpriteManager {
             'tree': 'images/terrain/thee.png',
             'tree_small': 'images/terrain/tree-sm.png',
             'rock': 'images/terrain/rock.png',
+            'ocean_wave': 'images/terrain/ocean-wave.png',
 
             // Buildings
             'barracks': 'images/buildings/barracks.png',

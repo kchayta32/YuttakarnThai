@@ -195,10 +195,12 @@ export class TerrainRenderer {
     }
 
     /**
-     * Render water with animated waves
+     * Render water with animated waves using ocean-wave.png
      */
     renderWater(ctx, x, y, width, height, time) {
-        // Base water
+        const zoom = this.game.camera.zoom || 1;
+
+        // 1. Base water gradient
         const gradient = ctx.createLinearGradient(x, y, x, y + height);
         gradient.addColorStop(0, '#1a6b9c');
         gradient.addColorStop(0.5, '#2980b9');
@@ -206,37 +208,94 @@ export class TerrainRenderer {
         ctx.fillStyle = gradient;
         ctx.fillRect(x, y, width, height);
 
-        // Animated waves
-        const waveOffset = (time * 30) % 60;
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+        const sprite = spriteManager.get('ocean_wave');
+        if (sprite) {
+            ctx.save();
+            // 2. Clip to water area so waves don't spill
+            ctx.beginPath();
+            ctx.rect(x, y, width, height);
+            ctx.clip();
 
-        for (let wy = 0; wy < height; wy += 60) {
-            const actualY = y + wy + waveOffset;
-            if (actualY >= y && actualY <= y + height - 3) {
-                ctx.fillRect(x, actualY, width, 3);
+            // 3. Setup animation parameters
+            const waveSize = 120 * zoom;
+            const vStep = waveSize * 0.4;
+            const hStep = waveSize * 0.6;
+
+            const flowSpeed = 30 * zoom;  // Slow, steady flow
+            const swayAmount = 25 * zoom; // Wider sway for more pronounced movement
+            const swaySpeed = 0.4;        // Very slow oscillations
+
+            // Calculate two layers of movement for extra smoothness and depth
+            // Layer 1
+            const offV1 = (time * flowSpeed) % vStep;
+            const offH1 = Math.sin(time * swaySpeed) * swayAmount;
+
+            // Layer 2 (slayer sway, different timing)
+            const offV2 = (time * flowSpeed * 1.2) % vStep;
+            const offH2 = Math.sin(time * swaySpeed * 0.7 + 2) * (swayAmount * 0.8);
+
+            // 4. Tile the wave sprite - Dual layer for depth and overlapping
+
+            // Layer 1: Base Waves
+            ctx.globalAlpha = 0.3;
+            for (let wy = -waveSize; wy < height + waveSize; wy += vStep) {
+                for (let wx = -waveSize; wx < width + waveSize; wx += hStep) {
+                    ctx.drawImage(
+                        sprite,
+                        Math.round(x + wx + offH1),
+                        Math.round(y + wy + offV1),
+                        waveSize,
+                        waveSize
+                    );
+                }
+            }
+
+            // Layer 2: Detail Waves (slightly differently timed)
+            ctx.globalAlpha = 0.25;
+            for (let wy = -waveSize; wy < height + waveSize; wy += vStep) {
+                for (let wx = -waveSize; wx < width + waveSize; wx += hStep) {
+                    ctx.drawImage(
+                        sprite,
+                        Math.round(x + wx + offH2),
+                        Math.round(y + wy + offV2),
+                        waveSize,
+                        waveSize
+                    );
+                }
+            }
+
+            ctx.restore();
+        } else {
+            // Fallback to simple line waves if sprite not loaded
+            const waveOffset = (time * 30) % 60;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+            for (let wy = 0; wy < height; wy += 60) {
+                const actualY = y + wy + waveOffset;
+                if (actualY >= y && actualY <= y + height - 3) {
+                    ctx.fillRect(x, actualY, width, 3);
+                }
             }
         }
 
-        // Sparkles
-        const sparkleCount = Math.floor(width * height / 5000);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        // 5. Sparkles (retained for extra polish)
+        const sparkleCount = Math.floor(width * height / 8000);
         for (let i = 0; i < sparkleCount; i++) {
             const sparkleTime = time + i * 0.3;
             const sparkleAlpha = (Math.sin(sparkleTime * 3) + 1) * 0.2;
-            if (sparkleAlpha > 0.1) {
+            if (sparkleAlpha > 0.05) {
                 const sx = x + this.pseudoRandomFloat(i * 7) * width;
                 const sy = y + this.pseudoRandomFloat(i * 11) * height;
                 ctx.beginPath();
-                ctx.arc(sx, sy, 2, 0, Math.PI * 2);
+                ctx.arc(sx, sy, 1.5 * zoom, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 255, 255, ${sparkleAlpha})`;
                 ctx.fill();
             }
         }
 
-        // Shore line
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x + 2, y + 2, width - 4, height - 4);
+        // Border
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+        ctx.lineWidth = 1.5 * zoom;
+        ctx.strokeRect(x, y, width, height);
     }
 
     /**
