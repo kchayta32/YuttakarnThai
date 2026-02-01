@@ -129,7 +129,7 @@ export class TerrainRenderer {
                     this.renderWater(ctx, screenX, screenY, width, height, time);
                     break;
                 case 'mountain':
-                    this.renderMountain(ctx, screenX, screenY, width, height);
+                    this.renderMountain(ctx, screenX, screenY, width, height, feature);
                     break;
                 case 'road':
                     this.renderRoad(ctx, screenX, screenY, width, height);
@@ -240,45 +240,53 @@ export class TerrainRenderer {
     }
 
     /**
-     * Render mountain with depth
+     * Render mountain/rock obstacle - World-space consistent
      */
-    renderMountain(ctx, x, y, width, height) {
-        // Base mountain
-        const gradient = ctx.createLinearGradient(x, y, x + width, y + height);
-        gradient.addColorStop(0, '#8b9dc3');
-        gradient.addColorStop(0.3, '#6b7280');
-        gradient.addColorStop(0.7, '#4b5563');
-        gradient.addColorStop(1, '#374151');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, y, width, height);
+    renderMountain(ctx, screenX, screenY, screenWidth, screenHeight, feature) {
+        const sprite = spriteManager.get('rock');
+        const zoom = this.game.camera.zoom || 1;
 
-        // Snow cap effect (top 30%)
-        const snowGradient = ctx.createLinearGradient(x, y, x, y + height * 0.3);
-        snowGradient.addColorStop(0, 'rgba(255, 255, 255, 0.4)');
-        snowGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = snowGradient;
-        ctx.fillRect(x, y, width, height * 0.35);
+        if (sprite) {
+            // Use WORLD-SPACE coordinates for deterministic seed and count
+            // This ensures rocks don't "jump" or change count when zooming
+            const seed = feature.x * 7 + feature.y * 13;
+            const rockCount = Math.max(1, Math.floor((feature.width * feature.height) / 4000));
 
-        // Rock texture
-        const rockCount = Math.floor(width * height / 2000);
-        for (let i = 0; i < rockCount; i++) {
-            const rx = x + this.pseudoRandomFloat(i * 11) * width;
-            const ry = y + this.pseudoRandomFloat(i * 17) * height;
-            const rSize = 5 + this.pseudoRandomFloat(i * 23) * 8;
+            for (let i = 0; i < rockCount; i++) {
+                // Random variation in world-space
+                const variation = this.pseudoRandomFloat(seed + i * 7);
 
-            ctx.fillStyle = `rgba(0, 0, 0, ${0.1 + this.pseudoRandomFloat(i) * 0.15})`;
-            ctx.fillRect(rx, ry, rSize, rSize * 0.6);
+                // Base size increased by 1.5x as requested (90 vs 60)
+                const worldSize = (90 + variation * 90);
+                const screenRockSize = worldSize * zoom;
+
+                // Position offset in world-space
+                const worldOffsetX = this.pseudoRandomFloat(seed + i * 11) * (feature.width - worldSize * 0.5);
+                const worldOffsetY = this.pseudoRandomFloat(seed + i * 17) * (feature.height - worldSize * 0.5);
+
+                // Project to screen space
+                const rx = screenX + worldOffsetX * zoom;
+                const ry = screenY + worldOffsetY * zoom;
+
+                // Draw rock shadow
+                ctx.beginPath();
+                ctx.ellipse(rx + screenRockSize / 2, ry + screenRockSize * 0.8, screenRockSize / 2.5, screenRockSize / 6, 0, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+                ctx.fill();
+
+                // Draw rock sprite
+                ctx.drawImage(sprite, rx, ry, screenRockSize, screenRockSize);
+            }
+        } else {
+            // Fallback (remains screen-space compatible)
+            const gradient = ctx.createLinearGradient(screenX, screenY, screenX + screenWidth, screenY + screenHeight);
+            gradient.addColorStop(0, '#8b9dc3');
+            gradient.addColorStop(0.3, '#6b7280');
+            gradient.addColorStop(0.7, '#4b5563');
+            gradient.addColorStop(1, '#374151');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(screenX, screenY, screenWidth, screenHeight);
         }
-
-        // Impassable indicator (subtle X pattern)
-        ctx.strokeStyle = 'rgba(139, 0, 0, 0.15)';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(x + 10, y + 10);
-        ctx.lineTo(x + width - 10, y + height - 10);
-        ctx.moveTo(x + width - 10, y + 10);
-        ctx.lineTo(x + 10, y + height - 10);
-        ctx.stroke();
     }
 
     /**
