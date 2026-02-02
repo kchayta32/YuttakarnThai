@@ -155,7 +155,15 @@ export class Building {
 
         // Draw Sprite if available, otherwise fallback to box
         if (this.sprite) {
-            ctx.drawImage(this.sprite, screenX - halfSize, screenY - halfSize, drawSize, drawSize);
+            if (this.typeId === 'barracks' && this.isEnemy) {
+                ctx.save();
+                // Apply a red tint filter
+                ctx.filter = 'sepia(1) saturate(5) hue-rotate(-50deg) brightness(0.8)';
+                ctx.drawImage(this.sprite, screenX - halfSize, screenY - halfSize, drawSize, drawSize);
+                ctx.restore();
+            } else {
+                ctx.drawImage(this.sprite, screenX - halfSize, screenY - halfSize, drawSize, drawSize);
+            }
         } else {
             // Fallback (Traditional box)
             ctx.fillStyle = this.isEnemy ? '#7f1d1d' : '#1a4d2e';
