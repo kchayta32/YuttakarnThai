@@ -1,0 +1,32 @@
+# RTS: Yutthakan Thailand - Final Package Summary
+
+## Delivery Content
+1.  **Docs/**
+    *   `RTS_Yutthakan_Thailand_GDD_v1.0.md` - Main Game Design Document.
+    *   `RTS_Campaign_Design_Sheets.md` - Details for all 9 campaigns.
+    *   `RTS_Balance_Sheet.csv` - Unit stats and costs.
+    *   `RTS_AI_Design.md` - Behavior trees and difficulty.
+    *   `RTS_Test_Plan.md` - QA checklists.
+    *   `RTS_Asset_List.md` - Polycounts and audio manifest.
+    *   `RTS_Localization.json` - Sample EN/TH/CN strings.
+    *   `Mockups/` - (See attached Artifacts in Agent UI for PNGs).
+
+2.  **UnityProject/**
+    *   `Assets/_Scripts/` - Core C# implementation (UnitController, Pathfinder, etc).
+    *   `Assets/_Scenes/` - 3 Prototype Scene placeholders.
+    *   `ProjectSettings/` - Config files.
+
+## How to Proceed
+1.  **Open Unity Hub.**
+2.  **Add Project:** Select the `UnityProject` folder.
+3.  **Open Scene:** Go to `Assets/_Scenes/Prototype_WWI.unity`.
+4.  **Add Assets:** The project currently uses placeholders. Replace generic cubes/capsules with models from the `Docs/RTS_Asset_List.md` specification.
+
+## Assumptions
+*   Unity Version 2022.3 LTS is used.
+*   "RTSPathfinder" acts as a wrapper for Unity's NavMesh.
+*   Audio clips are currently missing (placeholders only).
+
+## License
+*   Code: MIT License (Sample Code).
+*   Content: Historical facts are public domain. Original design is Copyright <User>.

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTS: ยุทธการไทย - สงครามช้างเผือก</title>
+    <meta name="description" content="เกม RTS ยุทธการไทย - สงครามช้างเผือก เวอร์ชัน HTML5 Canvas">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">⚔️</div>
+            <h1>RTS: ยุทธการไทย</h1>
+            <p>สงครามช้างเผือก</p>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loading-progress"></div>
+            </div>
+            <span class="loading-text" id="loading-text">กำลังโหลด...</span>
+        </div>
+    </div>
+
+    <!-- Main Menu -->
+    <div id="main-menu" class="main-menu hidden">
+        <div class="menu-background">
+            <div class="menu-overlay"></div>
+        </div>
+        <div class="menu-content">
+            <div class="menu-header">
+                <div class="menu-logo">⚔️</div>
+                <h1>RTS: ยุทธการไทย</h1>
+                <h2>สงครามช้างเผือก</h2>
+                <p>The War of the White Elephants • 1547-1549</p>
+            </div>
+            <div class="menu-buttons">
+                <button id="btn-start" class="menu-btn primary">
+                    <span class="btn-icon">▶️</span>
+                    <span>เริ่มเกม</span>
+                </button>
+                <button id="btn-continue" class="menu-btn" disabled>
+                    <span class="btn-icon">📂</span>
+                    <span>โหลดเกม</span>
+                </button>
+                <button id="btn-newgame" class="menu-btn">
+                    <span class="btn-icon">🔄</span>
+                    <span>เริ่มใหม่</span>
+                </button>
+                <button id="btn-settings" class="menu-btn">
+                    <span class="btn-icon">⚙️</span>
+                    <span>ตั้งค่า</span>
+                </button>
+                <button id="btn-about" class="menu-btn">
+                    <span class="btn-icon">ℹ️</span>
+                    <span>เกี่ยวกับเกม</span>
+                </button>
+            </div>
+            <div class="menu-footer">
+                <p>© 2025 RTS: Yutthakan Thailand • HTML5 Edition</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content settings-content">
+            <h2>⚙️ ตั้งค่า</h2>
+            <div class="settings-group">
+                <label for="volume-slider">🔊 ระดับเสียง</label>
+                <input type="range" id="volume-slider" title="ระดับเสียง" min="0" max="100" value="70">
+                <span id="volume-value">70%</span>
+            </div>
+            <div class="settings-group">
+                <label for="camera-speed">🎮 ความเร็วกล้อง</label>
+                <input type="range" id="camera-speed" title="ความเร็วกล้อง" min="1" max="10" value="5">
+                <span id="camera-value">5</span>
+            </div>
+            <div class="settings-group">
+                <label for="edge-scroll">📐 Edge Scrolling</label>
+                <input type="checkbox" id="edge-scroll" title="เปิด/ปิด Edge Scrolling" checked>
+                <span>เปิดใช้การเลื่อนขอบจอ</span>
+            </div>
+            <div class="settings-group">
+                <label for="hq-shadows">🌒 HQ Shadows</label>
+                <input type="checkbox" id="hq-shadows" title="เปิด/ปิด HQ Shadows" checked>
+                <span>เปิดใช้เงาคุณภาพสูง</span>
+            </div>
+            <div class="settings-group">
+                <label for="terrain-details">🌿 Terrain Details</label>
+                <input type="checkbox" id="terrain-details" title="เปิด/ปิด Terrain Details" checked>
+                <span>เปิดใช้รายละเอียดพื้นผิว</span>
+            </div>
+            <div class="settings-group">
+                <label for="props-detail">🌲 Environment Props</label>
+                <input type="checkbox" id="props-detail" title="เปิด/ปิด Environment Props" checked>
+                <span>เปิดใช้ต้นไม้และก้อนหิน</span>
+            </div>
+            <div class="settings-group">
+                <label for="debug-mode">🐛 Debug Mode</label>
+                <input type="checkbox" id="debug-mode" title="เปิด/ปิด Debug Mode">
+                <span>แสดง Grid และ Pathfinding</span>
+            </div>
+            <button class="modal-close" id="close-settings">บันทึก</button>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal hidden">
+        <div class="modal-content about-content">
+            <h2>ℹ️ เกี่ยวกับเกม</h2>
+            <div class="about-section">
+                <h3>📜 เนื้อเรื่อง</h3>
+                <p>
+                    <strong>สงครามช้างเผือก (พ.ศ. 2090-2092)</strong><br>
+                    พระเจ้าตะเบ็งชเวตี้แห่งตองอูนำทัพบุกสยามผ่านด่านเจดีย์สามองค์
+                    สมเด็จพระสุริโยทัยทรงช้างเข้าสู้รบเพื่อปกป้องพระราชสวามี
+                    สมเด็จพระมหาจักรพรรดิ
+                </p>
+            </div>
+            <div class="about-section">
+                <h3>🎮 วิธีเล่น</h3>
+                <ul>
+                    <li><strong>คลิกซ้าย</strong> - เลือกหน่วย</li>
+                    <li><strong>ลาก Box</strong> - เลือกหลายหน่วย</li>
+                    <li><strong>คลิกขวา</strong> - เคลื่อนที่/โจมตี</li>
+                    <li><strong>WASD / ลูกศร</strong> - เลื่อนกล้อง</li>
+                    <li><strong>ลากเมาส์กลาง</strong> - เลื่อนกล้อง</li>
+                    <li><strong>Scroll</strong> - ซูมเข้า/ออก</li>
+                </ul>
+            </div>
+            <div class="about-section">
+                <h3>👨‍💻 ทีมพัฒนา</h3>
+                <p>
+                    นายศตวรรษ อินทรักษ (66122519012)<br>
+                    นายกฤษนัย กิ้นโบราณ (66122519023)<br>
+                    นายธเนศพล แซ่เอีย (66122519026)
+                </p>
+            </div>
+            <button class="modal-close" id="close-about">ปิด</button>
+        </div>
+    </div>
+
+    <!-- Campaign Selection Modal -->
+    <div id="campaign-modal" class="modal hidden">
+        <div class="modal-content campaign-content">
+            <h2>⚔️ เลือกแคมเปญ</h2>
+            <p class="campaign-subtitle">เรียนรู้ประวัติศาสตร์การทหารไทยผ่านการเล่นเกม</p>
+
+            <div class="campaign-grid">
+                <!-- 1. สงครามช้างเผือก (UNLOCKED) -->
+                <div class="campaign-card unlocked" data-campaign="white_elephant">
+                    <div class="campaign-era">ยุคอยุธยา • 1547</div>
+                    <div class="campaign-icon">🐘</div>
+                    <h3>สงครามช้างเผือก</h3>
+                    <p class="campaign-en">The War of the White Elephants</p>
+                    <p class="campaign-desc">พระเจ้าตะเบ็งชเวตี้แห่งตองอูบุกสยามผ่านด่านเจดีย์สามองค์
+                        สมเด็จพระสุริโยทัยทรงช้างเข้าสู้รบเพื่อปกป้องพระราชสวามี</p>
+                    <div class="campaign-details">
+                        <span class="detail-item">📍 ที่ราบกาญจนบุรี → กำแพงอยุธยา</span>
+                        <span class="detail-item">⚔️ ดาบ, หอก, ช้างศึก</span>
+                    </div>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Elephant Duel</span>
+                        <span class="feature-tag">River Transport</span>
+                    </div>
+                    <button class="campaign-play-btn">▶️ เล่นเลย</button>
+                </div>
+
+                <!-- 2. สงครามท่าดินแดง (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="tha_din_daeng">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">ยุครัตนโกสินทร์ตอนต้น • 1786</div>
+                    <div class="campaign-icon">🌲</div>
+                    <h3>สงครามท่าดินแดง</h3>
+                    <p class="campaign-en">The Battle of Tha Din Daeng</p>
+                    <p class="campaign-desc">
+                        พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกทรงนำทัพรัตนโกสินทร์สกัดกองทัพพม่าของพระเจ้าปดุง</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Supply Lines</span>
+                        <span class="feature-tag">Ambush +50%</span>
+                    </div>
+                </div>
+
+                <!-- 3. วิกฤตการณ์ปากน้ำ (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="paknam">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">ยุคปฏิรูป • 1893</div>
+                    <div class="campaign-icon">⚓</div>
+                    <h3>วิกฤตการณ์ปากน้ำ</h3>
+                    <p class="campaign-en">The Paknam Incident</p>
+                    <p class="campaign-desc">เรือปืนฝรั่งเศสบุกขึ้นแม่น้ำเจ้าพระยา สยามต้องป้องกันเมืองหลวง</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Diplomatic Timer</span>
+                        <span class="feature-tag">Fort Batteries</span>
+                    </div>
+                </div>
+
+                <!-- 4. กองกำลังทหารอาสา WWI (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="wwi">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">สงครามโลกครั้งที่ 1 • 1918</div>
+                    <div class="campaign-icon">🎖️</div>
+                    <h3>กองกำลังทหารอาสา</h3>
+                    <p class="campaign-en">The Expeditionary Force</p>
+                    <p class="campaign-desc">กองกำลังสำรวจสยามเดินทางไปฝรั่งเศส ต้องปรับตัวเข้ากับสงครามอุตสาหกรรม</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Gas Attack</span>
+                        <span class="feature-tag">Artillery Support</span>
+                    </div>
+                </div>
+
+                <!-- 5. กบฏบวรเดช (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="boworadet">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">ยุคเปลี่ยนแปลงการปกครอง • 1933</div>
+                    <div class="campaign-icon">🚂</div>
+                    <h3>กบฏบวรเดช</h3>
+                    <p class="campaign-en">The Battle for the Constitution</p>
+                    <p class="campaign-desc">พลเอกพระองค์เจ้าบวรเดชนำทหารจากโคราชมุ่งหน้าสู่กรุงเทพฯ</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Armored Train</span>
+                        <span class="feature-tag">Propaganda</span>
+                    </div>
+                </div>
+
+                <!-- 6. ยุทธนาวีเกาะช้าง (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="koh_chang">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">สงครามโลกครั้งที่ 2 • 1940-41</div>
+                    <div class="campaign-icon">✈️</div>
+                    <h3>ยุทธนาวีเกาะช้าง</h3>
+                    <p class="campaign-en">Battle of Koh Chang</p>
+                    <p class="campaign-desc">ไทยรุกเข้าอินโดจีนของฝรั่งเศสเพื่อเรียกร้องดินแดนที่เสียไป</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Air Superiority</span>
+                        <span class="feature-tag">Combined Arms</span>
+                    </div>
+                </div>
+
+                <!-- 7. วีรชนอ่าวมะนาว (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="ao_manao">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">สงครามโลกครั้งที่ 2 • 1941</div>
+                    <div class="campaign-icon">🏖️</div>
+                    <h3>วีรชนอ่าวมะนาว</h3>
+                    <p class="campaign-en">The Heroes of Ao Manao</p>
+                    <p class="campaign-desc">8 ธันวาคม 1941 กองทัพญี่ปุ่นยกพลขึ้นบกที่ประจวบคีรีขันธ์</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Ammo Scarcity</span>
+                        <span class="feature-tag">Survival Timer</span>
+                    </div>
+                </div>
+
+                <!-- 8. พยัคฆ์น้อยเกาหลี (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="korea">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">สงครามเกาหลี • 1950-53</div>
+                    <div class="campaign-icon">❄️</div>
+                    <h3>พยัคฆ์น้อย</h3>
+                    <p class="campaign-en">Little Tigers of Pork Chop Hill</p>
+                    <p class="campaign-desc">กรมทหารราบที่ 21 ป้องกันภูเขายุทธศาสตร์ในฤดูหนาวที่หนาวเหน็บ</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Freezing Damage</span>
+                        <span class="feature-tag">Hand-to-Hand</span>
+                    </div>
+                </div>
+
+                <!-- 9. ปฏิบัติการนาคราช (LOCKED) -->
+                <div class="campaign-card locked" data-campaign="naga_protect">
+                    <div class="lock-overlay">🔒</div>
+                    <div class="campaign-era">อนาคตอันใกล้ • 2025</div>
+                    <div class="campaign-icon">🛸</div>
+                    <h3>ปฏิบัติการนาคราช</h3>
+                    <p class="campaign-en">Operation Naga Protect</p>
+                    <p class="campaign-desc">ข้อพิพาทชายแดนสมมติขยายตัว กองทัพบกไทยส่งกองกำลังรักษาสันติภาพ</p>
+                    <div class="campaign-features">
+                        <span class="feature-tag">Drone Warfare</span>
+                        <span class="feature-tag">Rules of Engagement</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="modal-close" id="close-campaign">← กลับเมนูหลัก</button>
+        </div>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorial-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2>📖 วิธีเล่น</h2>
+            <div class="tutorial-grid">
+                <div class="tutorial-item">
+                    <span class="key">คลิกซ้าย</span>
+                    <span>เลือกหน่วย</span>
+                </div>
+                <div class="tutorial-item">
+                    <span class="key">คลิกขวา</span>
+                    <span>สั่งเคลื่อนที่ / โจมตี</span>
+                </div>
+                <div class="tutorial-item">
+                    <span class="key">ลาก Box</span>
+                    <span>เลือกหลายหน่วย</span>
+                </div>
+                <div class="tutorial-item">
+                    <span class="key">WASD / ลูกศร</span>
+                    <span>เลื่อนกล้อง</span>
+                </div>
+                <div class="tutorial-item">
+                    <span class="key">ลาก Mouse กลาง</span>
+                    <span>เลื่อนกล้อง</span>
+                </div>
+                <div class="tutorial-item">
+                    <span class="key">Scroll</span>
+                    <span>ซูมเข้า/ออก</span>
+                </div>
+            </div>
+            <h3>🎯 เป้าหมาย</h3>
+            <p>ป้องกันพระนครอยุธยาจากกองทัพพม่า กำจัดศัตรูทั้งหมดเพื่อชนะ!</p>
+            <button class="modal-close" id="close-tutorial">เริ่มเกม!</button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container" class="game-container hidden">
+        <!-- Top HUD - Resources -->
+        <div class="hud-top">
+            <div class="resource-bar">
+                <div class="resource-item">
+                    <span class="resource-icon">🌾</span>
+                    <span class="resource-label">อาหาร</span>
+                    <span class="resource-value" id="res-food">500</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">💰</span>
+                    <span class="resource-label">ทอง</span>
+                    <span class="resource-value" id="res-gold">200</span>
+                </div>
+                <div class="resource-item">
+                    <span class="resource-icon">👥</span>
+                    <span class="resource-label">กำลังพล</span>
+                    <span class="resource-value" id="res-pop">0/20</span>
+                </div>
+            </div>
+            <div class="campaign-info">
+                <span class="campaign-name">สงครามช้างเผือก</span>
+                <span class="campaign-year">พ.ศ. 2090</span>
+            </div>
+            <div class="game-timer">
+                <span id="game-time">00:00</span>
+            </div>
+            <div class="game-controls">
+                <button id="btn-pause" class="control-btn" title="หยุดชั่วคราว (ESC)">⏸️</button>
+                <button id="btn-speed" class="control-btn" title="ความเร็ว">1x</button>
+                <button id="btn-menu" class="control-btn" title="เมนู">☰</button>
+            </div>
+        </div>
+
+        <!-- Game Canvas -->
+        <canvas id="game-canvas"></canvas>
+
+        <!-- Objective Panel -->
+        <div class="objective-panel" id="objective-panel">
+            <h4>🎯 ภารกิจ</h4>
+            <p id="objective-text">กำจัดกองทัพพม่าทั้งหมด</p>
+            <div class="objective-progress">
+                <span>ศัตรูเหลือ: <strong id="enemy-count">15</strong></span>
+            </div>
+        </div>
+
+        <!-- Bottom HUD -->
+        <div class="hud-bottom">
+            <!-- Minimap -->
+            <div class="minimap-container">
+                <canvas id="minimap-canvas" width="200" height="150"></canvas>
+                <div class="minimap-border"></div>
+            </div>
+
+            <!-- Unit Info Panel -->
+            <div class="unit-panel" id="unit-panel">
+                <div class="unit-portrait" id="unit-portrait">
+                    <span>?</span>
+                </div>
+                <div class="unit-info">
+                    <h3 id="unit-name">ไม่ได้เลือกหน่วย</h3>
+                    <div class="unit-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">❤️ HP:</span>
+                            <div class="stat-bar">
+                                <div class="stat-fill hp-fill" id="unit-hp-bar"></div>
+                            </div>
+                            <span id="unit-hp-text">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">⚔️ ATK:</span>
+                            <span id="unit-atk">-</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">🛡️ DEF:</span>
+                            <span id="unit-def">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="selected-count" id="selected-count"></div>
+            </div>
+
+            <!-- Command Panel -->
+            <div class="command-panel">
+                <h4>คำสั่ง</h4>
+                <div class="command-grid" id="command-grid">
+                    <button class="cmd-btn" data-cmd="move" title="เคลื่อนที่ (M)">🚶</button>
+                    <button class="cmd-btn" data-cmd="attack" title="โจมตี (A)">⚔️</button>
+                    <button class="cmd-btn" data-cmd="stop" title="หยุด (S)">✋</button>
+                    <button class="cmd-btn" data-cmd="hold" title="ยืนตำแหน่ง (H)">🛡️</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pause Menu -->
+        <div id="pause-menu" class="pause-menu hidden">
+            <div class="pause-content">
+                <h2>⏸️ หยุดชั่วคราว</h2>
+                <button id="btn-resume" class="menu-btn primary">▶️ เล่นต่อ</button>
+                <button id="btn-save" class="menu-btn">💾 บันทึกเกม</button>
+                <button id="btn-restart" class="menu-btn">🔄 เริ่มใหม่</button>
+                <button id="btn-quit" class="menu-btn danger">🚪 ออกจากเกม</button>
+            </div>
+        </div>
+
+        <!-- Victory/Defeat Screen -->
+        <div id="result-screen" class="result-screen hidden">
+            <div class="result-content">
+                <div class="result-icon" id="result-icon">🏆</div>
+                <h1 id="result-title">ชัยชนะ!</h1>
+                <p id="result-desc">คุณปกป้องพระนครได้สำเร็จ</p>
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span class="stat-value" id="stat-kills">0</span>
+                        <span class="stat-label">ศัตรูถูกกำจัด</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="stat-value" id="stat-time">00:00</span>
+                        <span class="stat-label">เวลา</span>
+                    </div>
+                    <div class="result-stat">
+                        <span class="stat-value" id="stat-survivors">0</span>
+                        <span class="stat-label">หน่วยรอดชีวิต</span>
+                    </div>
+                </div>
+                <div class="result-buttons">
+                    <button id="btn-play-again" class="menu-btn primary">🔄 เล่นอีกครั้ง</button>
+                    <button id="btn-to-menu" class="menu-btn">🏠 กลับเมนู</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

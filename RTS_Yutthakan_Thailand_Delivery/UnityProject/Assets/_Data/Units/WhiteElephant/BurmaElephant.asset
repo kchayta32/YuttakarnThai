@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe4e8d9e45c867e45a03ecf1aa6f9084, type: 3}
+  m_Name: BurmaElephant
+  m_EditorClassIdentifier: 
+  UnitName: "\u0E0A\u0E49\u0E32\u0E07\u0E28\u0E36\u0E01\u0E1E\u0E21\u0E48\u0E32"
+  Icon: {fileID: 0}
+  CostRice: 300
+  CostSupplies: 50
+  MaxHP: 1100
+  Armor: 4
+  Damage: 55
+  AttackRange: 2
+  AttackRate: 1.5
+  MoveSpeed: 6
+  AttackSounds: []
+  SelectSounds: []
+  MoveSounds: []

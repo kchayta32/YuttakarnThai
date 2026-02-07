@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1adbb9b615c96014fabeefb2df1a89a1, type: 3}
+  m_Name: GameUIAssets
+  m_EditorClassIdentifier: 
+  RiceIcon: {fileID: 21300000, guid: fe941e0bf34edea49be2fa029c9b463e, type: 3}
+  SuppliesIcon: {fileID: 21300000, guid: 5fe313d818676734abc85abb16f2b995, type: 3}
+  FuelIcon: {fileID: 21300000, guid: afc6487c67413744dab2a4ac982b6ba8, type: 3}
+  GoldIcon: {fileID: 21300000, guid: 9b3520a8f442d77408767959cbe02c6b, type: 3}
+  VictoryEmblem: {fileID: 21300000, guid: 5042f1ab99debec439e7f21bf13a818e, type: 3}
+  DefeatEmblem: {fileID: 21300000, guid: 324170f2f692c3c49b6b8a2dc3c09109, type: 3}
+  MainMenuBackground: {fileID: 21300000, guid: 6e258e2092eae86478d2298aba0f7d8e, type: 3}
+  CampaignBackground: {fileID: 21300000, guid: c71531f2eab81284da99f88041ccda45, type: 3}
+  InfantryIcon: {fileID: 21300000, guid: 1c0bf88080698984cbdbba58e436e24c, type: 3}
+  CavalryIcon: {fileID: 21300000, guid: a771f92e43838694998741a37d01d8cb, type: 3}
+  ElephantIcon: {fileID: 21300000, guid: 55b641050d528f043b22ba529e7bf6c3, type: 3}
+  ArcherIcon: {fileID: 21300000, guid: ea9971c463ad3254ea2039f5c315876f, type: 3}
+  SiegeIcon: {fileID: 21300000, guid: 159bfd1016bb27e4c93587423d418037, type: 3}
+  BarracksIcon: {fileID: 21300000, guid: 05a6ab832d1a69546956bc768f187057, type: 3}
+  StableIcon: {fileID: 0}
+  ElephantPenIcon: {fileID: 0}
+  ArcheryRangeIcon: {fileID: 0}
+  TownCenterIcon: {fileID: 0}
+  HealthIcon: {fileID: 0}
+  AttackIcon: {fileID: 0}
+  DefenseIcon: {fileID: 0}
+  SpeedIcon: {fileID: 0}
+  TechArmorIcon: {fileID: 21300000, guid: b9eabedc8279bca4ea3f4048c648f2b2, type: 3}
+  TechWeaponIcon: {fileID: 21300000, guid: f55a9fad99411134d81c3337d40e8a16, type: 3}
+  TechSpeedIcon: {fileID: 0}
+  TempleIcon: {fileID: 21300000, guid: bd7f00a87b798f74bb5597f206a46aa1, type: 3}
+  WorkshopIcon: {fileID: 21300000, guid: 37b2e5e971e046240b51c485bbce049b, type: 3}
