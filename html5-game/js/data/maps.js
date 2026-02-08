@@ -250,8 +250,7 @@ export const MAPS = {
             }
         },
 
-        startingResources: { food: 400, gold: 200 },
-        cameraStart: { x: 100, y: 1000 }
+        startingResources: { food: 400, gold: 200 }
     },
 
     // =====================================================

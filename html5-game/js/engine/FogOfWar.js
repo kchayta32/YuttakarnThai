@@ -214,13 +214,42 @@ export class FogOfWar {
     render(ctx, camera) {
         if (!this.enabled) return;
 
+        const zoom = camera.zoom || 1;
         ctx.save();
 
-        // Calculate visible area in grid coordinates
+        // 1. Draw black "gutters" for areas outside map bounds within the viewport
+        ctx.fillStyle = this.unexploredColor;
+
+        // Space to the right of map
+        const mapRightX = (this.mapWidth - camera.x) * zoom;
+        if (mapRightX < camera.width) {
+            ctx.fillRect(mapRightX, 0, camera.width - mapRightX, camera.height);
+        }
+
+        // Space below the map
+        const mapBottomY = (this.mapHeight - camera.y) * zoom;
+        if (mapBottomY < camera.height) {
+            ctx.fillRect(0, mapBottomY, camera.width, camera.height - mapBottomY);
+        }
+
+        // Space to the left of map
+        const mapLeftX = (0 - camera.x) * zoom;
+        if (mapLeftX > 0) {
+            ctx.fillRect(0, 0, mapLeftX, camera.height);
+        }
+
+        // Space above the map
+        const mapTopY = (0 - camera.y) * zoom;
+        if (mapTopY > 0) {
+            ctx.fillRect(0, 0, camera.width, mapTopY);
+        }
+
+        // 2. Render actual fog of war within map bounds
+        // Calculate visible area in grid coordinates (account for zoom)
         const startX = Math.floor(camera.x / this.tileSize);
         const startY = Math.floor(camera.y / this.tileSize);
-        const endX = Math.ceil((camera.x + camera.width) / this.tileSize);
-        const endY = Math.ceil((camera.y + camera.height) / this.tileSize);
+        const endX = Math.ceil((camera.x + camera.width / zoom) / this.tileSize);
+        const endY = Math.ceil((camera.y + camera.height / zoom) / this.tileSize);
 
         // Draw fog scaled up from the small fog canvas
         ctx.imageSmoothingEnabled = true;
@@ -232,11 +261,11 @@ export class FogOfWar {
         const sw = Math.min(this.gridWidth - sx, endX - startX);
         const sh = Math.min(this.gridHeight - sy, endY - startY);
 
-        // Destination rectangle (on screen)
-        const dx = sx * this.tileSize - camera.x;
-        const dy = sy * this.tileSize - camera.y;
-        const dw = sw * this.tileSize;
-        const dh = sh * this.tileSize;
+        // Destination rectangle (on screen) - Projected using zoom
+        const dx = (sx * this.tileSize - camera.x) * zoom;
+        const dy = (sy * this.tileSize - camera.y) * zoom;
+        const dw = sw * this.tileSize * zoom;
+        const dh = sh * this.tileSize * zoom;
 
         if (sw > 0 && sh > 0) {
             ctx.drawImage(this.fogCanvas, sx, sy, sw, sh, dx, dy, dw, dh);

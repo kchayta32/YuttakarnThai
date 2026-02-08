@@ -467,9 +467,60 @@ export class Game {
         this.input.settings.edgeScrollEnabled = this.settings.edgeScrollEnabled;
         this.input.settings.cameraSpeed = this.settings.cameraSpeed;
 
-        // Start game loop
+        // --- Final Camera Initialization ---
+        // 1. Force resize to get correct dimensions
+        this.resizeCanvas();
+
+        // 2. Determine target center position (prioritize player group)
+        let targetCenterX = this.mapWidth / 2;
+        let targetCenterY = this.mapHeight / 2;
+
+        const playerUnits = this.units.filter(u => u.team === 0);
+        if (playerUnits.length > 0) {
+            // Calculate center of player group
+            targetCenterX = playerUnits.reduce((sum, u) => sum + u.x, 0) / playerUnits.length;
+            targetCenterY = playerUnits.reduce((sum, u) => sum + u.y, 0) / playerUnits.length;
+        } else if (this.currentMap.cameraStart) {
+            // Fallback to map defined position (shifted from top-left to center focus)
+            targetCenterX = this.currentMap.cameraStart.x + (this.camera.width / 2);
+            targetCenterY = this.currentMap.cameraStart.y + (this.camera.height / 2);
+        }
+
+        // 3. Set camera based on center position and current viewport size
+        const zoom = 1;
+        this.camera.zoom = zoom;
+
+        // Use window properties if camera.width is still 0
+        const viewW = this.camera.width || window.innerWidth;
+        const viewH = this.camera.height || window.innerHeight;
+
+        this.camera.x = targetCenterX - (viewW / (2 * zoom));
+        this.camera.y = targetCenterY - (viewH / (2 * zoom));
+
+        // 4. Clamp to bounds immediately
+        const maxX = this.mapWidth - (viewW / zoom);
+        const maxY = this.mapHeight - (viewH / zoom);
+        this.camera.x = Math.max(0, Math.min(maxX, this.camera.x));
+        this.camera.y = Math.max(0, Math.min(maxY, this.camera.y));
+
+        // 5. Reset mouse safety and start game loop
+        if (this.input) {
+            this.input.mouseMoved = false;
+        }
+
         this.lastTime = performance.now();
-        requestAnimationFrame((time) => this.gameLoop(time));
+        requestAnimationFrame((time) => {
+            // Re-apply camera center in the first frame to handle potential late canvas resizing
+            if (playerUnits.length > 0) {
+                const viewW = this.camera.width || window.innerWidth;
+                const viewH = this.camera.height || window.innerHeight;
+                this.camera.x = targetCenterX - (viewW / (2 * zoom));
+                this.camera.y = targetCenterY - (viewH / (2 * zoom));
+                this.camera.x = Math.max(0, Math.min(maxX, this.camera.x));
+                this.camera.y = Math.max(0, Math.min(maxY, this.camera.y));
+            }
+            this.gameLoop(time);
+        });
     }
 
     spawnUnits() {

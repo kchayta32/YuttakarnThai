@@ -86,12 +86,12 @@ export class TerrainRenderer {
         // Calculate visible tile range
         const startX = Math.floor(camera.x / this.tileSize);
         const startY = Math.floor(camera.y / this.tileSize);
-        const endX = Math.ceil((camera.x + camera.width / zoom) / this.tileSize);
-        const endY = Math.ceil((camera.y + camera.height / zoom) / this.tileSize);
+        const endX = Math.min(Math.ceil((camera.x + camera.width / zoom) / this.tileSize), Math.ceil(mapData.width / this.tileSize) - 1);
+        const endY = Math.min(Math.ceil((camera.y + camera.height / zoom) / this.tileSize), Math.ceil(mapData.height / this.tileSize) - 1);
 
         // Draw base ground
-        for (let ty = startY; ty <= endY; ty++) {
-            for (let tx = startX; tx <= endX; tx++) {
+        for (let ty = Math.max(0, startY); ty <= endY; ty++) {
+            for (let tx = Math.max(0, startX); tx <= endX; tx++) {
                 const screenX = (tx * this.tileSize - camera.x) * zoom;
                 const screenY = (ty * this.tileSize - camera.y) * zoom;
 
