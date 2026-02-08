@@ -118,6 +118,12 @@ export const MAPS = {
             { type: 'mountain', x: 700, y: 300, width: 120, height: 150 },
             { type: 'mountain', x: 700, y: 1200, width: 120, height: 180 },
 
+            // Player side rocks (Siam side)
+            { type: 'mountain', x: 2350, y: 400, width: 120, height: 100 },
+            { type: 'mountain', x: 2400, y: 1200, width: 150, height: 120 },
+            { type: 'mountain', x: 2700, y: 300, width: 100, height: 100 },
+            { type: 'mountain', x: 2750, y: 1600, width: 150, height: 150 },
+
             // === RIVER (impassable except bridge) ===
             { type: 'water', x: 1600, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน (เลื่อนไป 600)
             { type: 'water', x: 1600, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง (เลื่อนไป 600)
