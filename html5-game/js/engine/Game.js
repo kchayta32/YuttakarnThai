@@ -12,8 +12,9 @@ import { TerrainRenderer } from './TerrainRenderer.js';
 import { StoryCutscene } from './StoryCutscene.js';
 import { BuildingSystem } from '../systems/BuildingSystem.js';
 import { WorkerSystem } from '../systems/WorkerSystem.js';
-import { MAPS, CURRENT_MAP } from '../data/maps.js';
+import { MAPS, CURRENT_MAP, CAMPAIGN_MISSIONS } from '../data/maps.js';
 import { spriteManager } from './SpriteManager.js';
+import { FogOfWar } from './FogOfWar.js';
 
 export class Game {
     constructor() {
@@ -38,11 +39,16 @@ export class Game {
             volume: 70,
             cameraSpeed: 5,
             edgeScrollEnabled: true,
-            debugMode: false
+            debugMode: false,
+            fogOfWarEnabled: true
         };
+
+        // Fog of War
+        this.fogOfWar = null;
 
         // Map data
         this.currentMap = MAPS[CURRENT_MAP];
+        this.currentMissionId = CURRENT_MAP;
         this.mapWidth = this.currentMap.width;
         this.mapHeight = this.currentMap.height;
 
@@ -99,10 +105,110 @@ export class Game {
         this.buildingSystem = new BuildingSystem(this);
         this.workerSystem = new WorkerSystem(this);
 
+        // Mission Progress (localStorage)
+        this.missionProgress = this.loadMissionProgress();
+
         // Timing
         this.lastTime = 0;
 
         this.init();
+    }
+
+    // Mission Progress System
+    loadMissionProgress() {
+        try {
+            const saved = localStorage.getItem('yuttakarn_thai_progress');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+        } catch (e) {
+            console.error('Failed to load mission progress:', e);
+        }
+        // Default: only mission 1 unlocked
+        return {
+            white_elephant: {
+                unlockedMission: 1,
+                completedMissions: []
+            }
+        };
+    }
+
+    saveMissionProgress() {
+        try {
+            localStorage.setItem('yuttakarn_thai_progress', JSON.stringify(this.missionProgress));
+            console.log('Mission progress saved:', this.missionProgress);
+        } catch (e) {
+            console.error('Failed to save mission progress:', e);
+        }
+    }
+
+    getMissionNumber(missionId) {
+        const match = missionId.match(/mission(\d+)/);
+        return match ? parseInt(match[1]) : 1;
+    }
+
+    isMissionUnlocked(missionId) {
+        const missionNum = this.getMissionNumber(missionId);
+        const campaignProgress = this.missionProgress[this.selectedCampaign || 'white_elephant'];
+        return missionNum <= (campaignProgress?.unlockedMission || 1);
+    }
+
+    unlockNextMission() {
+        const currentNum = this.getMissionNumber(this.currentMissionId);
+        const campaignId = this.selectedCampaign || 'white_elephant';
+
+        if (!this.missionProgress[campaignId]) {
+            this.missionProgress[campaignId] = { unlockedMission: 1, completedMissions: [] };
+        }
+
+        // Mark current mission as completed
+        if (!this.missionProgress[campaignId].completedMissions.includes(this.currentMissionId)) {
+            this.missionProgress[campaignId].completedMissions.push(this.currentMissionId);
+        }
+
+        // Unlock next mission
+        if (currentNum >= this.missionProgress[campaignId].unlockedMission) {
+            this.missionProgress[campaignId].unlockedMission = currentNum + 1;
+        }
+
+        this.saveMissionProgress();
+    }
+
+    getNextMissionId() {
+        const currentNum = this.getMissionNumber(this.currentMissionId);
+        const nextNum = currentNum + 1;
+        const nextMissionId = `campaign1_mission${nextNum}`;
+
+        // Check if next mission exists
+        if (MAPS[nextMissionId]) {
+            return nextMissionId;
+        }
+        return null; // No more missions
+    }
+
+    updateMissionUI() {
+        const missionCards = document.querySelectorAll('.mission-card');
+        missionCards.forEach(card => {
+            const missionId = card.dataset.mission;
+            const isUnlocked = this.isMissionUnlocked(missionId);
+            const campaignProgress = this.missionProgress[this.selectedCampaign || 'white_elephant'];
+            const isCompleted = campaignProgress?.completedMissions?.includes(missionId);
+
+            card.classList.toggle('locked', !isUnlocked);
+            card.classList.toggle('completed', isCompleted);
+
+            // Update status icon
+            const statusEl = card.querySelector('.mission-status');
+            if (statusEl) {
+                if (!isUnlocked) {
+                    statusEl.textContent = '🔒';
+                } else if (isCompleted) {
+                    statusEl.textContent = '✅';
+                } else {
+                    statusEl.textContent = '▶️';
+                }
+            }
+        });
     }
 
     async init() {
@@ -207,6 +313,20 @@ export class Game {
             this.startGame();
         });
 
+        // Mission modal
+        const missionCards = document.querySelectorAll('.mission-card');
+        missionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const missionId = card?.dataset.mission;
+                this.selectMission(missionId);
+            });
+        });
+
+        document.getElementById('close-mission')?.addEventListener('click', () => {
+            document.getElementById('mission-modal')?.classList.add('hidden');
+            document.getElementById('campaign-modal')?.classList.remove('hidden');
+        });
+
         // Pause menu buttons
         document.getElementById('btn-pause')?.addEventListener('click', () => this.togglePause());
         document.getElementById('btn-menu')?.addEventListener('click', () => this.togglePause());
@@ -221,6 +341,9 @@ export class Game {
 
         // Speed button
         document.getElementById('btn-speed')?.addEventListener('click', () => this.toggleSpeed());
+
+        // Next mission button
+        document.getElementById('btn-next-mission')?.addEventListener('click', () => this.playNextMission());
 
         // Command buttons
         document.querySelectorAll('.cmd-btn').forEach(btn => {
@@ -248,12 +371,44 @@ export class Game {
         console.log('Selected campaign:', campaignId);
         this.selectedCampaign = campaignId;
 
-        // Hide campaign modal
+        // Hide campaign modal, show mission modal for white elephant
         document.getElementById('campaign-modal')?.classList.add('hidden');
 
+        if (campaignId === 'white_elephant') {
+            // Update UI to show locked/unlocked missions
+            this.updateMissionUI();
+            // Show mission selection
+            document.getElementById('mission-modal')?.classList.remove('hidden');
+        } else {
+            // For other campaigns, play story then tutorial
+            this.storyCutscene.play(campaignId, () => {
+                document.getElementById('tutorial-modal')?.classList.remove('hidden');
+            });
+        }
+    }
+
+    selectMission(missionId) {
+        console.log('Selected mission:', missionId);
+
+        // Check if mission is unlocked
+        if (!this.isMissionUnlocked(missionId)) {
+            console.log('Mission locked:', missionId);
+            return; // Don't allow selecting locked missions
+        }
+
+        // Load the selected map
+        if (MAPS[missionId]) {
+            this.currentMissionId = missionId;
+            this.currentMap = MAPS[missionId];
+            this.mapWidth = this.currentMap.width;
+            this.mapHeight = this.currentMap.height;
+        }
+
+        // Hide mission modal
+        document.getElementById('mission-modal')?.classList.add('hidden');
+
         // Play story cutscene, then show tutorial
-        this.storyCutscene.play(campaignId, () => {
-            // After story, show tutorial
+        this.storyCutscene.play(this.selectedCampaign, () => {
             document.getElementById('tutorial-modal')?.classList.remove('hidden');
         });
     }
@@ -293,6 +448,13 @@ export class Game {
         // Initialize pathfinding
         this.pathfinder = new Pathfinder(this);
         this.pathfinder.initGrid(this.mapWidth, this.mapHeight, this.currentMap.features || []);
+
+        // Initialize Fog of War if enabled for this map
+        if (this.currentMap.fogOfWar !== false && this.settings.fogOfWarEnabled) {
+            this.fogOfWar = new FogOfWar(this.mapWidth, this.mapHeight, 32);
+        } else {
+            this.fogOfWar = null;
+        }
 
         // Spawn units and buildings
         this.spawnUnits();
@@ -387,6 +549,13 @@ export class Game {
             building.update(deltaTime);
         }
 
+        // Update Fog of War
+        if (this.fogOfWar) {
+            const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
+            const playerBuildings = this.buildings.filter(b => b.team === 0);
+            this.fogOfWar.update(playerUnits, playerBuildings, this.currentMap.features || []);
+        }
+
         // Update effects
         this.updateEffects(deltaTime);
 
@@ -420,13 +589,30 @@ export class Game {
         // Render terrain with new TerrainRenderer (Ground + Features + Decals)
         this.terrainRenderer.renderTerrain(ctx, this.camera, this.currentMap);
 
-        // Render buildings
+        // Render buildings (filter by fog visibility for enemy buildings)
         for (const building of this.buildings) {
+            if (building.team !== 0 && this.fogOfWar && !this.fogOfWar.isVisible(building.x, building.y)) {
+                continue; // Skip enemy buildings in fog
+            }
             building.render(ctx, this.camera);
         }
 
+        // Filter units for fog of war visibility
+        let visibleUnits = this.units;
+        if (this.fogOfWar) {
+            visibleUnits = this.units.filter(u => {
+                if (u.team === 0) return true; // Always show player units
+                return this.fogOfWar.isVisible(u.x, u.y);
+            });
+        }
+
         // Render units with new UnitRenderer (Shadows + Y-sorted + Animations)
-        this.unitRenderer.renderUnits(ctx, this.units, this.camera);
+        this.unitRenderer.renderUnits(ctx, visibleUnits, this.camera);
+
+        // Render Fog of War overlay
+        if (this.fogOfWar) {
+            this.fogOfWar.render(ctx, this.camera);
+        }
 
         // Render effects
         this.renderEffects(ctx);
@@ -757,14 +943,29 @@ export class Game {
         const title = document.getElementById('result-title');
         const desc = document.getElementById('result-desc');
         const icon = document.getElementById('result-icon');
+        const nextMissionBtn = document.getElementById('btn-next-mission');
 
         if (result === 'victory') {
+            // Unlock and save progress
+            this.unlockNextMission();
+
             if (title) {
                 title.textContent = 'ชัยชนะ!';
                 title.className = '';
             }
             if (desc) desc.textContent = 'คุณปกป้องพระนครได้สำเร็จ!';
             if (icon) icon.textContent = '🏆';
+
+            // Show next mission button if there's a next mission
+            const nextMissionId = this.getNextMissionId();
+            if (nextMissionBtn) {
+                if (nextMissionId) {
+                    nextMissionBtn.classList.remove('hidden');
+                    nextMissionBtn.textContent = '➡️ ภารกิจถัดไป';
+                } else {
+                    nextMissionBtn.classList.add('hidden');
+                }
+            }
         } else {
             if (title) {
                 title.textContent = 'พ่ายแพ้';
@@ -772,6 +973,9 @@ export class Game {
             }
             if (desc) desc.textContent = 'กองทัพถูกทำลาย...';
             if (icon) icon.textContent = '💀';
+
+            // Hide next mission button on defeat
+            if (nextMissionBtn) nextMissionBtn.classList.add('hidden');
         }
 
         // Stats
@@ -789,6 +993,14 @@ export class Game {
 
         const survivors = this.units.filter(u => u.team === 0 && u.state !== 'dead').length;
         if (survivorsEl) survivorsEl.textContent = survivors;
+    }
+
+    playNextMission() {
+        const nextMissionId = this.getNextMissionId();
+        if (nextMissionId) {
+            this.resultScreen?.classList.add('hidden');
+            this.selectMission(nextMissionId);
+        }
     }
 
     togglePause() {

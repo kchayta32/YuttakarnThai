@@ -274,6 +274,114 @@
         </div>
     </div>
 
+    <!-- Mission Selection Modal -->
+    <div id="mission-modal" class="modal hidden">
+        <div class="modal-content mission-content">
+            <h2>🗺️ เลือกภารกิจ</h2>
+            <p class="mission-subtitle">แคมเปญสงครามช้างเผือก (1547-1549)</p>
+
+            <div class="mission-list">
+                <!-- Mission 1 -->
+                <div class="mission-card" data-mission="campaign1_mission1">
+                    <div class="mission-number">1</div>
+                    <div class="mission-info">
+                        <span class="mission-date">พ.ศ. 2090</span>
+                        <h3>ศึกที่ราบกาญจนบุรี</h3>
+                        <p>กองทัพพม่าบุกผ่านด่านเจดีย์สามองค์ ป้องกันพระนครให้ได้!</p>
+                        <span class="mission-size">📐 2400×1800</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 2 -->
+                <div class="mission-card" data-mission="campaign1_mission2">
+                    <div class="mission-number">2</div>
+                    <div class="mission-info">
+                        <span class="mission-date">มกราคม พ.ศ. 2090</span>
+                        <h3>ศึกท่าวาย</h3>
+                        <p>นำกองทัพสยามยึดเมืองท่าวายจากพม่า!</p>
+                        <span class="mission-size">📐 3200×2400</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 3 -->
+                <div class="mission-card" data-mission="campaign1_mission3">
+                    <div class="mission-number">3</div>
+                    <div class="mission-info">
+                        <span class="mission-date">ตุลาคม พ.ศ. 2091</span>
+                        <h3>ด่านเจดีย์สามองค์</h3>
+                        <p>สกัดกองทัพพม่าที่บุกผ่านช่องเขา!</p>
+                        <span class="mission-size">📐 3600×2000</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 4 -->
+                <div class="mission-card" data-mission="campaign1_mission4">
+                    <div class="mission-number">4</div>
+                    <div class="mission-info">
+                        <span class="mission-date">พฤศจิกายน พ.ศ. 2091</span>
+                        <h3>ที่ราบกาญจนบุรี</h3>
+                        <p>ปะทะกองทัพพม่าบนที่ราบกว้างใหญ่!</p>
+                        <span class="mission-size">📐 4000×3000</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 5 -->
+                <div class="mission-card" data-mission="campaign1_mission5">
+                    <div class="mission-number">5</div>
+                    <div class="mission-info">
+                        <span class="mission-date">ธันวาคม พ.ศ. 2091</span>
+                        <h3>ล้อมกรุงศรีอยุธยา</h3>
+                        <p>ป้องกันพระนครจากกองทัพพม่าที่ล้อมเมือง!</p>
+                        <span class="mission-size">📐 4800×4000</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 6 -->
+                <div class="mission-card" data-mission="campaign1_mission6">
+                    <div class="mission-number">6</div>
+                    <div class="mission-info">
+                        <span class="mission-date">มกราคม พ.ศ. 2092</span>
+                        <h3>ยุทธหัตถี</h3>
+                        <p>ศึกยุทธหัตถี! ปกป้องสมเด็จพระมหาจักรพรรดิ!</p>
+                        <span class="mission-size">📐 2400×1800</span>
+                    </div>
+                    <div class="mission-status">⚔️</div>
+                </div>
+
+                <!-- Mission 7 -->
+                <div class="mission-card" data-mission="campaign1_mission7">
+                    <div class="mission-number">7</div>
+                    <div class="mission-info">
+                        <span class="mission-date">มกราคม พ.ศ. 2092</span>
+                        <h3>ขับไล่ข้าศึก</h3>
+                        <p>ตีโต้กองทัพพม่าที่กำลังล่าถอย!</p>
+                        <span class="mission-size">📐 4000×3000</span>
+                    </div>
+                    <div class="mission-status">▶️</div>
+                </div>
+
+                <!-- Mission 8 -->
+                <div class="mission-card" data-mission="campaign1_mission8">
+                    <div class="mission-number">8</div>
+                    <div class="mission-info">
+                        <span class="mission-date">กุมภาพันธ์ พ.ศ. 2092</span>
+                        <h3>กำแพงเพชร</h3>
+                        <p>ป้องกันเมืองกำแพงเพชรจากการโจมตีครั้งสุดท้าย!</p>
+                        <span class="mission-size">📐 3200×2400</span>
+                    </div>
+                    <div class="mission-status">🏆</div>
+                </div>
+            </div>
+
+            <button class="modal-close" id="close-mission">← กลับเลือกแคมเปญ</button>
+        </div>
+    </div>
+
     <!-- Tutorial Modal -->
     <div id="tutorial-modal" class="modal hidden">
         <div class="modal-content">
@@ -437,7 +545,8 @@
                     </div>
                 </div>
                 <div class="result-buttons">
-                    <button id="btn-play-again" class="menu-btn primary">🔄 เล่นอีกครั้ง</button>
+                    <button id="btn-next-mission" class="menu-btn primary hidden">➡️ ภารกิจถัดไป</button>
+                    <button id="btn-play-again" class="menu-btn">🔄 เล่นอีกครั้ง</button>
                     <button id="btn-to-menu" class="menu-btn">🏠 กลับเมนู</button>
                 </div>
             </div>

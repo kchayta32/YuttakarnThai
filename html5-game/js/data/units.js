@@ -18,6 +18,7 @@ export const UNIT_TYPES = {
         range: 1,
         speed: 2,
         attackSpeed: 1.0,
+        visionRange: 5,
         cost: { food: 50, gold: 0 },
         buildTime: 5,
         description: 'ทหารราบพื้นฐานติดอาวุธดาบสั้น'
@@ -35,6 +36,7 @@ export const UNIT_TYPES = {
         range: 1.5,
         speed: 1.8,
         attackSpeed: 1.2,
+        visionRange: 5,
         cost: { food: 40, gold: 10 },
         buildTime: 6,
         description: 'ทหารหอกเหมาะต่อต้านม้าและช้าง',
@@ -53,6 +55,7 @@ export const UNIT_TYPES = {
         range: 5,
         speed: 2.2,
         attackSpeed: 1.5,
+        visionRange: 7,
         cost: { food: 30, gold: 30 },
         buildTime: 7,
         description: 'หน่วยยิงระยะไกล'
@@ -70,6 +73,7 @@ export const UNIT_TYPES = {
         range: 1.5,
         speed: 1.7,
         attackSpeed: 2.0,
+        visionRange: 8,
         cost: { food: 200, gold: 100 },
         buildTime: 20,
         description: 'หน่วยรถถังโบราณ สร้างความเสียหายกว้าง',
@@ -88,6 +92,7 @@ export const UNIT_TYPES = {
         range: 1,
         speed: 4,
         attackSpeed: 1.0,
+        visionRange: 6,
         cost: { food: 80, gold: 50 },
         buildTime: 10,
         description: 'หน่วยโจมตีเร็ว เหมาะโจมตีนักธนู'
@@ -105,6 +110,7 @@ export const UNIT_TYPES = {
         range: 1,
         speed: 2,
         attackSpeed: 2.0,
+        visionRange: 4,
         cost: { food: 50, gold: 0 },
         buildTime: 3,
         description: 'เก็บทรัพยากร สร้างอาคาร',
@@ -127,6 +133,7 @@ export const UNIT_TYPES = {
         range: 1,
         speed: 2,
         attackSpeed: 1.0,
+        visionRange: 5,
         isEnemy: true
     },
     ENEMY_SPEARMAN: {
@@ -142,6 +149,7 @@ export const UNIT_TYPES = {
         range: 1.5,
         speed: 1.8,
         attackSpeed: 1.2,
+        visionRange: 5,
         isEnemy: true,
         bonusVs: ['cavalry', 'elephant']
     },
@@ -158,6 +166,7 @@ export const UNIT_TYPES = {
         range: 5,
         speed: 2.2,
         attackSpeed: 1.5,
+        visionRange: 7,
         isEnemy: true
     },
     ENEMY_ELEPHANT: {
@@ -173,6 +182,7 @@ export const UNIT_TYPES = {
         range: 1.5,
         speed: 1.6,
         attackSpeed: 2.0,
+        visionRange: 8,
         isEnemy: true,
         aoe: true
     },
@@ -189,6 +199,7 @@ export const UNIT_TYPES = {
         range: 1,
         speed: 4,
         attackSpeed: 1.0,
+        visionRange: 6,
         isEnemy: true
     }
 };
