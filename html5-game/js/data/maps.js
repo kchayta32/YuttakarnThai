@@ -9,7 +9,7 @@ export const MAPS = {
         id: 'campaign1_mission1',
         name: 'ศึกที่ราบกาญจนบุรี',
         description: 'กองทัพพม่าบุกผ่านด่านเจดีย์สามองค์ ป้องกันพระนครให้ได้!',
-        width: 2400,
+        width: 3000,
         height: 1800,
 
         // Terrain colors
@@ -24,39 +24,39 @@ export const MAPS = {
         // Player starting units (Siam - Team 0)
         playerUnits: [
             // Main army group (Moved closer but NOT overlapping)
-            { type: 'swordsman', x: 1750, y: 800, team: 0 },
-            { type: 'swordsman', x: 1800, y: 800, team: 0 },
-            { type: 'swordsman', x: 1850, y: 800, team: 0 },
-            { type: 'swordsman', x: 1750, y: 850, team: 0 },
-            { type: 'swordsman', x: 1800, y: 850, team: 0 },
-            { type: 'swordsman', x: 1850, y: 850, team: 0 },
-            { type: 'spearman', x: 1700, y: 800, team: 0 },
-            { type: 'spearman', x: 1700, y: 850, team: 0 },
-            { type: 'spearman', x: 1700, y: 900, team: 0 },
-            { type: 'archer', x: 1850, y: 750, team: 0 },
-            { type: 'archer', x: 1900, y: 750, team: 0 },
-            { type: 'archer', x: 1850, y: 800, team: 0 },
-            { type: 'archer', x: 1900, y: 800, team: 0 },
-            { type: 'elephant', x: 1750, y: 950, team: 0 },
-            { type: 'elephant', x: 1850, y: 950, team: 0 },
-            { type: 'cavalry', x: 1650, y: 750, team: 0 },
-            { type: 'cavalry', x: 1650, y: 800, team: 0 },
-            { type: 'cavalry', x: 1650, y: 850, team: 0 }
+            { type: 'swordsman', x: 2350, y: 800, team: 0 },
+            { type: 'swordsman', x: 2400, y: 800, team: 0 },
+            { type: 'swordsman', x: 2450, y: 800, team: 0 },
+            { type: 'swordsman', x: 2350, y: 850, team: 0 },
+            { type: 'swordsman', x: 2400, y: 850, team: 0 },
+            { type: 'swordsman', x: 2450, y: 850, team: 0 },
+            { type: 'spearman', x: 2300, y: 800, team: 0 },
+            { type: 'spearman', x: 2300, y: 850, team: 0 },
+            { type: 'spearman', x: 2300, y: 900, team: 0 },
+            { type: 'archer', x: 2450, y: 750, team: 0 },
+            { type: 'archer', x: 2500, y: 750, team: 0 },
+            { type: 'archer', x: 2450, y: 800, team: 0 },
+            { type: 'archer', x: 2500, y: 800, team: 0 },
+            { type: 'elephant', x: 2350, y: 950, team: 0 },
+            { type: 'elephant', x: 2450, y: 950, team: 0 },
+            { type: 'cavalry', x: 2250, y: 750, team: 0 },
+            { type: 'cavalry', x: 2250, y: 800, team: 0 },
+            { type: 'cavalry', x: 2250, y: 850, team: 0 }
         ],
 
         // Enemy units (Burma - Team 1)
         enemyUnits: [
-            // Wave 1 - West main force (เขยิบไปทางขวา)
-            { type: 'enemy_cavalry', x: 400, y: 850, team: 1 },
-            { type: 'enemy_cavalry', x: 450, y: 850, team: 1 },
-            { type: 'enemy_cavalry', x: 500, y: 850, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 500, y: 900, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 850, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 900, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 875, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 925, team: 1 },
+            // Wave 1 - West main force (Shift right to avoid barracks at 400)
+            { type: 'enemy_cavalry', x: 650, y: 800, team: 1 },
+            { type: 'enemy_cavalry', x: 700, y: 800, team: 1 },
+            { type: 'enemy_cavalry', x: 750, y: 800, team: 1 },
+            { type: 'enemy_swordsman', x: 650, y: 850, team: 1 },
+            { type: 'enemy_swordsman', x: 700, y: 850, team: 1 },
+            { type: 'enemy_swordsman', x: 750, y: 850, team: 1 },
+            { type: 'enemy_spearman', x: 600, y: 800, team: 1 },
+            { type: 'enemy_spearman', x: 600, y: 850, team: 1 },
+            { type: 'enemy_archer', x: 550, y: 825, team: 1 },
+            { type: 'enemy_archer', x: 550, y: 875, team: 1 },
 
             // Wave 2 - ย้ายลงมาและเขยิบขวาให้พ้นต้นไม้
             { type: 'enemy_swordsman', x: 800, y: 550, team: 1 },
@@ -82,16 +82,16 @@ export const MAPS = {
         // Buildings
         buildings: [
             // Player base (Siam - Team 0) - ฝั่งขวาของแผนที่
-            { type: 'barracks', x: 2000, y: 850, team: 0 },
-            { type: 'farm', x: 2250, y: 700, team: 0 },
-            { type: 'farm', x: 2250, y: 850, team: 0 },
-            { type: 'farm', x: 2250, y: 1000, team: 0 },
+            { type: 'barracks', x: 2600, y: 850, team: 0 },
+            { type: 'farm', x: 2850, y: 700, team: 0 },
+            { type: 'farm', x: 2850, y: 850, team: 0 },
+            { type: 'farm', x: 2850, y: 1000, team: 0 },
 
-            // Enemy base (Burma - Team 1) - ย้ายลงล่างไม่ให้ติดหิน
-            { type: 'barracks', x: 150, y: 900, team: 1 },   // ค่ายทหารพม่า
-            { type: 'farm', x: 100, y: 750, team: 1 },       // นาข้าวพม่า 1
-            { type: 'farm', x: 100, y: 1050, team: 1 },      // นาข้าวพม่า 2
-            { type: 'farm', x: 100, y: 1200, team: 1 }       // นาข้าวพม่า 3 (เพิ่มใหม่)
+            // Enemy base (Burma - Team 1) - ปรับพิกัดไม่ให้ทับกัน (Mirror player layout)
+            { type: 'barracks', x: 400, y: 850, team: 1 },   // ค่ายทหารพม่า (เขยิบมาทางขวา)
+            { type: 'farm', x: 150, y: 700, team: 1 },       // นาข้าวพม่า 1 (เขยิบไปขอบซ้าย)
+            { type: 'farm', x: 150, y: 850, team: 1 },       // นาข้าวพม่า 2
+            { type: 'farm', x: 150, y: 1000, team: 1 }       // นาข้าวพม่า 3
         ],
 
         // Terrain features (obstacles, forests, water)
@@ -99,15 +99,15 @@ export const MAPS = {
             // === FORESTS (slows movement, blocks LOS) ===
             // North forest belt
             { type: 'forest', x: 100, y: 100, width: 400, height: 250 },
-            { type: 'forest', x: 1400, y: 50, width: 350, height: 200 },
+            { type: 'forest', x: 2000, y: 50, width: 350, height: 200 },
 
             // Central forest patches
             { type: 'forest', x: 500, y: 500, width: 150, height: 180 },
-            { type: 'forest', x: 1100, y: 450, width: 180, height: 150 },
+            { type: 'forest', x: 1700, y: 450, width: 180, height: 150 },
 
             // South forest belt
             { type: 'forest', x: 100, y: 1400, width: 450, height: 300 },
-            { type: 'forest', x: 1500, y: 1500, width: 300, height: 200 },
+            { type: 'forest', x: 2100, y: 1500, width: 300, height: 200 },
 
             // === MOUNTAINS (impassable) ===
             // Northwest mountains
@@ -119,11 +119,11 @@ export const MAPS = {
             { type: 'mountain', x: 700, y: 1200, width: 120, height: 180 },
 
             // === RIVER (impassable except bridge) ===
-            { type: 'water', x: 1000, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน
-            { type: 'water', x: 1000, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง
+            { type: 'water', x: 1600, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน (เลื่อนไป 600)
+            { type: 'water', x: 1600, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง (เลื่อนไป 600)
 
             // === BRIDGE (road over river - passable) ===
-            { type: 'road', x: 1000, y: 700, width: 100, height: 250 }
+            { type: 'road', x: 1600, y: 700, width: 100, height: 250 }
         ],
 
         // Victory/Defeat conditions
@@ -145,7 +145,7 @@ export const MAPS = {
         },
 
         // Camera starting position
-        cameraStart: { x: 1500, y: 600 },
+        cameraStart: { x: 2100, y: 600 },
 
         // Fog of War disabled for tutorial mission
         fogOfWar: false

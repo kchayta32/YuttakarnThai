@@ -45,7 +45,7 @@ export class Unit {
 
         // Visual & Collision Size (Adjusted to ~2.25x original)
         this.size = this.typeId.includes('elephant') ? 100 : 63;
-        this.angle = 0;
+        this.angle = this.team === 0 ? Math.PI : 0; // Player faces left, Enemy faces right
 
         // Animation
         this.animFrame = 0;
