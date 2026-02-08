@@ -203,96 +203,142 @@ export class TerrainRenderer {
     }
 
     /**
-     * Render water with animated waves using ocean-wave.png
+     * Render water with animated waves and realistic depth/banks
      */
     renderWater(ctx, x, y, width, height, time) {
         const zoom = this.game.camera.zoom || 1;
+        const isVertical = height > width;
 
-        // 1. Base water gradient
-        const gradient = ctx.createLinearGradient(x, y, x, y + height);
-        gradient.addColorStop(0, '#1a6b9c');
-        gradient.addColorStop(0.5, '#2980b9');
-        gradient.addColorStop(1, '#1a5276');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(x, y, width, height);
+        // --- 1. THE "EXCAVATION" / PIT ---
+        // This creates a dark shadow layer where the river sits
+        ctx.fillStyle = '#1b110c'; // Deep soil color
+        ctx.fillRect(x - 4 * zoom, y - 4 * zoom, width + 8 * zoom, height + 8 * zoom);
 
+        // --- 2. THE VISIBLE BANKS (Sloping Earth) ---
+        // Adds 3D feel of the river being lower than the grass
+        if (isVertical) {
+            // Left slope
+            const gradL = ctx.createLinearGradient(x - 5 * zoom, 0, x + 8 * zoom, 0);
+            gradL.addColorStop(0, '#5c4033'); // Top of bank
+            gradL.addColorStop(1, '#2c1a10'); // Lower bank
+            ctx.fillStyle = gradL;
+            ctx.fillRect(x - 5 * zoom, y, 13 * zoom, height);
+
+            // Right slope
+            const gradR = ctx.createLinearGradient(x + width - 8 * zoom, 0, x + width + 5 * zoom, 0);
+            gradR.addColorStop(0, '#2c1a10');
+            gradR.addColorStop(1, '#5c4033');
+            ctx.fillStyle = gradR;
+            ctx.fillRect(x + width - 8 * zoom, y, 13 * zoom, height);
+        } else {
+            // Horizontal slope (if any)
+            const gradT = ctx.createLinearGradient(0, y - 5 * zoom, 0, y + 8 * zoom);
+            gradT.addColorStop(0, '#5c4033');
+            gradT.addColorStop(1, '#2c1a10');
+            ctx.fillStyle = gradT;
+            ctx.fillRect(x, y - 5 * zoom, width, 13 * zoom);
+
+            const gradB = ctx.createLinearGradient(0, y + height - 8 * zoom, 0, y + height + 5 * zoom);
+            gradB.addColorStop(0, '#2c1a10');
+            gradB.addColorStop(1, '#5c4033');
+            ctx.fillStyle = gradB;
+            ctx.fillRect(x, y + height - 8 * zoom, width, 13 * zoom);
+        }
+
+        // --- 3. THE WET EDGES (Mud transition) ---
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+        const mudSize = 6 * zoom;
+        if (isVertical) {
+            ctx.fillRect(x, y, mudSize, height);
+            ctx.fillRect(x + width - mudSize, y, mudSize, height);
+        } else {
+            ctx.fillRect(x, y, width, mudSize);
+            ctx.fillRect(x, y + height - mudSize, width, mudSize);
+        }
+
+        // --- 4. WATER SURFACE WITH DEPTH GRADIENT ---
+        const waterInset = 4 * zoom;
+        const wx = x + (isVertical ? waterInset : 0);
+        const wy = y + (isVertical ? 0 : waterInset);
+        const ww = width - (isVertical ? waterInset * 2 : 0);
+        const wh = height - (isVertical ? 0 : waterInset * 2);
+
+        let depthGrad;
+        if (isVertical) {
+            depthGrad = ctx.createLinearGradient(wx, 0, wx + ww, 0);
+        } else {
+            depthGrad = ctx.createLinearGradient(0, wy, 0, wy + wh);
+        }
+
+        depthGrad.addColorStop(0, '#144c6b');   // Deep/Dark edge
+        depthGrad.addColorStop(0.3, '#1a6b9c'); // Transition
+        depthGrad.addColorStop(0.5, '#2980b9'); // Lighter center
+        depthGrad.addColorStop(0.7, '#1a6b9c'); // Transition
+        depthGrad.addColorStop(1, '#144c6b');   // Deep/Dark edge
+
+        ctx.fillStyle = depthGrad;
+        ctx.fillRect(wx, wy, ww, wh);
+
+        // --- 5. ANIMATED WAVES (Using ocean-wave.png) ---
         const sprite = spriteManager.get('ocean_wave');
         if (sprite) {
             ctx.save();
-            // 2. Clip to water area so waves don't spill
+            // Clip to water area so waves don't spill
             ctx.beginPath();
-            ctx.rect(x, y, width, height);
+            ctx.rect(wx, wy, ww, wh);
             ctx.clip();
 
-            // 3. Setup animation parameters
             const waveSize = 120 * zoom;
             const vStep = waveSize * 0.4;
             const hStep = waveSize * 0.6;
+            const flowSpeed = 30 * zoom;
+            const swayAmount = 25 * zoom;
+            const swaySpeed = 0.4;
 
-            const flowSpeed = 30 * zoom;  // Slow, steady flow
-            const swayAmount = 25 * zoom; // Wider sway for more pronounced movement
-            const swaySpeed = 0.4;        // Very slow oscillations
-
-            // Calculate two layers of movement for extra smoothness and depth
-            // Layer 1
+            // Two layers of movement for extra smoothness and depth
             const offV1 = (time * flowSpeed) % vStep;
             const offH1 = Math.sin(time * swaySpeed) * swayAmount;
 
-            // Layer 2 (slayer sway, different timing)
             const offV2 = (time * flowSpeed * 1.2) % vStep;
             const offH2 = Math.sin(time * swaySpeed * 0.7 + 2) * (swayAmount * 0.8);
 
-            // 4. Tile the wave sprite - Dual layer for depth and overlapping
-
             // Layer 1: Base Waves
             ctx.globalAlpha = 0.3;
-            for (let wy = -waveSize; wy < height + waveSize; wy += vStep) {
-                for (let wx = -waveSize; wx < width + waveSize; wx += hStep) {
-                    ctx.drawImage(
-                        sprite,
-                        Math.round(x + wx + offH1),
-                        Math.round(y + wy + offV1),
-                        waveSize,
-                        waveSize
-                    );
+            for (let wY = -waveSize; wY < wh + waveSize; wY += vStep) {
+                for (let wX = -waveSize; wX < ww + waveSize; wX += hStep) {
+                    ctx.drawImage(sprite, Math.round(wx + wX + offH1), Math.round(wy + wY + offV1), waveSize, waveSize);
                 }
             }
 
-            // Layer 2: Detail Waves (slightly differently timed)
+            // Layer 2: Detail Waves
             ctx.globalAlpha = 0.25;
-            for (let wy = -waveSize; wy < height + waveSize; wy += vStep) {
-                for (let wx = -waveSize; wx < width + waveSize; wx += hStep) {
-                    ctx.drawImage(
-                        sprite,
-                        Math.round(x + wx + offH2),
-                        Math.round(y + wy + offV2),
-                        waveSize,
-                        waveSize
-                    );
+            for (let wY = -waveSize; wY < wh + waveSize; wY += vStep) {
+                for (let wX = -waveSize; wX < ww + waveSize; wX += hStep) {
+                    ctx.drawImage(sprite, Math.round(wx + wX + offH2), Math.round(wy + wY + offV2), waveSize, waveSize);
                 }
             }
 
             ctx.restore();
         } else {
-            // Fallback to simple line waves if sprite not loaded
+            // Fallback waves
             const waveOffset = (time * 30) % 60;
             ctx.fillStyle = 'rgba(255, 255, 255, 0.12)';
-            for (let wy = 0; wy < height; wy += 60) {
-                const actualY = y + wy + waveOffset;
-                if (actualY >= y && actualY <= y + height - 3) {
-                    ctx.fillRect(x, actualY, width, 3);
+            for (let wY = 0; wY < wh; wY += 60) {
+                const actualY = wy + wY + waveOffset;
+                if (actualY >= wy && actualY <= wy + wh - 3) {
+                    ctx.fillRect(wx, actualY, ww, 3);
                 }
             }
         }
 
-        // 5. Sparkles (retained for extra polish)
-        const sparkleCount = Math.floor(width * height / 8000);
+        // --- 6. SPARKLES ---
+        const sparkleCount = Math.floor(ww * wh / 8000);
         for (let i = 0; i < sparkleCount; i++) {
             const sparkleTime = time + i * 0.3;
             const sparkleAlpha = (Math.sin(sparkleTime * 3) + 1) * 0.2;
             if (sparkleAlpha > 0.05) {
-                const sx = x + this.pseudoRandomFloat(i * 7) * width;
-                const sy = y + this.pseudoRandomFloat(i * 11) * height;
+                const sx = wx + this.pseudoRandomFloat(i * 7) * ww;
+                const sy = wy + this.pseudoRandomFloat(i * 11) * wh;
                 ctx.beginPath();
                 ctx.arc(sx, sy, 1.5 * zoom, 0, Math.PI * 2);
                 ctx.fillStyle = `rgba(255, 255, 255, ${sparkleAlpha})`;
@@ -300,10 +346,15 @@ export class TerrainRenderer {
             }
         }
 
-        // Border
+        // --- 7. FINAL POLISH (Inner Shadow / Rim Light) ---
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-        ctx.lineWidth = 1.5 * zoom;
-        ctx.strokeRect(x, y, width, height);
+        ctx.lineWidth = 1.2 * zoom;
+        ctx.strokeRect(wx, wy, ww, wh);
+
+        // Dark rim for recursion depth
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.lineWidth = 2 * zoom;
+        ctx.strokeRect(wx, wy, ww, wh);
     }
 
     /**
