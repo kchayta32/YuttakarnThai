@@ -13,6 +13,7 @@ import { StoryCutscene } from './StoryCutscene.js';
 import { BuildingSystem } from '../systems/BuildingSystem.js';
 import { WorkerSystem } from '../systems/WorkerSystem.js';
 import { MAPS, CURRENT_MAP, CAMPAIGN_MISSIONS } from '../data/maps.js';
+import { UNIT_TYPES } from '../data/units.js';
 import { spriteManager } from './SpriteManager.js';
 import { FogOfWar } from './FogOfWar.js';
 
@@ -549,6 +550,11 @@ export class Game {
             building.update(deltaTime);
         }
 
+        // Update training queue UI if a building is selected
+        if (this.selectedBuilding && this.selectedBuilding.builds) {
+            this.updateTrainingQueue(this.selectedBuilding);
+        }
+
         // Update Fog of War
         if (this.fogOfWar) {
             const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
@@ -792,13 +798,135 @@ export class Game {
     }
 
     updateBuildingPanel(building) {
+        this.selectedBuilding = building;
+
         document.getElementById('unit-portrait').innerHTML = `<span>${building.icon}</span>`;
         document.getElementById('unit-name').textContent = building.name;
         document.getElementById('unit-hp-text').textContent = `${Math.round(building.hp)}/${building.maxHp}`;
         document.getElementById('unit-hp-bar').style.width = `${(building.hp / building.maxHp) * 100}%`;
-        document.getElementById('unit-atk').textContent = '-';
+        document.getElementById('unit-atk').textContent = building.attack ? building.attack : '-';
         document.getElementById('unit-def').textContent = '-';
         document.getElementById('selected-count').textContent = '';
+
+        // Show training panel if building can produce units
+        const trainingPanel = document.getElementById('training-panel');
+        const trainingGrid = document.getElementById('training-grid');
+
+        if (building.builds && building.builds.length > 0 && building.team === 0) {
+            trainingPanel?.classList.remove('hidden');
+
+            // Clear and populate training grid
+            if (trainingGrid) {
+                trainingGrid.innerHTML = '';
+
+                building.builds.forEach(unitTypeId => {
+                    const unitKey = unitTypeId.toUpperCase();
+                    const unitData = UNIT_TYPES[unitKey];
+
+                    if (!unitData) return;
+
+                    const cost = unitData.cost || { food: 50, gold: 0 };
+                    const buildTime = unitData.buildTime || 5;
+                    const canAfford = this.resources.food >= cost.food && this.resources.gold >= cost.gold;
+
+                    const btn = document.createElement('button');
+                    btn.className = `train-btn ${canAfford ? '' : 'disabled'}`;
+                    btn.innerHTML = `
+                        <span class="unit-icon">${unitData.icon}</span>
+                        <span class="unit-name">${unitData.name}</span>
+                        <span class="unit-cost ${canAfford ? '' : 'insufficient'}">🍖${cost.food} 🪙${cost.gold}</span>
+                        <span class="build-time">⏱️ ${buildTime}s</span>
+                    `;
+                    btn.onclick = () => this.trainUnit(building, unitTypeId);
+                    trainingGrid.appendChild(btn);
+                });
+            }
+
+            // Update queue display
+            this.updateTrainingQueue(building);
+        } else {
+            trainingPanel?.classList.add('hidden');
+        }
+    }
+
+    trainUnit(building, unitTypeId) {
+        console.log('trainUnit called:', unitTypeId, 'on building:', building.name);
+        const unitKey = unitTypeId.toUpperCase();
+        const unitData = UNIT_TYPES[unitKey];
+
+        if (!unitData) {
+            console.log('Unit data not found for:', unitKey);
+            return;
+        }
+
+        const cost = unitData.cost || { food: 50, gold: 0 };
+
+        // Check resources
+        if (this.resources.food < cost.food || this.resources.gold < cost.gold) {
+            console.log('Not enough resources');
+            return;
+        }
+
+        // Deduct resources
+        this.resources.food -= cost.food;
+        this.resources.gold -= cost.gold;
+        this.updateHUD();
+
+        // Add to production queue
+        building.productionQueue.push({
+            type: unitTypeId,
+            buildTime: unitData.buildTime || 5,
+            icon: unitData.icon
+        });
+
+        // Update UI
+        this.updateTrainingQueue(building);
+        this.updateBuildingPanel(building);
+
+        console.log(`Training ${unitData.name}`);
+    }
+
+    onUnitTrainingComplete(unit, building) {
+        // Auto-select newly trained unit
+        this.clearSelection();
+        unit.selected = true;
+        this.updateUnitPanel();
+
+        // Create visual effect at spawn location
+        this.createCommandEffect(unit.x, unit.y, 'spawn');
+
+        // Log completion
+        console.log(`Unit ${unit.name} training complete at ${building.name}`);
+    }
+
+    updateTrainingQueue(building) {
+        const queueItems = document.getElementById('queue-items');
+        const progressContainer = document.getElementById('training-progress-container');
+        const progressBar = document.getElementById('training-progress-bar');
+        const progressText = document.getElementById('training-progress-text');
+
+        if (!queueItems) return;
+
+        queueItems.innerHTML = '';
+
+        building.productionQueue.forEach((item, index) => {
+            const queueItem = document.createElement('div');
+            queueItem.className = `queue-item ${index === 0 ? 'active' : ''}`;
+            queueItem.textContent = item.icon || '⚔️';
+            queueItems.appendChild(queueItem);
+        });
+
+        // Show/update progress bar
+        if (building.productionQueue.length > 0 && progressContainer && progressBar && progressText) {
+            progressContainer.classList.remove('hidden');
+            const currentItem = building.productionQueue[0];
+            const progress = (building.productionProgress / currentItem.buildTime) * 100;
+            progressBar.style.width = `${progress}%`;
+            const remaining = Math.ceil(currentItem.buildTime - building.productionProgress);
+            progressText.textContent = `กำลังฝึก... ${remaining}s`;
+        } else if (progressContainer) {
+            progressContainer.classList.add('hidden');
+        }
     }
 
     getSelectedUnits() {
@@ -812,6 +940,10 @@ export class Game {
         for (const building of this.buildings) {
             building.selected = false;
         }
+
+        // Hide training panel
+        this.selectedBuilding = null;
+        document.getElementById('training-panel')?.classList.add('hidden');
     }
 
     removeUnit(unit) {

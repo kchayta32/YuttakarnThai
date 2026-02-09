@@ -1150,3 +1150,166 @@ body {
         display: none;
     }
 }
+
+/* ===================================
+   Training Panel (Unit Recruitment)
+   =================================== */
+
+.training-panel {
+    background: var(--ui-bg);
+    border: 1px solid var(--ui-border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.training-panel h4 {
+    color: var(--color-gold);
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.training-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.train-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-navy-light);
+    border: 2px solid var(--ui-border);
+    border-radius: 8px;
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-height: 70px;
+}
+
+.train-btn:hover {
+    background: var(--color-navy);
+    border-color: var(--color-gold);
+    transform: translateY(-2px);
+}
+
+.train-btn:active {
+    transform: translateY(0);
+}
+
+.train-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.train-btn.disabled:hover {
+    transform: none;
+    border-color: var(--ui-border);
+}
+
+.train-btn .unit-icon {
+    font-size: 1.5rem;
+    margin-bottom: 4px;
+}
+
+.train-btn .unit-name {
+    font-size: 0.7rem;
+    color: var(--ui-text);
+    text-align: center;
+}
+
+.train-btn .unit-cost {
+    font-size: 0.6rem;
+    color: var(--color-gold);
+    margin-top: 2px;
+}
+
+.train-btn .unit-cost.insufficient {
+    color: var(--color-red);
+}
+
+.train-btn .build-time {
+    font-size: 0.55rem;
+    color: var(--ui-text-muted);
+    margin-top: 2px;
+}
+
+.training-queue {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    min-height: 40px;
+}
+
+.queue-label {
+    color: var(--ui-text-muted);
+    font-size: 0.8rem;
+}
+
+.queue-items {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.queue-item {
+    width: 28px;
+    height: 28px;
+    background: var(--color-navy);
+    border: 1px solid var(--ui-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.queue-item.active {
+    border-color: var(--color-gold);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+    }
+}
+
+.training-progress-container {
+    margin-top: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+    height: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.training-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-green), var(--color-gold));
+    width: 0%;
+    transition: width 0.1s;
+}
+
+.training-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}

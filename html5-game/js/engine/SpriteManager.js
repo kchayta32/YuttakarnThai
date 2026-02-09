@@ -34,8 +34,35 @@ export class SpriteManager {
             // Buildings
             'barracks': 'images/buildings/barracks.png',
             'wood_factory': 'images/buildings/wood_factory.png',
-            'elephant_pen': 'images/buildings/elephant_stable.png',
-            'farm': 'images/buildings/vegetable_plot.png'
+            'elephant_pen': 'images/buildings/elephant_pen.png',
+            'farm': 'images/buildings/vegetable_plot.png',
+            'wall': 'images/buildings/wall.png',
+            'watch_tower': 'images/buildings/watch_tower.png',
+            'palace': 'images/buildings/palace.png',
+            'market': 'images/buildings/market.png',
+            'stable': 'images/buildings/stable.png',
+
+            // Mission 2 Buildings
+            'burmese_fortress': 'images/buildings/mission2/burmese_fortress.png',
+            'coastal_barracks': 'images/buildings/mission2/coastal_barracks.png',
+            'dock': 'images/buildings/mission2/dock.png',
+
+            // Mission 2 Units
+            'burmese_defender': 'images/units/mission2/burmese_defender.png',
+            'siamese_assault': 'images/units/mission2/siamese_assault_infantry.png',
+            'war_boat': 'images/units/mission2/war_boat.png',
+
+            // Mission 2 Terrain
+            'tropical_forest': 'images/terrain/mission2/tropical_forest.png',
+            'river_crossing': 'images/terrain/mission2/river_crossing.png',
+            'coastal_sand': 'images/terrain/mission2/coastal_sand.png',
+            'wooden_bridge': 'images/terrain/mission2/wooden_bridge.png',
+
+            // Mission 2 Story
+            'story_m2_opening': 'images/story/mission2/Opening Scene - กองทัพสยามเตรียมบุก.png',
+            'story_m2_map': 'images/story/mission2/Map_Strategy Scene - แผนที่เมืองท่าวาย.png',
+            'story_m2_battle': 'images/story/mission2/Battle Scene - ข้ามแม่น้ำบุกเมือง.png',
+            'story_m2_victory': 'images/story/mission2/Victory Scene - ยึดเมืองสำเร็จ.png'
         };
     }
 
@@ -107,6 +134,7 @@ export class SpriteManager {
 
         if (unit.isEnemy) {
             // Enemy variants
+            if (id.includes('burmese_defender')) return 'burmese_defender';
             if (id.includes('swordsman')) return 'enemy_swordsman';
             if (id.includes('spearman')) return 'enemy_spearman';
             if (id.includes('archer')) return 'enemy_archer';
@@ -115,6 +143,8 @@ export class SpriteManager {
             return 'enemy_swordsman';
         } else {
             // Player units
+            if (id.includes('siamese_assault')) return 'siamese_assault';
+            if (id.includes('war_boat')) return 'war_boat';
             if (id.includes('swordsman')) return 'swordsman';
             if (id.includes('spearman')) return 'spearman';
             if (id.includes('archer')) return 'archer';

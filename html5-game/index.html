@@ -511,6 +511,22 @@
                     <button class="cmd-btn" data-cmd="hold" title="ยืนตำแหน่ง (H)">🛡️</button>
                 </div>
             </div>
+
+            <!-- Training Panel (shown when barracks selected) -->
+            <div class="training-panel hidden" id="training-panel">
+                <h4>🏛️ เกณฑ์ทหาร</h4>
+                <div class="training-grid" id="training-grid">
+                    <!-- Training buttons will be dynamically added -->
+                </div>
+                <div class="training-queue" id="training-queue">
+                    <span class="queue-label">คิว:</span>
+                    <div class="queue-items" id="queue-items"></div>
+                </div>
+                <div class="training-progress-container hidden" id="training-progress-container">
+                    <div class="training-progress-bar" id="training-progress-bar"></div>
+                    <span class="training-progress-text" id="training-progress-text"></span>
+                </div>
+            </div>
         </div>
 
         <!-- Pause Menu -->

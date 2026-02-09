@@ -67,7 +67,13 @@ export class Building {
             this.productionProgress += deltaTime;
             const currentItem = this.productionQueue[0];
 
+            // Debug log every second
+            if (Math.floor(this.productionProgress) !== Math.floor(this.productionProgress - deltaTime)) {
+                console.log(`Building ${this.name}: Progress ${this.productionProgress.toFixed(1)}/${currentItem.buildTime}s`);
+            }
+
             if (this.productionProgress >= currentItem.buildTime) {
+                console.log(`Building ${this.name}: Production complete! Spawning ${currentItem.type}`);
                 this.completeProduction();
             }
         }
@@ -91,12 +97,18 @@ export class Building {
         const item = this.productionQueue.shift();
         this.productionProgress = 0;
 
-        // Spawn unit near building
-        const angle = Math.random() * Math.PI * 2;
-        const spawnX = this.x + Math.cos(angle) * (this.size + 30);
-        const spawnY = this.y + Math.sin(angle) * (this.size + 30);
+        // Spawn unit near building (in front of building)
+        const spawnOffset = this.size / 2 + 50;
+        const spawnX = this.x + spawnOffset;
+        const spawnY = this.y + spawnOffset;
 
-        this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
+        // Spawn the unit
+        const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
+
+        // Notify game that training is complete (for auto-selection)
+        if (newUnit && this.game.onUnitTrainingComplete) {
+            this.game.onUnitTrainingComplete(newUnit, this);
+        }
     }
 
     takeDamage(amount, attacker) {

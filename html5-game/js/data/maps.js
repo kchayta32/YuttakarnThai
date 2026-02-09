@@ -174,69 +174,109 @@ export const MAPS = {
             sand: '#c2b280'
         },
 
-        // Player attacks from west
+        // Story cutscene images
+        storyCutscene: {
+            opening: 'story_m2_opening',
+            map: 'story_m2_map',
+            battle: 'story_m2_battle',
+            victory: 'story_m2_victory'
+        },
+
+        // Player attacks from west - Enhanced with assault infantry
         playerUnits: [
+            // Assault infantry (new unit type)
+            { type: 'siamese_assault', x: 200, y: 1050, team: 0 },
+            { type: 'siamese_assault', x: 250, y: 1050, team: 0 },
+            { type: 'siamese_assault', x: 300, y: 1050, team: 0 },
+            // Regular swordsmen
             { type: 'swordsman', x: 200, y: 1100, team: 0 },
             { type: 'swordsman', x: 250, y: 1100, team: 0 },
             { type: 'swordsman', x: 300, y: 1100, team: 0 },
             { type: 'swordsman', x: 200, y: 1150, team: 0 },
             { type: 'swordsman', x: 250, y: 1150, team: 0 },
-            { type: 'swordsman', x: 300, y: 1150, team: 0 },
+            // Spearmen
             { type: 'spearman', x: 200, y: 1200, team: 0 },
             { type: 'spearman', x: 250, y: 1200, team: 0 },
+            { type: 'spearman', x: 300, y: 1200, team: 0 },
+            // Archers
             { type: 'archer', x: 150, y: 1100, team: 0 },
             { type: 'archer', x: 150, y: 1150, team: 0 },
             { type: 'archer', x: 150, y: 1200, team: 0 },
+            { type: 'archer', x: 150, y: 1250, team: 0 },
+            // War elephant
             { type: 'elephant', x: 350, y: 1150, team: 0 },
+            { type: 'elephant', x: 400, y: 1150, team: 0 },
+            // Cavalry for flanking
+            { type: 'cavalry', x: 100, y: 1000, team: 0 },
             { type: 'cavalry', x: 100, y: 1050, team: 0 },
-            { type: 'cavalry', x: 100, y: 1100, team: 0 }
+            { type: 'cavalry', x: 100, y: 1300, team: 0 }
         ],
 
-        // Enemy defends Tavoy (east side)
+        // Enemy defends Tavoy (east side) - Enhanced with defenders
         enemyUnits: [
-            { type: 'enemy_swordsman', x: 2800, y: 1100, team: 1 },
+            // Fortress defenders (new unit type)
+            { type: 'burmese_defender', x: 2750, y: 1100, team: 1 },
+            { type: 'burmese_defender', x: 2750, y: 1150, team: 1 },
+            { type: 'burmese_defender', x: 2800, y: 1075, team: 1 },
+            { type: 'burmese_defender', x: 2800, y: 1175, team: 1 },
+            // Regular troops
             { type: 'enemy_swordsman', x: 2850, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 2800, y: 1150, team: 1 },
             { type: 'enemy_swordsman', x: 2850, y: 1150, team: 1 },
-            { type: 'enemy_spearman', x: 2750, y: 1100, team: 1 },
-            { type: 'enemy_spearman', x: 2750, y: 1150, team: 1 },
+            { type: 'enemy_spearman', x: 2700, y: 1125, team: 1 },
+            // Archers on walls
+            { type: 'enemy_archer', x: 2900, y: 1000, team: 1 },
             { type: 'enemy_archer', x: 2900, y: 1050, team: 1 },
             { type: 'enemy_archer', x: 2900, y: 1100, team: 1 },
             { type: 'enemy_archer', x: 2900, y: 1150, team: 1 },
-            { type: 'enemy_elephant', x: 2700, y: 1125, team: 1 },
-            // Patrol units
+            { type: 'enemy_archer', x: 2900, y: 1200, team: 1 },
+            // War elephant
+            { type: 'enemy_elephant', x: 2650, y: 1125, team: 1 },
+            // Patrol cavalry
             { type: 'enemy_cavalry', x: 1600, y: 800, team: 1 },
-            { type: 'enemy_cavalry', x: 1600, y: 1400, team: 1 }
+            { type: 'enemy_cavalry', x: 1600, y: 1400, team: 1 },
+            { type: 'enemy_cavalry', x: 2200, y: 600, team: 1 }
         ],
 
+        // Enhanced buildings with new Mission 2 structures
         buildings: [
-            { type: 'barracks', x: 2950, y: 1200, team: 1 },
-            { type: 'farm', x: 3000, y: 1000, team: 1 },
-            { type: 'farm', x: 3000, y: 1400, team: 1 }
+            // Burmese fortress (main objective)
+            { type: 'burmese_fortress', x: 2850, y: 1125, team: 1 },
+            // Coastal barracks
+            { type: 'coastal_barracks', x: 2950, y: 800, team: 1 },
+            { type: 'coastal_barracks', x: 2950, y: 1400, team: 1 },
+            // Dock
+            { type: 'dock', x: 3050, y: 1200, team: 1 },
+            // Farms
+            { type: 'farm', x: 2600, y: 700, team: 1 },
+            { type: 'farm', x: 2600, y: 1500, team: 1 }
         ],
 
         features: [
-            // Coastal water (east)
+            // Coastal water (east) - Andaman Sea
             { type: 'water', x: 3100, y: 0, width: 200, height: 2400 },
             // Rivers
             { type: 'water', x: 1500, y: 0, width: 80, height: 900 },
             { type: 'water', x: 1500, y: 1100, width: 80, height: 1300 },
-            // Bridge
+            // Bridge crossing
             { type: 'road', x: 1500, y: 900, width: 80, height: 200 },
-            // Forests
-            { type: 'forest', x: 600, y: 200, width: 400, height: 300 },
-            { type: 'forest', x: 600, y: 1800, width: 400, height: 400 },
-            { type: 'forest', x: 2000, y: 400, width: 300, height: 250 },
-            { type: 'forest', x: 2000, y: 1700, width: 300, height: 300 },
-            // Mountains
-            { type: 'mountain', x: 0, y: 0, width: 100, height: 600 },
-            { type: 'mountain', x: 0, y: 1800, width: 100, height: 600 }
+            // Tropical forests
+            { type: 'forest', x: 500, y: 200, width: 500, height: 350 },
+            { type: 'forest', x: 500, y: 1800, width: 500, height: 450 },
+            { type: 'forest', x: 1900, y: 350, width: 350, height: 300 },
+            { type: 'forest', x: 1900, y: 1650, width: 350, height: 350 },
+            { type: 'forest', x: 1000, y: 1000, width: 200, height: 200 },
+            // Mountains (north & south edges)
+            { type: 'mountain', x: 0, y: 0, width: 120, height: 700 },
+            { type: 'mountain', x: 0, y: 1700, width: 120, height: 700 },
+            // Coastal sand
+            { type: 'sand', x: 2900, y: 0, width: 200, height: 2400 }
         ],
 
         objectives: {
             victory: {
-                type: 'eliminate_all',
-                description: 'กำจัดกองทหารพม่าและยึดเมืองท่าวาย'
+                type: 'destroy_building',
+                target: 'burmese_fortress',
+                description: 'ทำลายป้อมปราการพม่าและยึดเมืองท่าวาย'
             },
             defeat: {
                 type: 'lose_all_units',
@@ -244,7 +284,7 @@ export const MAPS = {
             }
         },
 
-        startingResources: { food: 400, gold: 200 },
+        startingResources: { food: 500, gold: 300 },
         cameraStart: { x: 100, y: 1000 }
     },
 
