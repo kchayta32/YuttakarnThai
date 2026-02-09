@@ -10,14 +10,15 @@ export class InputHandler {
 
         // Mouse state
         this.mouse = {
-            x: 0,
-            y: 0,
+            x: -1,
+            y: -1,
             worldX: 0,
             worldY: 0,
             leftDown: false,
             rightDown: false,
             middleDown: false
         };
+        this.mouseMoved = false;
 
         // Selection box
         this.selectionBox = {
@@ -96,6 +97,7 @@ export class InputHandler {
 
     onMouseMove(e) {
         this.updateMousePosition(e);
+        this.mouseMoved = true;
 
         // Update selection box
         if (this.selectionBox.active) {
@@ -379,7 +381,7 @@ export class InputHandler {
         }
 
         // Edge scrolling
-        if (this.settings.edgeScrollEnabled && !this.cameraDrag.active) {
+        if (this.settings.edgeScrollEnabled && !this.cameraDrag.active && this.mouseMoved) {
             const edgeSize = 25;
             const edgeSpeed = this.settings.cameraSpeed * 80 * deltaTime;
 
