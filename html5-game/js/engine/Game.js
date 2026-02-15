@@ -654,10 +654,30 @@ export class Game {
         // Render terrain with new TerrainRenderer (Ground + Features + Decals)
         this.terrainRenderer.renderTerrain(ctx, this.camera, this.currentMap);
 
+        // Sort buildings by Y for correct overlap
+        this.buildings.sort((a, b) => a.y - b.y);
+
         // Render buildings (filter by fog visibility for enemy buildings)
         for (const building of this.buildings) {
-            if (building.team !== 0 && this.fogOfWar && !this.fogOfWar.isVisible(building.x, building.y)) {
-                continue; // Skip enemy buildings in fog
+            // Check visibility
+            let isVisible = true;
+            if (building.team !== 0 && this.fogOfWar) {
+                // Check center first
+                isVisible = this.fogOfWar.isVisible(building.x, building.y);
+
+                // If center not visible, check corners (for large buildings)
+                if (!isVisible) {
+                    const halfSize = building.size / 2;
+                    // Check 4 corners
+                    isVisible = this.fogOfWar.isVisible(building.x - halfSize, building.y - halfSize) ||
+                        this.fogOfWar.isVisible(building.x + halfSize, building.y - halfSize) ||
+                        this.fogOfWar.isVisible(building.x + halfSize, building.y + halfSize) ||
+                        this.fogOfWar.isVisible(building.x - halfSize, building.y + halfSize);
+                }
+
+                if (!isVisible) {
+                    continue; // Skip enemy buildings in fog
+                }
             }
             building.render(ctx, this.camera);
         }

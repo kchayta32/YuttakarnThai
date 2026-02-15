@@ -251,7 +251,7 @@ export const MAPS = {
             { type: 'coastal_barracks', x: 2950, y: 800, team: 1 },
             { type: 'coastal_barracks', x: 2950, y: 1400, team: 1 },
             // Dock
-            { type: 'dock', x: 3050, y: 1200, team: 1 },
+            { type: 'dock', x: 2850, y: 1550, team: 1 },
             // Farms
             { type: 'farm', x: 2600, y: 700, team: 1 },
             { type: 'farm', x: 2600, y: 1500, team: 1 }
