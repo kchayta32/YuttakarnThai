@@ -492,17 +492,18 @@ export const MAPS = {
         buildings: [
 
             // Unique Mission 4 Buildings
-            { type: 'royal_pavilion', x: 3500, y: 1450, team: 0 }, // Player Command
-            { type: 'field_armory', x: 3600, y: 1350, team: 0 },
-            { type: 'field_armory', x: 3600, y: 1550, team: 0 },
-            // Barricades front line
-            { type: 'barricades', x: 3100, y: 1400, team: 0 },
-            { type: 'barricades', x: 3100, y: 1500, team: 0 },
-            { type: 'barricades', x: 3100, y: 1600, team: 0 },
+            { type: 'royal_pavilion', x: 3500, y: 1450, team: 0 }, // Player Command (Center)
+            { type: 'field_armory', x: 3500, y: 950, team: 0 },   // Moved Up (Far)
+            { type: 'field_armory', x: 3500, y: 1950, team: 0 },  // Moved Down (Far)
 
-            { type: 'barracks', x: 3600, y: 1450, team: 0 },
-            { type: 'farm', x: 3700, y: 1300, team: 0 },
-            { type: 'farm', x: 3700, y: 1600, team: 0 },
+            // Barricades front line (Shifted forward)
+            { type: 'barricades', x: 2800, y: 1300, team: 0 },
+            { type: 'barricades', x: 2800, y: 1600, team: 0 },
+            { type: 'barricades', x: 2800, y: 1450, team: 0 },
+
+            { type: 'barracks', x: 3900, y: 1450, team: 0 },      // Moved Back
+            { type: 'farm', x: 3900, y: 1000, team: 0 },          // Moved Back & Up
+            { type: 'farm', x: 3900, y: 1900, team: 0 },          // Moved Back & Down
             { type: 'barracks', x: 200, y: 1450, team: 1 },
             { type: 'farm', x: 100, y: 1300, team: 1 },
             { type: 'farm', x: 100, y: 1600, team: 1 }

@@ -412,7 +412,7 @@ export const BUILDING_TYPES = {
         name: 'พลับพลาที่ประทับ',
         icon: 'pavilion',
         hp: 4000,
-        size: 350,
+        size: 700, // Doubled from 350
         description: 'ศูนย์บัญชาการหลักในสนามรบ'
     },
     FIELD_ARMORY: {
@@ -420,7 +420,7 @@ export const BUILDING_TYPES = {
         name: 'คลังอาวุธสนาม',
         icon: 'armory',
         hp: 1000,
-        size: 200,
+        size: 400, // Doubled from 200
         description: 'จุดเก็บอาวุธและเสบียงกรัง'
     },
     BARRICADES: {
@@ -428,7 +428,7 @@ export const BUILDING_TYPES = {
         name: 'แนวป้องกัน',
         icon: 'barricade',
         hp: 2000,
-        size: 150,
+        size: 300, // Doubled from 150
         description: 'ขวากหนามป้องกันการบุกรุก'
     }
 };
