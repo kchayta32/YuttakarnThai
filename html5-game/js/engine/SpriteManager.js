@@ -36,7 +36,7 @@ export class SpriteManager {
             'enemy_barracks': 'images/buildings/woodred.png',
             'wood_factory': 'images/buildings/wood_factory.png',
             'elephant_pen': 'images/buildings/elephant_pen.png',
-            'farm': 'images/buildings/vegetable_plot.png',
+            'farm': 'images/buildings/farm_new.png',
             'wall': 'images/buildings/wall.png',
             'watch_tower': 'images/buildings/watch_tower.png',
             'palace': 'images/buildings/palace.png',

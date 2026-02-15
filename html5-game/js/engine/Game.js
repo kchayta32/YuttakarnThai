@@ -265,6 +265,13 @@ export class Game {
         this.loadingScreen?.classList.add('hidden');
         this.mainMenu?.classList.remove('hidden');
         this.gameContainer?.classList.add('hidden');
+
+        // Enable/disable load button based on save existence
+        const btnContinue = document.getElementById('btn-continue');
+        if (btnContinue) {
+            const hasSave = localStorage.getItem('rts_yutthakan_save') !== null;
+            btnContinue.disabled = !hasSave;
+        }
     }
 
     setupMenuButtons() {
@@ -333,6 +340,7 @@ export class Game {
         document.getElementById('btn-menu')?.addEventListener('click', () => this.togglePause());
         document.getElementById('btn-resume')?.addEventListener('click', () => this.togglePause());
         document.getElementById('btn-save')?.addEventListener('click', () => this.saveGame());
+        document.getElementById('btn-continue')?.addEventListener('click', () => this.loadGame());
         document.getElementById('btn-restart')?.addEventListener('click', () => this.restartGame());
         document.getElementById('btn-quit')?.addEventListener('click', () => this.quitToMenu());
 
@@ -409,7 +417,7 @@ export class Game {
         document.getElementById('mission-modal')?.classList.add('hidden');
 
         // Play story cutscene, then show tutorial
-        this.storyCutscene.play(this.selectedCampaign, () => {
+        this.storyCutscene.play(this.currentMissionId, () => {
             document.getElementById('tutorial-modal')?.classList.remove('hidden');
         });
     }
@@ -1220,20 +1228,182 @@ export class Game {
 
     saveGame() {
         const saveData = {
+            version: 1,
+            timestamp: Date.now(),
+            currentMissionId: this.currentMissionId,
             gameTime: this.gameTime,
-            resources: this.resources,
-            stats: this.stats,
-            units: this.units.map(u => ({
+            resources: { ...this.resources },
+            stats: { ...this.stats },
+            camera: {
+                x: this.camera.x,
+                y: this.camera.y,
+                zoom: this.camera.zoom
+            },
+            units: this.units.filter(u => u.state !== 'dead').map(u => ({
                 typeId: u.typeId,
                 x: u.x,
                 y: u.y,
                 hp: u.hp,
-                team: u.team
+                team: u.team,
+                state: u.state,
+                targetX: u.targetX,
+                targetY: u.targetY,
+                holdingPosition: u.holdingPosition
+            })),
+            buildings: this.buildings.map(b => ({
+                typeId: b.typeId,
+                x: b.x,
+                y: b.y,
+                hp: b.hp,
+                team: b.team,
+                productionQueue: b.productionQueue.map(q => ({ ...q })),
+                productionProgress: b.productionProgress,
+                resourceTimer: b.resourceTimer
             }))
         };
 
         localStorage.setItem('rts_yutthakan_save', JSON.stringify(saveData));
-        alert('บันทึกเกมสำเร็จ!');
+        this.showSaveToast();
+    }
+
+    loadGame() {
+        const raw = localStorage.getItem('rts_yutthakan_save');
+        if (!raw) {
+            console.warn('No save data found');
+            return;
+        }
+
+        try {
+            const saveData = JSON.parse(raw);
+
+            // Load the correct mission/map
+            if (saveData.currentMissionId && MAPS[saveData.currentMissionId]) {
+                this.currentMissionId = saveData.currentMissionId;
+                this.currentMap = MAPS[saveData.currentMissionId];
+                this.mapWidth = this.currentMap.width;
+                this.mapHeight = this.currentMap.height;
+            }
+
+            // Transition to game view
+            this.state = 'playing';
+            this.mainMenu?.classList.add('hidden');
+            this.gameContainer?.classList.remove('hidden');
+            this.pauseMenu?.classList.add('hidden');
+            this.resultScreen?.classList.add('hidden');
+
+            // Reset arrays
+            this.units = [];
+            this.buildings = [];
+            this.effects = [];
+            this.damageNumbers = [];
+            this.controlGroups = {};
+
+            // Restore game time and stats
+            this.gameTime = saveData.gameTime || 0;
+            this.stats = saveData.stats || { enemyKills: 0, startTime: Date.now() };
+
+            // Restore resources
+            if (saveData.resources) {
+                this.resources.food = saveData.resources.food;
+                this.resources.gold = saveData.resources.gold;
+                this.resources.population = saveData.resources.population || 0;
+                this.resources.maxPopulation = saveData.resources.maxPopulation || 20;
+            }
+
+            // Initialize pathfinding
+            this.pathfinder = new Pathfinder(this);
+            this.pathfinder.initGrid(this.mapWidth, this.mapHeight, this.currentMap.features || []);
+
+            // Initialize Fog of War
+            if (this.currentMap.fogOfWar !== false && this.settings.fogOfWarEnabled) {
+                this.fogOfWar = new FogOfWar(this.mapWidth, this.mapHeight, 32);
+            } else {
+                this.fogOfWar = null;
+            }
+
+            // Restore buildings
+            if (saveData.buildings) {
+                for (const bData of saveData.buildings) {
+                    const building = new Building(this, bData.typeId, bData.x, bData.y, bData.team);
+                    building.hp = bData.hp;
+                    building.productionQueue = bData.productionQueue || [];
+                    building.productionProgress = bData.productionProgress || 0;
+                    building.resourceTimer = bData.resourceTimer || 0;
+                    this.buildings.push(building);
+
+                    // Add building obstacle to pathfinding
+                    if (this.pathfinder) {
+                        this.pathfinder.addBuildingObstacle(building);
+                    }
+                }
+            }
+
+            // Restore units
+            if (saveData.units) {
+                for (const uData of saveData.units) {
+                    const unit = new Unit(this, uData.typeId, uData.x, uData.y, uData.team);
+                    unit.hp = uData.hp;
+                    unit.state = uData.state || 'idle';
+                    unit.targetX = uData.targetX || uData.x;
+                    unit.targetY = uData.targetY || uData.y;
+                    unit.holdingPosition = uData.holdingPosition || false;
+                    this.units.push(unit);
+                }
+            }
+
+            // Update population count
+            this.resources.population = this.units.filter(u => u.team === 0).length;
+
+            // Setup input
+            if (!this.input) {
+                this.input = new InputHandler(this);
+            }
+            this.input.settings.edgeScrollEnabled = this.settings.edgeScrollEnabled;
+            this.input.settings.cameraSpeed = this.settings.cameraSpeed;
+
+            // Resize canvas
+            this.resizeCanvas();
+
+            // Restore camera position
+            if (saveData.camera) {
+                this.camera.x = saveData.camera.x;
+                this.camera.y = saveData.camera.y;
+                this.camera.zoom = saveData.camera.zoom || 1;
+            }
+
+            // Reset mouse safety and start game loop
+            if (this.input) {
+                this.input.mouseMoved = false;
+            }
+
+            this.lastTime = performance.now();
+            requestAnimationFrame((time) => this.gameLoop(time));
+
+            console.log('✅ Game loaded successfully!');
+        } catch (e) {
+            console.error('Failed to load game:', e);
+        }
+    }
+
+    showSaveToast() {
+        // Remove existing toast if present
+        const existing = document.getElementById('save-toast');
+        if (existing) existing.remove();
+
+        const toast = document.createElement('div');
+        toast.id = 'save-toast';
+        toast.innerHTML = '💾 บันทึกสำเร็จ!';
+        document.getElementById('game-container')?.appendChild(toast);
+
+        // Force reflow then add visible class
+        toast.offsetHeight;
+        toast.classList.add('visible');
+
+        // Auto-remove after 2 seconds
+        setTimeout(() => {
+            toast.classList.remove('visible');
+            setTimeout(() => toast.remove(), 400);
+        }, 2000);
     }
 
     restartGame() {
