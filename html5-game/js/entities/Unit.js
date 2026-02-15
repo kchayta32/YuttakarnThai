@@ -4,6 +4,7 @@
 // ===================================
 
 import { UNIT_TYPES } from '../data/units.js';
+import { spriteManager } from '../engine/SpriteManager.js';
 
 export class Unit {
     constructor(game, typeId, x, y, team = 0) {
@@ -382,44 +383,73 @@ export class Unit {
             ctx.stroke();
         }
 
-        // Unit body (circle with team color)
-        const gradient = ctx.createRadialGradient(
-            screenX - halfSize * 0.3, screenY - halfSize * 0.3, 0,
-            screenX, screenY, halfSize
-        );
+        // Draw Sprite using SpriteManager
+        const spriteKey = spriteManager.getUnitSpriteKey(this);
+        const sprite = spriteManager.get(spriteKey);
 
-        if (this.isEnemy) {
-            gradient.addColorStop(0, '#e74c3c');
-            gradient.addColorStop(1, '#7f1d1d');
+        if (sprite) {
+            // Draw sprite image
+            // Sprites are usually a bit larger than collision box to look good
+            const drawWidth = this.size * 1.5 * zoom;
+            const drawHeight = this.size * 1.5 * zoom;
+
+            ctx.save();
+            ctx.translate(screenX, screenY);
+
+            // Flip if facing left (angle is PI)
+            if (this.angle > Math.PI / 2 || this.angle < -Math.PI / 2) {
+                ctx.scale(-1, 1);
+            }
+
+            ctx.drawImage(
+                sprite,
+                -drawWidth / 2,
+                -drawHeight * 0.8, // Shift up slightly
+                drawWidth,
+                drawHeight
+            );
+            ctx.restore();
+
         } else {
-            gradient.addColorStop(0, this.color);
-            gradient.addColorStop(1, '#1a4d2e');
+            // Fallback: Unit body (circle with team color)
+            const gradient = ctx.createRadialGradient(
+                screenX - halfSize * 0.3, screenY - halfSize * 0.3, 0,
+                screenX, screenY, halfSize
+            );
+
+            if (this.isEnemy) {
+                gradient.addColorStop(0, '#e74c3c');
+                gradient.addColorStop(1, '#7f1d1d');
+            } else {
+                gradient.addColorStop(0, this.color || '#333');
+                gradient.addColorStop(1, '#1a4d2e');
+            }
+
+            ctx.beginPath();
+            ctx.arc(screenX, screenY, halfSize, 0, Math.PI * 2);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+            ctx.strokeStyle = this.isEnemy ? '#991b1b' : '#166534';
+            ctx.lineWidth = 2 * zoom;
+            ctx.stroke();
+
+            // Direction indicator
+            ctx.beginPath();
+            ctx.moveTo(screenX, screenY);
+            ctx.lineTo(
+                screenX + Math.cos(this.angle) * halfSize * 0.8,
+                screenY + Math.sin(this.angle) * halfSize * 0.8
+            );
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 3 * zoom;
+            ctx.stroke();
+
+            // Icon
+            ctx.font = `${this.size * 0.65 * zoom}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.icon, screenX, screenY);
         }
-
-        ctx.beginPath();
-        ctx.arc(screenX, screenY, halfSize, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
-        ctx.fill();
-        ctx.strokeStyle = this.isEnemy ? '#991b1b' : '#166534';
-        ctx.lineWidth = 2 * zoom;
-        ctx.stroke();
-
-        // Direction indicator
-        ctx.beginPath();
-        ctx.moveTo(screenX, screenY);
-        ctx.lineTo(
-            screenX + Math.cos(this.angle) * halfSize * 0.8,
-            screenY + Math.sin(this.angle) * halfSize * 0.8
-        );
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
-        ctx.lineWidth = 3 * zoom;
-        ctx.stroke();
-
-        // Icon
-        ctx.font = `${this.size * 0.65 * zoom}px Arial`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(this.icon, screenX, screenY);
 
         // Health bar
         if (this.hp < this.maxHp) {
