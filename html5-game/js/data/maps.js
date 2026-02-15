@@ -702,45 +702,36 @@ export const MAPS = {
 
         // Siamese royal guard and elephants
         playerUnits: [
-            // Royal elephants (center)
-            { type: 'elephant', x: 1800, y: 900, team: 0 }, // King Maha Chakkraphat
-            { type: 'elephant', x: 1750, y: 850, team: 0 }, // Queen Suriyothai
-            { type: 'elephant', x: 1850, y: 850, team: 0 },
+            // Royal elephants (center - duel setup)
+            { type: 'thai_king', x: 1400, y: 900, team: 0 }, // King Maha Chakkraphat
+            { type: 'queen_suriyothai', x: 1400, y: 1100, team: 0 }, // Queen Suriyothai (nearby)
+
             // Royal guard
-            { type: 'swordsman', x: 1700, y: 900, team: 0 },
-            { type: 'swordsman', x: 1900, y: 900, team: 0 },
-            { type: 'swordsman', x: 1700, y: 950, team: 0 },
-            { type: 'swordsman', x: 1900, y: 950, team: 0 },
-            { type: 'spearman', x: 1650, y: 850, team: 0 },
-            { type: 'spearman', x: 1950, y: 850, team: 0 },
-            { type: 'spearman', x: 1650, y: 900, team: 0 },
-            { type: 'spearman', x: 1950, y: 900, team: 0 },
-            { type: 'archer', x: 1900, y: 800, team: 0 },
-            { type: 'archer', x: 1950, y: 800, team: 0 },
-            { type: 'cavalry', x: 1600, y: 800, team: 0 },
-            { type: 'cavalry', x: 2000, y: 800, team: 0 }
+            { type: 'swordsman', x: 1300, y: 800, team: 0 },
+            { type: 'swordsman', x: 1300, y: 1000, team: 0 },
+            { type: 'swordsman', x: 1300, y: 1200, team: 0 },
+            { type: 'spearman', x: 1250, y: 850, team: 0 },
+            { type: 'spearman', x: 1250, y: 1050, team: 0 },
+            { type: 'archer', x: 1200, y: 900, team: 0 },
+            { type: 'archer', x: 1200, y: 1100, team: 0 },
+            { type: 'cavalry', x: 1250, y: 700, team: 0 },
+            { type: 'cavalry', x: 1250, y: 1300, team: 0 }
         ],
 
         // Burmese assault with boss elephant
         enemyUnits: [
-            // Burmese general on elephant (Boss)
-            { type: 'enemy_elephant', x: 500, y: 900, team: 1 },
-            { type: 'enemy_elephant', x: 450, y: 850, team: 1 },
-            { type: 'enemy_elephant', x: 550, y: 850, team: 1 },
+            // Burmese King on elephant (Boss - facing Thai King)
+            { type: 'burmese_king', x: 1600, y: 900, team: 1 },
+
             // Burmese warriors
-            { type: 'enemy_swordsman', x: 400, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 600, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 950, team: 1 },
-            { type: 'enemy_swordsman', x: 600, y: 950, team: 1 },
-            { type: 'enemy_swordsman', x: 350, y: 875, team: 1 },
-            { type: 'enemy_swordsman', x: 650, y: 875, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 925, team: 1 },
-            { type: 'enemy_spearman', x: 650, y: 925, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 850, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 900, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 950, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 800, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 1000, team: 1 }
+            { type: 'enemy_elephant', x: 1600, y: 700, team: 1 },
+            { type: 'enemy_elephant', x: 1600, y: 1100, team: 1 },
+            { type: 'enemy_swordsman', x: 1700, y: 800, team: 1 },
+            { type: 'enemy_swordsman', x: 1700, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 1700, y: 1200, team: 1 },
+            { type: 'enemy_spearman', x: 1750, y: 900, team: 1 },
+            { type: 'enemy_archer', x: 1800, y: 850, team: 1 },
+            { type: 'enemy_archer', x: 1800, y: 950, team: 1 }
         ],
 
         buildings: [],
