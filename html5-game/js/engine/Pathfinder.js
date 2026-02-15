@@ -29,9 +29,19 @@ export class Pathfinder {
             }
         }
 
-        // Mark obstacles
+        // Mark obstacles in two passes:
+        // 1. First mark water, mountains, and forests as blocked
         for (const obs of obstacles) {
-            this.markObstacle(obs);
+            if (obs.type !== 'road') {
+                this.markObstacle(obs);
+            }
+        }
+
+        // 2. Then mark roads as walkable (overrides water)
+        for (const obs of obstacles) {
+            if (obs.type === 'road') {
+                this.markObstacle(obs);
+            }
         }
     }
 
@@ -49,6 +59,20 @@ export class Pathfinder {
                 for (let x = startX; x < endX && x < this.gridWidth; x++) {
                     if (y >= 0 && x >= 0) {
                         this.grid[y][x] = 1;
+                    }
+                }
+            }
+        } else if (obs.type === 'road') {
+            // Roads (bridges) are walkable - mark as 0 to override water
+            const startX = Math.floor(obs.x / this.gridSize);
+            const startY = Math.floor(obs.y / this.gridSize);
+            const endX = Math.ceil((obs.x + obs.width) / this.gridSize);
+            const endY = Math.ceil((obs.y + obs.height) / this.gridSize);
+
+            for (let y = startY; y < endY && y < this.gridHeight; y++) {
+                for (let x = startX; x < endX && x < this.gridWidth; x++) {
+                    if (y >= 0 && x >= 0) {
+                        this.grid[y][x] = 0; // Walkable
                     }
                 }
             }

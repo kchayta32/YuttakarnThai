@@ -125,11 +125,11 @@ export const MAPS = {
             { type: 'mountain', x: 2750, y: 1600, width: 150, height: 150 },
 
             // === RIVER (impassable except bridge) ===
-            { type: 'water', x: 1600, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน (เลื่อนไป 600)
-            { type: 'water', x: 1600, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง (เลื่อนไป 600)
+            { type: 'water', x: 350, y: -50, width: 100, height: 800 },    // ยาวถึงขอบบน
+            { type: 'water', x: 350, y: 950, width: 100, height: 1000 },   // ยาวถึงขอบล่าง
 
             // === BRIDGE (road over river - passable) ===
-            { type: 'road', x: 1600, y: 700, width: 100, height: 250 }
+            { type: 'road', x: 350, y: 750, width: 100, height: 200 }
         ],
 
         // Victory/Defeat conditions
@@ -635,9 +635,9 @@ export const MAPS = {
             { type: 'water', x: 2900, y: 1700, width: 100, height: 700 },
             { type: 'water', x: 2800, y: 2300, width: 200, height: 100 },
             { type: 'water', x: 2800, y: 0, width: 150, height: 1800 },
-            // Bridges
-            { type: 'road', x: 1850, y: 1750, width: 100, height: 150 },
-            { type: 'road', x: 2850, y: 1750, width: 100, height: 150 },
+            // Bridges (aligned with vertical river sections)
+            { type: 'road', x: 1800, y: 1600, width: 150, height: 200 },
+            { type: 'road', x: 2800, y: 1600, width: 150, height: 200 },
             // Forests
             { type: 'forest', x: 400, y: 400, width: 500, height: 400 },
             { type: 'forest', x: 4000, y: 400, width: 500, height: 400 },
