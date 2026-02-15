@@ -293,7 +293,7 @@ export const BUILDING_TYPES = {
         produces: 'food',
         rate: 10,
         cost: { food: 0, gold: 50 },
-        size: 180 // Increased 1.5x from 120
+        size: 360 // Doubled from 180
     },
     MARKET: {
         id: 'market',
@@ -357,7 +357,7 @@ export const BUILDING_TYPES = {
         attack: 20,
         range: 6,
         attackSpeed: 3.0,
-        size: 300,
+        size: 600, // Doubled from 300
         description: 'ป้อมปราการพม่า มีหอยิงธนู'
     },
     COASTAL_BARRACKS: {
@@ -366,7 +366,7 @@ export const BUILDING_TYPES = {
         icon: '🏕️',
         hp: 800,
         builds: ['burmese_defender'],
-        size: 180,
+        size: 360, // Doubled from 180
         description: 'ค่ายทหารพม่าริมทะเล'
     },
     DOCK: {
@@ -376,7 +376,33 @@ export const BUILDING_TYPES = {
         hp: 500,
         builds: ['war_boat'],
         cost: { food: 150, gold: 100 },
-        size: 200,
+        size: 400, // Doubled from 200
         description: 'ท่าเรือสำหรับสร้างเรือรบ'
+    },
+
+    // === MISSION 3 SPECIFIC BUILDINGS ===
+    THREE_PAGODAS: {
+        id: 'three_pagodas',
+        name: 'พระเจดีย์สามองค์',
+        icon: 'pagoda',
+        hp: 5000,
+        size: 400,
+        description: 'สัญลักษณ์แห่งด่านชายแดน'
+    },
+    BORDER_OUTPOST: {
+        id: 'border_outpost',
+        name: 'ด่านตรวจคนเข้าเมือง',
+        icon: 'gate',
+        hp: 1500,
+        size: 300,
+        description: 'จุดตรวจและป้องกันชายแดน'
+    },
+    SUPPLY_CAMP: {
+        id: 'supply_camp',
+        name: 'ค่ายเสบียง',
+        icon: 'tent',
+        hp: 800,
+        size: 250,
+        description: 'ค่ายพักแรมและเก็บเสบียง'
     }
 };

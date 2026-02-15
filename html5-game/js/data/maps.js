@@ -251,7 +251,7 @@ export const MAPS = {
             { type: 'coastal_barracks', x: 2950, y: 800, team: 1 },
             { type: 'coastal_barracks', x: 2950, y: 1400, team: 1 },
             // Dock
-            { type: 'dock', x: 3050, y: 1200, team: 1 },
+            { type: 'dock', x: 2850, y: 1550, team: 1 },
             // Farms
             { type: 'farm', x: 2600, y: 700, team: 1 },
             { type: 'farm', x: 2600, y: 1500, team: 1 }
@@ -365,6 +365,13 @@ export const MAPS = {
         ],
 
         buildings: [
+            // Unique Mission 3 Buildings
+            { type: 'three_pagodas', x: 200, y: 1000, team: 1 }, // Landmark at the pass
+            { type: 'border_outpost', x: 600, y: 1000, team: 1 }, // Guarding the entry
+            { type: 'supply_camp', x: 400, y: 1200, team: 1 }, // Rear camp
+            { type: 'supply_camp', x: 400, y: 800, team: 1 },
+
+            // Player Base
             { type: 'barracks', x: 3200, y: 950, team: 0 },
             { type: 'farm', x: 3300, y: 800, team: 0 },
             { type: 'farm', x: 3300, y: 1100, team: 0 }
