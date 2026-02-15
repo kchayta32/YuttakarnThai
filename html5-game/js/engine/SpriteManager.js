@@ -48,6 +48,11 @@ export class SpriteManager {
             'coastal_barracks': 'images/buildings/mission2/coastal_barracks.png',
             'dock': 'images/buildings/mission2/dock.png',
 
+            // Mission 3 Buildings
+            'three_pagodas': 'images/buildings/mission3/three_pagodas.png',
+            'border_outpost': 'images/buildings/mission3/border_outpost.png',
+            'supply_camp': 'images/buildings/mission3/supply_camp.png',
+
             // Mission 2 Units
             'burmese_defender': 'images/units/mission2/burmese_defender.png',
             'siamese_assault': 'images/units/mission2/siamese_assault_infantry.png',

@@ -378,5 +378,31 @@ export const BUILDING_TYPES = {
         cost: { food: 150, gold: 100 },
         size: 400, // Doubled from 200
         description: 'ท่าเรือสำหรับสร้างเรือรบ'
+    },
+
+    // === MISSION 3 SPECIFIC BUILDINGS ===
+    THREE_PAGODAS: {
+        id: 'three_pagodas',
+        name: 'พระเจดีย์สามองค์',
+        icon: 'pagoda',
+        hp: 5000,
+        size: 400,
+        description: 'สัญลักษณ์แห่งด่านชายแดน'
+    },
+    BORDER_OUTPOST: {
+        id: 'border_outpost',
+        name: 'ด่านตรวจคนเข้าเมือง',
+        icon: 'gate',
+        hp: 1500,
+        size: 300,
+        description: 'จุดตรวจและป้องกันชายแดน'
+    },
+    SUPPLY_CAMP: {
+        id: 'supply_camp',
+        name: 'ค่ายเสบียง',
+        icon: 'tent',
+        hp: 800,
+        size: 250,
+        description: 'ค่ายพักแรมและเก็บเสบียง'
     }
 };

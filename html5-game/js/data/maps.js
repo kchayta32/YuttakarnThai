@@ -365,6 +365,13 @@ export const MAPS = {
         ],
 
         buildings: [
+            // Unique Mission 3 Buildings
+            { type: 'three_pagodas', x: 200, y: 1000, team: 1 }, // Landmark at the pass
+            { type: 'border_outpost', x: 600, y: 1000, team: 1 }, // Guarding the entry
+            { type: 'supply_camp', x: 400, y: 1200, team: 1 }, // Rear camp
+            { type: 'supply_camp', x: 400, y: 800, team: 1 },
+
+            // Player Base
             { type: 'barracks', x: 3200, y: 950, team: 0 },
             { type: 'farm', x: 3300, y: 800, team: 0 },
             { type: 'farm', x: 3300, y: 1100, team: 0 }
@@ -636,8 +643,8 @@ export const MAPS = {
             { type: 'water', x: 2800, y: 2300, width: 200, height: 100 },
             { type: 'water', x: 2800, y: 0, width: 150, height: 1800 },
             // Bridges (aligned with vertical river sections)
-            { type: 'road', x: 1800, y: 1600, width: 150, height: 200 },
-            { type: 'road', x: 2800, y: 1600, width: 150, height: 200 },
+            { type: 'road', x: 1600, y: 1900, width: 100, height: 200 },
+            { type: 'road', x: 2900, y: 1900, width: 100, height: 200 },
             // Forests
             { type: 'forest', x: 400, y: 400, width: 500, height: 400 },
             { type: 'forest', x: 4000, y: 400, width: 500, height: 400 },
