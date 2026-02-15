@@ -135,6 +135,14 @@ export class Building {
         // Handle Sprite loading if not yet ready
         if (!this.sprite) {
             this.sprite = spriteManager.get(this.typeId);
+            if (!this.sprite) {
+                // Try again nicely
+                // console.warn(`Building ${this.typeId} has no sprite in manager!`);
+            } else {
+                if (this.typeId === 'burmese_fortress' && Math.random() < 0.01) {
+                    console.log('Rendering fortress', this.sprite);
+                }
+            }
         }
 
         const zoom = camera.zoom;
