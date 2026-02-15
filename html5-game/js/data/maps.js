@@ -702,36 +702,38 @@ export const MAPS = {
 
         // Siamese royal guard and elephants
         playerUnits: [
-            // Royal elephants (center - duel setup)
-            { type: 'thai_king', x: 1400, y: 900, team: 0 }, // King Maha Chakkraphat
-            { type: 'queen_suriyothai', x: 1400, y: 1100, team: 0 }, // Queen Suriyothai (nearby)
+            // === FRONT LINE: THE DUEL (Center) ===
+            { type: 'thai_king', x: 1300, y: 900, team: 0 }, // King Maha Chakkraphat (Facing Left)
+            // Royal Guard for the King (Small elite squad)
+            { type: 'swordsman', x: 1350, y: 850, team: 0 },
+            { type: 'swordsman', x: 1350, y: 950, team: 0 },
+            { type: 'spearman', x: 1400, y: 900, team: 0 },
 
-            // Royal guard
-            { type: 'swordsman', x: 1300, y: 800, team: 0 },
-            { type: 'swordsman', x: 1300, y: 1000, team: 0 },
-            { type: 'swordsman', x: 1300, y: 1200, team: 0 },
-            { type: 'spearman', x: 1250, y: 850, team: 0 },
-            { type: 'spearman', x: 1250, y: 1050, team: 0 },
-            { type: 'archer', x: 1200, y: 900, team: 0 },
-            { type: 'archer', x: 1200, y: 1100, team: 0 },
-            { type: 'cavalry', x: 1250, y: 700, team: 0 },
-            { type: 'cavalry', x: 1250, y: 1300, team: 0 }
+            // === REINFORCEMENTS: QUEEN SURIYOTHAI (Rear/Far Right) ===
+            { type: 'queen_suriyothai', x: 2100, y: 900, team: 0 }, // Queen arriving to help
+            // Queen's Army
+            { type: 'elephant', x: 2150, y: 850, team: 0 },
+            { type: 'elephant', x: 2150, y: 950, team: 0 },
+            { type: 'cavalry', x: 2050, y: 800, team: 0 },
+            { type: 'cavalry', x: 2050, y: 1000, team: 0 },
+            { type: 'archer', x: 2200, y: 850, team: 0 },
+            { type: 'archer', x: 2200, y: 950, team: 0 },
+            { type: 'swordsman', x: 2050, y: 900, team: 0 }
         ],
 
         // Burmese assault with boss elephant
         enemyUnits: [
-            // Burmese King on elephant (Boss - facing Thai King)
-            { type: 'burmese_king', x: 1600, y: 900, team: 1 },
+            // === BURMESE KING (Center - Facing Right) ===
+            { type: 'burmese_king', x: 1100, y: 900, team: 1 },
 
-            // Burmese warriors
-            { type: 'enemy_elephant', x: 1600, y: 700, team: 1 },
-            { type: 'enemy_elephant', x: 1600, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 1700, y: 800, team: 1 },
-            { type: 'enemy_swordsman', x: 1700, y: 1000, team: 1 },
-            { type: 'enemy_swordsman', x: 1700, y: 1200, team: 1 },
-            { type: 'enemy_spearman', x: 1750, y: 900, team: 1 },
-            { type: 'enemy_archer', x: 1800, y: 850, team: 1 },
-            { type: 'enemy_archer', x: 1800, y: 950, team: 1 }
+            // Burmese Elite Guard
+            { type: 'enemy_elephant', x: 1050, y: 800, team: 1 },
+            { type: 'enemy_elephant', x: 1050, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 1000, y: 850, team: 1 },
+            { type: 'enemy_swordsman', x: 1000, y: 950, team: 1 },
+            { type: 'enemy_spearman', x: 950, y: 900, team: 1 },
+            { type: 'enemy_archer', x: 900, y: 800, team: 1 },
+            { type: 'enemy_archer', x: 900, y: 1000, team: 1 }
         ],
 
         buildings: [],
