@@ -53,6 +53,11 @@ export class SpriteManager {
             'border_outpost': 'images/buildings/mission3/border_outpost.png',
             'supply_camp': 'images/buildings/mission3/supply_camp.png',
 
+            // Mission 4 Buildings
+            'royal_pavilion': 'images/buildings/mission4/royal_pavilion.png',
+            'field_armory': 'images/buildings/mission4/field_armory.png',
+            'barricades': 'images/buildings/mission4/barricades.png',
+
             // Mission 2 Units
             'burmese_defender': 'images/units/mission2/burmese_defender.png',
             'siamese_assault': 'images/units/mission2/siamese_assault_infantry.png',

@@ -404,5 +404,31 @@ export const BUILDING_TYPES = {
         hp: 800,
         size: 250,
         description: 'ค่ายพักแรมและเก็บเสบียง'
+    },
+
+    // === MISSION 4 SPECIFIC BUILDINGS ===
+    ROYAL_PAVILION: {
+        id: 'royal_pavilion',
+        name: 'พลับพลาที่ประทับ',
+        icon: 'pavilion',
+        hp: 4000,
+        size: 350,
+        description: 'ศูนย์บัญชาการหลักในสนามรบ'
+    },
+    FIELD_ARMORY: {
+        id: 'field_armory',
+        name: 'คลังอาวุธสนาม',
+        icon: 'armory',
+        hp: 1000,
+        size: 200,
+        description: 'จุดเก็บอาวุธและเสบียงกรัง'
+    },
+    BARRICADES: {
+        id: 'barricades',
+        name: 'แนวป้องกัน',
+        icon: 'barricade',
+        hp: 2000,
+        size: 150,
+        description: 'ขวากหนามป้องกันการบุกรุก'
     }
 };

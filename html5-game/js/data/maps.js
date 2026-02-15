@@ -490,6 +490,16 @@ export const MAPS = {
         ],
 
         buildings: [
+
+            // Unique Mission 4 Buildings
+            { type: 'royal_pavilion', x: 3500, y: 1450, team: 0 }, // Player Command
+            { type: 'field_armory', x: 3600, y: 1350, team: 0 },
+            { type: 'field_armory', x: 3600, y: 1550, team: 0 },
+            // Barricades front line
+            { type: 'barricades', x: 3100, y: 1400, team: 0 },
+            { type: 'barricades', x: 3100, y: 1500, team: 0 },
+            { type: 'barricades', x: 3100, y: 1600, team: 0 },
+
             { type: 'barracks', x: 3600, y: 1450, team: 0 },
             { type: 'farm', x: 3700, y: 1300, team: 0 },
             { type: 'farm', x: 3700, y: 1600, team: 0 },
