@@ -697,6 +697,11 @@ body {
     justify-content: space-between;
     align-items: center;
     z-index: 100;
+    pointer-events: none;
+}
+
+.hud-top>* {
+    pointer-events: auto;
 }
 
 .resource-bar {
@@ -829,6 +834,11 @@ body {
     display: flex;
     gap: 20px;
     z-index: 100;
+    pointer-events: none;
+}
+
+.hud-bottom>* {
+    pointer-events: auto;
 }
 
 /* Minimap */
@@ -1335,7 +1345,7 @@ body {
     opacity: 0;
     transition: opacity 0.35s ease, transform 0.35s ease;
     box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3),
-                inset 0 0 20px rgba(212, 175, 55, 0.05);
+        inset 0 0 20px rgba(212, 175, 55, 0.05);
     text-shadow: 0 1px 8px rgba(212, 175, 55, 0.4);
 }
 
