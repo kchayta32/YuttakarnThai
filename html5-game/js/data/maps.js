@@ -64,13 +64,13 @@ export const MAPS = {
             { type: 'enemy_swordsman', x: 800, y: 600, team: 1 },
             { type: 'enemy_elephant', x: 750, y: 575, team: 1 },
 
-            // Wave 3 - Southwest
+            // Wave 3 - Southwest (Archers moved left to avoid forest)
             { type: 'enemy_swordsman', x: 400, y: 1100, team: 1 },
             { type: 'enemy_swordsman', x: 450, y: 1100, team: 1 },
             { type: 'enemy_swordsman', x: 400, y: 1150, team: 1 },
             { type: 'enemy_spearman', x: 350, y: 1125, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 1100, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 1150, team: 1 },
+            { type: 'enemy_archer', x: 150, y: 1100, team: 1 },
+            { type: 'enemy_archer', x: 150, y: 1150, team: 1 },
 
             // Wave 4 - Bridge defenders
             { type: 'enemy_swordsman', x: 950, y: 800, team: 1 },
@@ -326,9 +326,9 @@ export const MAPS = {
             { type: 'spearman', x: 2750, y: 950, team: 0 },
             { type: 'spearman', x: 2750, y: 1000, team: 0 },
             { type: 'spearman', x: 2750, y: 1050, team: 0 },
-            // Archers in forest ambush
-            { type: 'archer', x: 2200, y: 700, team: 0 },
-            { type: 'archer', x: 2250, y: 700, team: 0 },
+            // Archers in forest ambush (moved right to avoid forest overlap)
+            { type: 'archer', x: 2400, y: 700, team: 0 },
+            { type: 'archer', x: 2450, y: 700, team: 0 },
             { type: 'archer', x: 2200, y: 1250, team: 0 },
             { type: 'archer', x: 2250, y: 1250, team: 0 },
             { type: 'elephant', x: 2900, y: 1000, team: 0 },
