@@ -1340,7 +1340,7 @@ body {
     font-family: var(--font-main);
     font-size: 1.1rem;
     font-weight: 600;
-    z-index: 200;
+    z-index: 1000;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.35s ease, transform 0.35s ease;
