@@ -417,7 +417,7 @@ export class Game {
         document.getElementById('mission-modal')?.classList.add('hidden');
 
         // Play story cutscene, then show tutorial
-        this.storyCutscene.play(this.selectedCampaign, () => {
+        this.storyCutscene.play(this.currentMissionId, () => {
             document.getElementById('tutorial-modal')?.classList.remove('hidden');
         });
     }

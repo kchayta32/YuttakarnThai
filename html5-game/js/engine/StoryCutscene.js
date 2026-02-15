@@ -4,30 +4,104 @@
 // ===================================
 
 export const STORY_DATA = {
+    // Campaign Intro
     white_elephant: {
         title: 'สงครามช้างเผือก',
         titleEn: 'The War of the White Elephants',
         year: 'พ.ศ. 2090-2092 (ค.ศ. 1547-1549)',
         scenes: [
             {
-                image: 'images/story/story_scene_01.png',
-                subtitle: 'พระเจ้าตะเบ็งชเวตี้แห่งอาณาจักรตองอู ทรงนำทัพใหญ่บุกเข้าสยามผ่านด่านเจดีย์สามองค์...',
-                duration: 5000
-            },
+                image: 'images/story/campaign_intro.png',
+                subtitle: 'มหาศึกแห่งอุษาคเนย์ สงครามระหว่างกรุงศรีอยุธยาและหงสาวดี กำลังจะระเบิดขึ้น...',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 1
+    campaign1_mission1: {
+        title: 'ศึกที่ราบกาญจนบุรี',
+        scenes: [
             {
-                image: 'images/story/story_scene_02.png',
-                subtitle: 'สมเด็จพระมหาจักรพรรดิแห่งกรุงศรีอยุธยา ทรงได้รับข่าวการบุกรุกของกองทัพพม่า...',
-                duration: 5000
-            },
+                image: 'images/story/mission_1.png',
+                subtitle: 'กองทัพหน้าของพม่าเคลื่อนพลผ่านด่านเจดีย์สามองค์ เข้าสู่ที่ราบกาญจนบุรี กองทัพสยามต้องสกัดกั้น!',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 2
+    campaign1_mission2: {
+        title: 'ศึกท่าวาย',
+        scenes: [
             {
-                image: 'images/story/story_scene_03.png',
-                subtitle: 'สมเด็จพระสุริโยทัย พระอัครมเหสี ทรงแต่งองค์เป็นชายและขึ้นช้างศึก เพื่อปกป้องพระราชสวามี...',
-                duration: 5000
-            },
+                image: 'images/story/mission_2.png',
+                subtitle: 'กองทัพสยามยกพลบุกยึดเมืองท่าวาย เมืองหน้าด่านสำคัญทางฝั่งทะเลอันดามัน',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 3
+    campaign1_mission3: {
+        title: 'ด่านเจดีย์สามองค์',
+        scenes: [
             {
-                image: 'images/story/story_scene_04.png',
-                subtitle: 'การรบอันดุเดือดบนหลังช้าง พระสุริโยทัยทรงสละพระชนม์ชีพเพื่อปกป้องพระมหาจักรพรรดิ...',
-                duration: 5000
+                image: 'images/story/mission_3.png',
+                subtitle: 'พม่าระดมทัพใหญ่บุกกลับทางด่านเจดีย์สามองค์ การป้องกันช่องเขานี้คือหัวใจสำคัญ',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 4
+    campaign1_mission4: {
+        title: 'ที่ราบกาญจนบุรี',
+        scenes: [
+            {
+                image: 'images/story/mission_4.png',
+                subtitle: 'สงครามเต็มรูปแบบ! สองกองทัพเผชิญหน้ากันบนทุ่งกว้าง ณ กาญจนบุรี',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 5
+    campaign1_mission5: {
+        title: 'ล้อมกรุงศรีอยุธยา',
+        scenes: [
+            {
+                image: 'images/story/mission_5.png',
+                subtitle: 'ข้าศึกประชิดพระนคร! กองทัพพม่าล้อมกรุงศรีอยุธยาไว้ทุกด้าน สถานการณ์คับขันถึงขีดสุด',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 6
+    campaign1_mission6: {
+        title: 'ยุทธหัตถี',
+        scenes: [
+            {
+                image: 'images/story/mission_6.png',
+                subtitle: 'วีรกรรมแห่งประวัติศาสตร์ สมเด็จพระสุริโยทัยทรงไสช้างเข้าขวางศัตรูเพื่อปกป้องพระราชสวามี',
+                duration: 7000
+            }
+        ]
+    },
+    // Mission 7
+    campaign1_mission7: {
+        title: 'ขับไล่ข้าศึก',
+        scenes: [
+            {
+                image: 'images/story/mission_7.png',
+                subtitle: 'กองทัพพม่าเสียขวัญและเริ่มถอยร่น ได้เวลาบุกตีโต้เพื่อขับไล่ออกไปจากแผ่นดิน!',
+                duration: 6000
+            }
+        ]
+    },
+    // Mission 8
+    campaign1_mission8: {
+        title: 'กำแพงเพชร',
+        scenes: [
+            {
+                image: 'images/story/mission_8.png',
+                subtitle: 'การรบครั้งสุดท้าย ณ เมืองกำแพงเพชร ร่วมมือกับทหารรับจ้างโปรตุเกสปกป้องเมือง!',
+                duration: 6000
             }
         ]
     }
