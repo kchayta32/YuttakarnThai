@@ -1279,7 +1279,8 @@ export class Game {
                 productionQueue: b.productionQueue.map(q => ({ ...q })),
                 productionProgress: b.productionProgress,
                 resourceTimer: b.resourceTimer
-            }))
+            })),
+            fogOfWar: this.fogOfWar ? Array.from(this.fogOfWar.visibility) : null
         };
 
         localStorage.setItem('rts_yutthakan_save', JSON.stringify(saveData));
@@ -1337,6 +1338,12 @@ export class Game {
             // Initialize Fog of War
             if (this.currentMap.fogOfWar !== false && this.settings.fogOfWarEnabled) {
                 this.fogOfWar = new FogOfWar(this.mapWidth, this.mapHeight, 32);
+                // Restore explored areas from save data
+                if (saveData.fogOfWar && saveData.fogOfWar.length === this.fogOfWar.visibility.length) {
+                    this.fogOfWar.visibility.set(saveData.fogOfWar);
+                    this.fogOfWar.visibilityChanged = true;
+                    this.fogOfWar.updateFogTexture();
+                }
             } else {
                 this.fogOfWar = null;
             }
