@@ -69,6 +69,11 @@ export class SpriteManager {
             'coastal_sand': 'images/terrain/mission2/coastal_sand.png',
             'wooden_bridge': 'images/terrain/mission2/wooden_bridge.png',
 
+            // Mission 6 Hero Units
+            'thai_king': 'images/units/mission6/thai_king.png',
+            'burmese_king': 'images/units/mission6/burmese_king.png',
+            'queen_suriyothai': 'images/units/mission6/queen_suriyothai.png',
+
             // Mission 2 Story
             'story_m2_opening': 'images/story/mission2/Opening Scene - กองทัพสยามเตรียมบุก.png',
             'story_m2_map': 'images/story/mission2/Map_Strategy Scene - แผนที่เมืองท่าวาย.png',
@@ -146,6 +151,7 @@ export class SpriteManager {
         if (unit.isEnemy) {
             // Enemy variants
             if (id.includes('burmese_defender')) return 'burmese_defender';
+            if (id.includes('burmese_king')) return 'burmese_king'; // New Hero
             if (id.includes('swordsman')) return 'enemy_swordsman';
             if (id.includes('spearman')) return 'enemy_spearman';
             if (id.includes('archer')) return 'enemy_archer';
@@ -156,6 +162,8 @@ export class SpriteManager {
             // Player units
             if (id.includes('siamese_assault')) return 'siamese_assault';
             if (id.includes('war_boat')) return 'war_boat';
+            if (id.includes('thai_king')) return 'thai_king'; // New Hero
+            if (id.includes('queen_suriyothai')) return 'queen_suriyothai'; // New Hero
             if (id.includes('swordsman')) return 'swordsman';
             if (id.includes('spearman')) return 'spearman';
             if (id.includes('archer')) return 'archer';
