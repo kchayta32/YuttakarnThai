@@ -5,6 +5,7 @@
 
 import { UNIT_TYPES } from '../data/units.js';
 import { spriteManager } from '../engine/SpriteManager.js';
+import { Projectile } from './Projectile.js';
 
 export class Unit {
     constructor(game, typeId, x, y, team = 0) {
@@ -225,7 +226,18 @@ export class Unit {
                     this.x, this.y,
                     this.target.x, this.target.y
                 );
-                this.setPath(path);
+
+                // For ranged units, only move if significantly out of range
+                // and stop at personal range distance
+                if (this.range > 1.5) {
+                    if (dist > attackRange + 10) {
+                        this.setPath(path);
+                    } else {
+                        this.state = 'idle'; // Wait at edge of range
+                    }
+                } else {
+                    this.setPath(path);
+                }
             } else if (!this.holdingPosition) {
                 this.targetX = this.target.x;
                 this.targetY = this.target.y;
@@ -242,12 +254,38 @@ export class Unit {
 
         // Attack if cooldown ready
         if (this.attackCooldown <= 0) {
-            this.dealDamage(this.target);
+            if (this.range > 1.5) {
+                this.fireProjectile(this.target);
+            } else {
+                this.dealDamage(this.target);
+            }
             this.attackCooldown = this.attackSpeed;
         }
     }
 
-    dealDamage(target) {
+    fireProjectile(target) {
+        // Calculate damage before firing
+        let damage = this.calculateDamage(target);
+
+        // Create projectile
+        const projectile = new Projectile(
+            this.game,
+            'arrow',
+            this.x, this.y,
+            target,
+            damage,
+            this
+        );
+
+        this.game.projectiles.push(projectile);
+
+        // Visual feedback (flash/bob)
+        if (this.game.unitRenderer) {
+            this.game.unitRenderer.triggerAttackAnim(this);
+        }
+    }
+
+    calculateDamage(target) {
         // Calculate damage
         let damage = this.attack;
 
@@ -265,11 +303,21 @@ export class Unit {
         const reduction = target.defense / (target.defense + 10);
         damage = damage * (1 - reduction);
 
+        return damage;
+    }
+
+    dealDamage(target) {
+        const damage = this.calculateDamage(target);
+
         // Deal damage
         target.takeDamage(damage, this);
 
         // Visual feedback
         this.game.createDamageNumber(target.x, target.y, Math.round(damage));
+
+        if (this.game.unitRenderer) {
+            this.game.unitRenderer.triggerAttackAnim(this);
+        }
     }
 
     takeDamage(amount, attacker) {

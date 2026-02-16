@@ -90,9 +90,11 @@ export class UnitRenderer {
             this.renderHealthBar(ctx, unit, screenX, finalY - halfSize);
         }
 
-        // 5. Attack indicator line
+        // 5. Attack indicator line (only for melee/siege, not ranged)
         if (unit.state === 'attacking' && unit.target && unit.target.state !== 'dead') {
-            this.renderAttackLine(ctx, unit, camera);
+            if (unit.range <= 1.5) {
+                this.renderAttackLine(ctx, unit, camera);
+            }
         }
     }
 

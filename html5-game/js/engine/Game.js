@@ -15,6 +15,7 @@ import { WorkerSystem } from '../systems/WorkerSystem.js';
 import { MAPS, CURRENT_MAP, CAMPAIGN_MISSIONS } from '../data/maps.js';
 import { UNIT_TYPES } from '../data/units.js';
 import { spriteManager } from './SpriteManager.js';
+import { Projectile } from '../entities/Projectile.js';
 import { FogOfWar } from './FogOfWar.js';
 
 export class Game {
@@ -65,6 +66,7 @@ export class Game {
         // Entities
         this.units = [];
         this.buildings = [];
+        this.projectiles = [];
 
         // Resources
         this.resources = {
@@ -444,6 +446,7 @@ export class Game {
         // Reset game
         this.units = [];
         this.buildings = [];
+        this.projectiles = [];
         this.effects = [];
         this.damageNumbers = [];
         this.gameTime = 0;
@@ -609,6 +612,12 @@ export class Game {
             building.update(deltaTime);
         }
 
+        // Update projectiles
+        this.projectiles = this.projectiles.filter(p => {
+            p.update(deltaTime);
+            return !p.isDead;
+        });
+
         // Update training queue UI if a building is selected
         if (this.selectedBuilding && this.selectedBuilding.builds) {
             this.updateTrainingQueue(this.selectedBuilding);
@@ -697,6 +706,11 @@ export class Game {
         // Render Fog of War overlay
         if (this.fogOfWar) {
             this.fogOfWar.render(ctx, this.camera);
+        }
+
+        // Render projectiles
+        for (const projectile of this.projectiles) {
+            projectile.render(ctx, this.camera);
         }
 
         // Render effects
