@@ -237,10 +237,10 @@ export const MAPS = {
             { type: 'enemy_archer', x: 2500, y: 1650, team: 1 },
             // War elephant (moved to ground level with troops)
             { type: 'enemy_elephant', x: 2400, y: 1300, team: 1 },
-            // Patrol cavalry
-            { type: 'enemy_cavalry', x: 1600, y: 800, team: 1 },
-            { type: 'enemy_cavalry', x: 1600, y: 1600, team: 1 },
-            { type: 'enemy_cavalry', x: 2200, y: 600, team: 1 }
+            // Patrol cavalry (Shifted right and out of forest/river bounds)
+            { type: 'enemy_cavalry', x: 1700, y: 800, team: 1 },
+            { type: 'enemy_cavalry', x: 1700, y: 1500, team: 1 },
+            { type: 'enemy_cavalry', x: 2300, y: 750, team: 1 }
         ],
 
         // Enhanced buildings with new Mission 2 structures
