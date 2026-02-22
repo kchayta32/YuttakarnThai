@@ -195,11 +195,15 @@ export class Unit {
 
         if (this.game.pathfinder) {
             const gs = this.game.pathfinder.gridSize;
+            const currentGX = Math.floor(this.x / gs);
+            const currentGY = Math.floor(this.y / gs);
+            const isCurrentlyBlocked = !this.game.pathfinder.isWalkable(currentGX, currentGY);
+
             const canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
             const canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
 
-            if (canMoveX) this.x = nextX;
-            if (canMoveY) this.y = nextY;
+            if (canMoveX || isCurrentlyBlocked) this.x = nextX;
+            if (canMoveY || isCurrentlyBlocked) this.y = nextY;
         } else {
             this.x = nextX;
             this.y = nextY;
@@ -228,11 +232,15 @@ export class Unit {
 
         if (this.game.pathfinder) {
             const gs = this.game.pathfinder.gridSize;
+            const currentGX = Math.floor(this.x / gs);
+            const currentGY = Math.floor(this.y / gs);
+            const isCurrentlyBlocked = !this.game.pathfinder.isWalkable(currentGX, currentGY);
+
             const canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
             const canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
 
-            if (canMoveX) this.x = nextX;
-            if (canMoveY) this.y = nextY;
+            if (canMoveX || isCurrentlyBlocked) this.x = nextX;
+            if (canMoveY || isCurrentlyBlocked) this.y = nextY;
         } else {
             this.x = nextX;
             this.y = nextY;
@@ -431,11 +439,15 @@ export class Unit {
 
             if (this.game.pathfinder) {
                 const gs = this.game.pathfinder.gridSize;
+                const currentGX = Math.floor(this.x / gs);
+                const currentGY = Math.floor(this.y / gs);
+                const isCurrentlyBlocked = !this.game.pathfinder.isWalkable(currentGX, currentGY);
+
                 let canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
                 let canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
 
-                if (canMoveX) this.x = nextX;
-                if (canMoveY) this.y = nextY;
+                if (canMoveX || isCurrentlyBlocked) this.x = nextX;
+                if (canMoveY || isCurrentlyBlocked) this.y = nextY;
             } else {
                 this.x = nextX;
                 this.y = nextY;

@@ -440,12 +440,12 @@ export const MAPS = {
             { type: 'spearman', x: 2850, y: 1850, team: 0 },
             { type: 'spearman', x: 2900, y: 1850, team: 0 },
             { type: 'spearman', x: 2950, y: 1850, team: 0 },
-            // Archers behind (also shifted)
-            { type: 'archer', x: 3000, y: 1750, team: 0 },
-            { type: 'archer', x: 3050, y: 1750, team: 0 },
-            { type: 'archer', x: 3000, y: 1800, team: 0 },
-            { type: 'archer', x: 3050, y: 1800, team: 0 },
-            { type: 'archer', x: 3000, y: 1850, team: 0 },
+            // Archers behind (shifted further forward to clear Pavilion)
+            { type: 'archer', x: 2850, y: 1750, team: 0 },
+            { type: 'archer', x: 2900, y: 1750, team: 0 },
+            { type: 'archer', x: 2850, y: 1800, team: 0 },
+            { type: 'archer', x: 2900, y: 1800, team: 0 },
+            { type: 'archer', x: 2850, y: 1850, team: 0 },
             // Elephants (Middle defense - Shifted LEFT)
             { type: 'elephant', x: 2750, y: 1600, team: 0 },
             { type: 'elephant', x: 2750, y: 1650, team: 0 },
