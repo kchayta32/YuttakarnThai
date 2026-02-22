@@ -58,6 +58,7 @@ export class InputHandler {
         this.canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
         this.canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
         this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this));
+        this.canvas.addEventListener('mouseleave', this.onMouseLeave.bind(this));
         this.canvas.addEventListener('contextmenu', e => e.preventDefault());
         this.canvas.addEventListener('wheel', this.onWheel.bind(this));
 
@@ -111,6 +112,19 @@ export class InputHandler {
             const dy = this.mouse.y - this.cameraDrag.startY;
             this.game.camera.x = this.cameraDrag.cameraStartX - dx;
             this.game.camera.y = this.cameraDrag.cameraStartY - dy;
+        }
+    }
+
+    onMouseLeave(e) {
+        this.mouse.leftDown = false;
+        this.mouse.rightDown = false;
+        this.mouse.middleDown = false;
+
+        if (this.selectionBox.active) {
+            this.selectionBox.active = false;
+        }
+        if (this.cameraDrag.active) {
+            this.cameraDrag.active = false;
         }
     }
 

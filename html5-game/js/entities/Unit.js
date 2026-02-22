@@ -253,23 +253,33 @@ export class Unit {
         if (dist > attackRange) {
             // Move towards target
             if (this.game.pathfinder && !this.holdingPosition) {
+                // Prevent pathfinding spam if target is unreachable
+                if ((this.pathCooldown || 0) > 0) {
+                    this.pathCooldown -= deltaTime;
+                    return;
+                }
+
                 const path = this.game.pathfinder.findPath(
                     this.x, this.y,
                     this.target.x, this.target.y
                 );
 
-                if (path) {
-                    // For ranged units, only move if significantly out of range
-                    // and stop at personal range distance
-                    if (this.range > 1.5) {
-                        if (dist > attackRange + 10) {
-                            this.setPath(path);
-                        } else {
-                            this.state = 'idle'; // Wait at edge of range
-                        }
-                    } else {
+                if (!path || path.length === 0) {
+                    this.stop();
+                    this.pathCooldown = 1.0; // Cooldown for 1 second before retrying
+                    return;
+                }
+
+                // For ranged units, only move if significantly out of range
+                // and stop at personal range distance
+                if (this.range > 1.5) {
+                    if (dist > attackRange + 10) {
                         this.setPath(path);
+                    } else {
+                        this.state = 'idle'; // Wait at edge of range
                     }
+                } else {
+                    this.setPath(path);
                 }
             } else if (!this.holdingPosition) {
                 this.targetX = this.target.x;

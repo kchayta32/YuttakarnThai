@@ -114,10 +114,10 @@ export class StoryCutscene {
         this.currentScene = 0;
         this.isPlaying = false;
         this.sceneTimer = 0;
-        this.fadeAlpha = 0;
         this.fadeDirection = 'in'; // 'in', 'hold', 'out'
         this.images = {};
         this.onComplete = null;
+        this.typewriterInterval = null;
 
         this.createUI();
     }
@@ -348,14 +348,18 @@ export class StoryCutscene {
     }
 
     typewriterEffect(element, text) {
+        if (this.typewriterInterval) {
+            clearInterval(this.typewriterInterval);
+        }
         element.textContent = '';
         let i = 0;
-        const interval = setInterval(() => {
+        this.typewriterInterval = setInterval(() => {
             if (i < text.length) {
                 element.textContent += text.charAt(i);
                 i++;
             } else {
-                clearInterval(interval);
+                clearInterval(this.typewriterInterval);
+                this.typewriterInterval = null;
             }
         }, 30);
     }
@@ -378,6 +382,10 @@ export class StoryCutscene {
 
     complete() {
         this.isPlaying = false;
+        if (this.typewriterInterval) {
+            clearInterval(this.typewriterInterval);
+            this.typewriterInterval = null;
+        }
 
         // Hide overlay
         const overlay = document.getElementById('story-overlay');
