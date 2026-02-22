@@ -629,10 +629,10 @@ export const MAPS = {
 
         buildings: [
             // Ayutthaya city (center)
-            { type: 'barracks', x: 2400, y: 2200, team: 0 },
-            { type: 'farm', x: 2200, y: 2300, team: 0 },
-            { type: 'farm', x: 2600, y: 2300, team: 0 },
-            { type: 'farm', x: 2400, y: 2400, team: 0 },
+            { type: 'barracks', x: 2400, y: 2150, team: 0 },
+            { type: 'farm', x: 2250, y: 2450, team: 0 },
+            { type: 'farm', x: 2550, y: 2450, team: 0 },
+            { type: 'farm', x: 2400, y: 2650, team: 0 },
             // Burmese camps
             { type: 'barracks', x: 2400, y: 300, team: 1 },
             { type: 'farm', x: 2200, y: 200, team: 1 },
@@ -644,12 +644,14 @@ export const MAPS = {
             { type: 'water', x: 1800, y: 0, width: 150, height: 1600 },
             { type: 'water', x: 1800, y: 1600, width: 100, height: 200 },
             { type: 'water', x: 1600, y: 1700, width: 300, height: 100 },
-            { type: 'water', x: 1600, y: 1700, width: 100, height: 700 },
-            { type: 'water', x: 1600, y: 2300, width: 350, height: 100 },
-            { type: 'water', x: 2900, y: 1700, width: 100, height: 700 },
-            { type: 'water', x: 2800, y: 2300, width: 200, height: 100 },
+            { type: 'water', x: 1600, y: 1700, width: 100, height: 200 }, // Left split top
+            { type: 'water', x: 1600, y: 2100, width: 100, height: 300 }, // Left split bottom
+            { type: 'water', x: 1600, y: 2300, width: 220, height: 100 }, // Left bottom horizontal (shortened)
+            { type: 'water', x: 2900, y: 1700, width: 100, height: 200 }, // Right split top
+            { type: 'water', x: 2900, y: 2100, width: 100, height: 300 }, // Right split bottom
+            { type: 'water', x: 2850, y: 2300, width: 150, height: 100 }, // Right bottom horizontal (shortened)
             { type: 'water', x: 2800, y: 0, width: 150, height: 1800 },
-            // Bridges (aligned with vertical river sections)
+            // Bridges (aligned with vertical river sections in the split gaps)
             { type: 'road', x: 1600, y: 1900, width: 100, height: 200 },
             { type: 'road', x: 2900, y: 1900, width: 100, height: 200 },
             // Forests
