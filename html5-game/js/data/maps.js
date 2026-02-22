@@ -700,10 +700,10 @@ export const MAPS = {
         playerUnits: [
             // === FRONT LINE: THE DUEL (Center) ===
             { type: 'thai_king', x: 1300, y: 900, team: 0 }, // King Maha Chakkraphat (Facing Left)
-            // Royal Guard for the King (Small elite squad)
-            { type: 'swordsman', x: 1350, y: 850, team: 0 },
-            { type: 'swordsman', x: 1350, y: 950, team: 0 },
-            { type: 'spearman', x: 1400, y: 900, team: 0 },
+            // Royal Guard for the King (Moved to reinforcements)
+            { type: 'swordsman', x: 2000, y: 850, team: 0 },
+            { type: 'swordsman', x: 2000, y: 950, team: 0 },
+            { type: 'spearman', x: 2000, y: 900, team: 0 },
 
             // === REINFORCEMENTS: QUEEN SURIYOTHAI (Rear/Far Right) ===
             { type: 'queen_suriyothai', x: 2100, y: 900, team: 0 }, // Queen arriving to help
