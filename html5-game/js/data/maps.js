@@ -33,10 +33,10 @@ export const MAPS = {
             { type: 'spearman', x: 2300, y: 800, team: 0 },
             { type: 'spearman', x: 2300, y: 850, team: 0 },
             { type: 'spearman', x: 2300, y: 900, team: 0 },
-            { type: 'archer', x: 2450, y: 750, team: 0 },
-            { type: 'archer', x: 2500, y: 750, team: 0 },
-            { type: 'archer', x: 2450, y: 800, team: 0 },
-            { type: 'archer', x: 2500, y: 800, team: 0 },
+            { type: 'archer', x: 2350, y: 700, team: 0 },
+            { type: 'archer', x: 2400, y: 700, team: 0 },
+            { type: 'archer', x: 2450, y: 700, team: 0 },
+            { type: 'archer', x: 2500, y: 700, team: 0 },
             { type: 'elephant', x: 2350, y: 950, team: 0 },
             { type: 'elephant', x: 2450, y: 950, team: 0 },
             { type: 'cavalry', x: 2250, y: 750, team: 0 },
@@ -64,13 +64,13 @@ export const MAPS = {
             { type: 'enemy_swordsman', x: 800, y: 600, team: 1 },
             { type: 'enemy_elephant', x: 750, y: 575, team: 1 },
 
-            // Wave 3 - Southwest (Archers moved left to avoid forest)
-            { type: 'enemy_swordsman', x: 400, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 1150, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 1125, team: 1 },
-            { type: 'enemy_archer', x: 150, y: 1100, team: 1 },
-            { type: 'enemy_archer', x: 150, y: 1150, team: 1 },
+            // Wave 3 - Southwest (Moved up and right to clear pathing and avoid farms/forests)
+            { type: 'enemy_swordsman', x: 600, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 650, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 600, y: 1050, team: 1 },
+            { type: 'enemy_spearman', x: 550, y: 1025, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 1000, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 1050, team: 1 },
 
             // Wave 4 - Bridge defenders
             { type: 'enemy_swordsman', x: 950, y: 800, team: 1 },
