@@ -221,10 +221,10 @@ export const MAPS = {
         // Enemy defends Tavoy (east side) - Enhanced with defenders
         enemyUnits: [
             // Fortress defenders (moved to front/left of the fortress, well-spaced)
-            { type: 'burmese_defender', x: 2600, y: 1300, team: 1 },
-            { type: 'burmese_defender', x: 2600, y: 1400, team: 1 },
-            { type: 'burmese_defender', x: 2700, y: 1350, team: 1 },
-            { type: 'burmese_defender', x: 2700, y: 1450, team: 1 },
+            { type: 'burmese_defender', x: 2350, y: 1300, team: 1 },
+            { type: 'burmese_defender', x: 2350, y: 1400, team: 1 },
+            { type: 'burmese_defender', x: 2450, y: 1350, team: 1 },
+            { type: 'burmese_defender', x: 2450, y: 1450, team: 1 },
             // Regular troops (Shifted left to avoid farm overlap)
             { type: 'enemy_swordsman', x: 2400, y: 1400, team: 1 },
             { type: 'enemy_swordsman', x: 2400, y: 1500, team: 1 },
