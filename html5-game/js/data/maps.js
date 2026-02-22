@@ -220,23 +220,23 @@ export const MAPS = {
 
         // Enemy defends Tavoy (east side) - Enhanced with defenders
         enemyUnits: [
-            // Fortress defenders (new unit type)
-            { type: 'burmese_defender', x: 2750, y: 1100, team: 1 },
-            { type: 'burmese_defender', x: 2750, y: 1150, team: 1 },
-            { type: 'burmese_defender', x: 2800, y: 1075, team: 1 },
-            { type: 'burmese_defender', x: 2800, y: 1175, team: 1 },
-            // Regular troops (Shifted down for space)
-            { type: 'enemy_swordsman', x: 2600, y: 1800, team: 1 },
-            { type: 'enemy_swordsman', x: 2650, y: 1800, team: 1 },
-            { type: 'enemy_spearman', x: 2600, y: 1850, team: 1 },
-            // Archers on walls
-            { type: 'enemy_archer', x: 2900, y: 1000, team: 1 },
-            { type: 'enemy_archer', x: 2900, y: 1050, team: 1 },
-            { type: 'enemy_archer', x: 2900, y: 1100, team: 1 },
-            { type: 'enemy_archer', x: 2900, y: 1150, team: 1 },
-            { type: 'enemy_archer', x: 2900, y: 1200, team: 1 },
-            // War elephant
-            { type: 'enemy_elephant', x: 2650, y: 1125, team: 1 },
+            // Fortress defenders (moved to front/left of the fortress, well-spaced)
+            { type: 'burmese_defender', x: 2600, y: 1300, team: 1 },
+            { type: 'burmese_defender', x: 2600, y: 1400, team: 1 },
+            { type: 'burmese_defender', x: 2700, y: 1350, team: 1 },
+            { type: 'burmese_defender', x: 2700, y: 1450, team: 1 },
+            // Regular troops (Shifted left to avoid farm overlap)
+            { type: 'enemy_swordsman', x: 2400, y: 1400, team: 1 },
+            { type: 'enemy_swordsman', x: 2400, y: 1500, team: 1 },
+            { type: 'enemy_spearman', x: 2400, y: 1600, team: 1 },
+            // Archers on walls (moved to ground level on the left, well-spaced)
+            { type: 'enemy_archer', x: 2500, y: 1250, team: 1 },
+            { type: 'enemy_archer', x: 2500, y: 1350, team: 1 },
+            { type: 'enemy_archer', x: 2500, y: 1450, team: 1 },
+            { type: 'enemy_archer', x: 2500, y: 1550, team: 1 },
+            { type: 'enemy_archer', x: 2500, y: 1650, team: 1 },
+            // War elephant (moved to ground level with troops)
+            { type: 'enemy_elephant', x: 2400, y: 1300, team: 1 },
             // Patrol cavalry
             { type: 'enemy_cavalry', x: 1600, y: 800, team: 1 },
             { type: 'enemy_cavalry', x: 1600, y: 1600, team: 1 },
