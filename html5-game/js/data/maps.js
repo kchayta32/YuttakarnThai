@@ -949,10 +949,10 @@ export const MAPS = {
             { type: 'enemy_elephant', x: 600, y: 1075, team: 1 },
             { type: 'enemy_elephant', x: 600, y: 1125, team: 1 },
             { type: 'enemy_elephant', x: 650, y: 1100, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 900, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 950, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 1250, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 1300, team: 1 }
+            { type: 'enemy_cavalry', x: 300, y: 875, team: 1 },
+            { type: 'enemy_cavalry', x: 300, y: 925, team: 1 },
+            { type: 'enemy_cavalry', x: 300, y: 1225, team: 1 },
+            { type: 'enemy_cavalry', x: 300, y: 1275, team: 1 }
         ],
 
         buildings: [
