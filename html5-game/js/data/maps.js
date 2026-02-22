@@ -33,10 +33,10 @@ export const MAPS = {
             { type: 'spearman', x: 2300, y: 800, team: 0 },
             { type: 'spearman', x: 2300, y: 850, team: 0 },
             { type: 'spearman', x: 2300, y: 900, team: 0 },
-            { type: 'archer', x: 2450, y: 750, team: 0 },
-            { type: 'archer', x: 2500, y: 750, team: 0 },
-            { type: 'archer', x: 2450, y: 800, team: 0 },
-            { type: 'archer', x: 2500, y: 800, team: 0 },
+            { type: 'archer', x: 2350, y: 700, team: 0 },
+            { type: 'archer', x: 2400, y: 700, team: 0 },
+            { type: 'archer', x: 2450, y: 700, team: 0 },
+            { type: 'archer', x: 2500, y: 700, team: 0 },
             { type: 'elephant', x: 2350, y: 950, team: 0 },
             { type: 'elephant', x: 2450, y: 950, team: 0 },
             { type: 'cavalry', x: 2250, y: 750, team: 0 },
@@ -64,13 +64,13 @@ export const MAPS = {
             { type: 'enemy_swordsman', x: 800, y: 600, team: 1 },
             { type: 'enemy_elephant', x: 750, y: 575, team: 1 },
 
-            // Wave 3 - Southwest (Archers moved left to avoid forest)
-            { type: 'enemy_swordsman', x: 400, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 1150, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 1125, team: 1 },
-            { type: 'enemy_archer', x: 150, y: 1100, team: 1 },
-            { type: 'enemy_archer', x: 150, y: 1150, team: 1 },
+            // Wave 3 - Southwest (Moved up and right to clear pathing and avoid farms/forests)
+            { type: 'enemy_swordsman', x: 600, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 650, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 600, y: 1050, team: 1 },
+            { type: 'enemy_spearman', x: 550, y: 1025, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 1000, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 1050, team: 1 },
 
             // Wave 4 - Bridge defenders
             { type: 'enemy_swordsman', x: 950, y: 800, team: 1 },
@@ -322,9 +322,9 @@ export const MAPS = {
             { type: 'spearman', x: 2750, y: 950, team: 0 },
             { type: 'spearman', x: 2750, y: 1000, team: 0 },
             { type: 'spearman', x: 2750, y: 1050, team: 0 },
-            // Archers in forest ambush (moved right to avoid forest overlap)
-            { type: 'archer', x: 2400, y: 700, team: 0 },
-            { type: 'archer', x: 2450, y: 700, team: 0 },
+            // Archers in forest ambush (moved further right to avoid forest completely)
+            { type: 'archer', x: 2550, y: 700, team: 0 },
+            { type: 'archer', x: 2600, y: 700, team: 0 },
             { type: 'archer', x: 2200, y: 1250, team: 0 },
             { type: 'archer', x: 2250, y: 1250, team: 0 },
             { type: 'elephant', x: 2900, y: 1000, team: 0 },
@@ -335,24 +335,24 @@ export const MAPS = {
 
         // Burmese army enters from west (Three Pagodas Pass)
         enemyUnits: [
-            // Main force
-            { type: 'enemy_swordsman', x: 400, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 500, y: 900, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 950, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 950, team: 1 },
-            { type: 'enemy_swordsman', x: 500, y: 950, team: 1 },
-            { type: 'enemy_swordsman', x: 400, y: 1000, team: 1 },
-            { type: 'enemy_swordsman', x: 450, y: 1000, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 925, team: 1 },
-            { type: 'enemy_spearman', x: 350, y: 975, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 900, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 950, team: 1 },
-            { type: 'enemy_archer', x: 300, y: 1000, team: 1 },
-            { type: 'enemy_elephant', x: 550, y: 950, team: 1 },
-            { type: 'enemy_elephant', x: 600, y: 950, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 850, team: 1 },
-            { type: 'enemy_cavalry', x: 250, y: 1050, team: 1 },
+            // Main force (Shifted forward to completely avoid buildings at x: 200 - 600)
+            { type: 'enemy_swordsman', x: 750, y: 900, team: 1 },
+            { type: 'enemy_swordsman', x: 800, y: 900, team: 1 },
+            { type: 'enemy_swordsman', x: 850, y: 900, team: 1 },
+            { type: 'enemy_swordsman', x: 750, y: 950, team: 1 },
+            { type: 'enemy_swordsman', x: 800, y: 950, team: 1 },
+            { type: 'enemy_swordsman', x: 850, y: 950, team: 1 },
+            { type: 'enemy_swordsman', x: 750, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 800, y: 1000, team: 1 },
+            { type: 'enemy_spearman', x: 700, y: 925, team: 1 },
+            { type: 'enemy_spearman', x: 700, y: 975, team: 1 },
+            { type: 'enemy_archer', x: 650, y: 900, team: 1 },
+            { type: 'enemy_archer', x: 650, y: 950, team: 1 },
+            { type: 'enemy_archer', x: 650, y: 1000, team: 1 },
+            { type: 'enemy_elephant', x: 900, y: 900, team: 1 },
+            { type: 'enemy_elephant', x: 900, y: 1000, team: 1 },
+            { type: 'enemy_cavalry', x: 700, y: 850, team: 1 },
+            { type: 'enemy_cavalry', x: 700, y: 1050, team: 1 },
             // Second wave
             { type: 'enemy_swordsman', x: 800, y: 925, team: 1 },
             { type: 'enemy_swordsman', x: 850, y: 925, team: 1 },
@@ -645,7 +645,7 @@ export const MAPS = {
             { type: 'water', x: 1800, y: 1600, width: 100, height: 200 },
             { type: 'water', x: 1600, y: 1700, width: 300, height: 100 },
             { type: 'water', x: 1600, y: 1700, width: 100, height: 700 },
-            { type: 'water', x: 1600, y: 2300, width: 500, height: 100 },
+            { type: 'water', x: 1600, y: 2300, width: 350, height: 100 },
             { type: 'water', x: 2900, y: 1700, width: 100, height: 700 },
             { type: 'water', x: 2800, y: 2300, width: 200, height: 100 },
             { type: 'water', x: 2800, y: 0, width: 150, height: 1800 },
@@ -700,10 +700,10 @@ export const MAPS = {
         playerUnits: [
             // === FRONT LINE: THE DUEL (Center) ===
             { type: 'thai_king', x: 1300, y: 900, team: 0 }, // King Maha Chakkraphat (Facing Left)
-            // Royal Guard for the King (Small elite squad)
-            { type: 'swordsman', x: 1350, y: 850, team: 0 },
-            { type: 'swordsman', x: 1350, y: 950, team: 0 },
-            { type: 'spearman', x: 1400, y: 900, team: 0 },
+            // Royal Guard for the King (Moved to reinforcements)
+            { type: 'swordsman', x: 2000, y: 850, team: 0 },
+            { type: 'swordsman', x: 2000, y: 950, team: 0 },
+            { type: 'spearman', x: 2000, y: 900, team: 0 },
 
             // === REINFORCEMENTS: QUEEN SURIYOTHAI (Rear/Far Right) ===
             { type: 'queen_suriyothai', x: 2100, y: 900, team: 0 }, // Queen arriving to help
@@ -783,25 +783,25 @@ export const MAPS = {
 
         // Siamese pursuit force
         playerUnits: [
-            { type: 'swordsman', x: 3500, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3550, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3600, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3500, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3550, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3600, y: 1450, team: 0 },
-            { type: 'spearman', x: 3500, y: 1500, team: 0 },
-            { type: 'spearman', x: 3550, y: 1500, team: 0 },
-            { type: 'spearman', x: 3600, y: 1500, team: 0 },
-            { type: 'archer', x: 3650, y: 1400, team: 0 },
-            { type: 'archer', x: 3650, y: 1450, team: 0 },
-            { type: 'archer', x: 3650, y: 1500, team: 0 },
-            { type: 'elephant', x: 3450, y: 1450, team: 0 },
-            { type: 'elephant', x: 3450, y: 1500, team: 0 },
+            { type: 'swordsman', x: 3300, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3350, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3400, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3300, y: 1450, team: 0 },
+            { type: 'swordsman', x: 3350, y: 1450, team: 0 },
+            { type: 'swordsman', x: 3400, y: 1450, team: 0 },
+            { type: 'spearman', x: 3300, y: 1500, team: 0 },
+            { type: 'spearman', x: 3350, y: 1500, team: 0 },
+            { type: 'spearman', x: 3400, y: 1500, team: 0 },
+            { type: 'archer', x: 3450, y: 1400, team: 0 },
+            { type: 'archer', x: 3450, y: 1450, team: 0 },
+            { type: 'archer', x: 3450, y: 1500, team: 0 },
+            { type: 'elephant', x: 3250, y: 1450, team: 0 },
+            { type: 'elephant', x: 3250, y: 1500, team: 0 },
             // Fast cavalry for pursuit
-            { type: 'cavalry', x: 3400, y: 1350, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1400, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1550, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1600, team: 0 }
+            { type: 'cavalry', x: 3200, y: 1350, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1400, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1550, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1600, team: 0 }
         ],
 
         // Retreating Burmese (scattered)
@@ -897,31 +897,31 @@ export const MAPS = {
         // Defenders with mixed force
         playerUnits: [
             // Wall defenders
-            { type: 'swordsman', x: 2400, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2450, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2500, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2400, y: 1150, team: 0 },
-            { type: 'swordsman', x: 2450, y: 1150, team: 0 },
-            { type: 'swordsman', x: 2500, y: 1150, team: 0 },
-            { type: 'spearman', x: 2350, y: 1100, team: 0 },
-            { type: 'spearman', x: 2350, y: 1150, team: 0 },
-            { type: 'spearman', x: 2550, y: 1100, team: 0 },
-            { type: 'spearman', x: 2550, y: 1150, team: 0 },
+            { type: 'swordsman', x: 2400, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2450, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2500, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2400, y: 1050, team: 0 },
+            { type: 'swordsman', x: 2450, y: 1050, team: 0 },
+            { type: 'swordsman', x: 2500, y: 1050, team: 0 },
+            { type: 'spearman', x: 2350, y: 1000, team: 0 },
+            { type: 'spearman', x: 2350, y: 1050, team: 0 },
+            { type: 'spearman', x: 2550, y: 1000, team: 0 },
+            { type: 'spearman', x: 2550, y: 1050, team: 0 },
             // Archers on walls
-            { type: 'archer', x: 2400, y: 1050, team: 0 },
-            { type: 'archer', x: 2450, y: 1050, team: 0 },
-            { type: 'archer', x: 2500, y: 1050, team: 0 },
-            { type: 'archer', x: 2400, y: 1200, team: 0 },
-            { type: 'archer', x: 2450, y: 1200, team: 0 },
-            { type: 'archer', x: 2500, y: 1200, team: 0 },
+            { type: 'archer', x: 2400, y: 950, team: 0 },
+            { type: 'archer', x: 2450, y: 950, team: 0 },
+            { type: 'archer', x: 2500, y: 950, team: 0 },
+            { type: 'archer', x: 2400, y: 1100, team: 0 },
+            { type: 'archer', x: 2450, y: 1100, team: 0 },
+            { type: 'archer', x: 2500, y: 1100, team: 0 },
             // Elephants
-            { type: 'elephant', x: 2600, y: 1125, team: 0 },
-            { type: 'elephant', x: 2650, y: 1125, team: 0 },
-            // Cavalry reserve
-            { type: 'cavalry', x: 2700, y: 1050, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1100, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1150, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1200, team: 0 }
+            { type: 'elephant', x: 2600, y: 1025, team: 0 },
+            { type: 'elephant', x: 2650, y: 1025, team: 0 },
+            // Cavalry reserve (shifted left and up)
+            { type: 'cavalry', x: 2650, y: 950, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1000, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1050, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1100, team: 0 }
         ],
 
         // Attacking Burmese

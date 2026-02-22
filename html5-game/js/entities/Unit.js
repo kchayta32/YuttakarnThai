@@ -86,6 +86,9 @@ export class Unit {
             this.animFrame = (this.animFrame + 1) % 4;
         }
 
+        // Unit separation
+        this.separateFromOthers(deltaTime);
+
         // State machine
         switch (this.state) {
             case 'idle':
@@ -128,7 +131,10 @@ export class Unit {
      * Set path from A* pathfinding
      */
     setPath(path) {
-        if (!path || path.length === 0) return;
+        if (!path || path.length === 0) {
+            this.stop();
+            return;
+        }
 
         this.path = path;
         this.pathIndex = 0;
@@ -146,14 +152,17 @@ export class Unit {
      */
     followPath(deltaTime) {
         if (this.path.length === 0) {
-            this.moveToTarget(deltaTime);
+            if (this.game.pathfinder) {
+                this.stop();
+            } else {
+                this.moveToTarget(deltaTime);
+            }
             return;
         }
 
         const waypoint = this.path[this.pathIndex];
         if (!waypoint) {
-            this.state = 'idle';
-            this.path = [];
+            this.stop();
             return;
         }
 
@@ -166,14 +175,12 @@ export class Unit {
             this.pathIndex++;
 
             // More waypoints?
-            if (this.pathIndex < this.path.length) {
+            if (this.pathIndex >= this.path.length) {
+                this.stop();
+            } else {
                 const next = this.path[this.pathIndex];
                 this.targetX = next.x;
                 this.targetY = next.y;
-            } else {
-                // Path complete
-                this.state = 'idle';
-                this.path = [];
             }
             return;
         }
@@ -183,8 +190,20 @@ export class Unit {
         const moveSpeed = this.speed * 50 * deltaTime;
         const ratio = Math.min(1, moveSpeed / dist);
 
-        this.x += dx * ratio;
-        this.y += dy * ratio;
+        const nextX = this.x + dx * ratio;
+        const nextY = this.y + dy * ratio;
+
+        if (this.game.pathfinder) {
+            const gs = this.game.pathfinder.gridSize;
+            const canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
+            const canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
+
+            if (canMoveX) this.x = nextX;
+            if (canMoveY) this.y = nextY;
+        } else {
+            this.x = nextX;
+            this.y = nextY;
+        }
     }
 
     moveToTarget(deltaTime) {
@@ -193,7 +212,7 @@ export class Unit {
         const dist = Math.sqrt(dx * dx + dy * dy);
 
         if (dist < 5) {
-            this.state = 'idle';
+            this.stop();
             return;
         }
 
@@ -204,8 +223,20 @@ export class Unit {
         const moveSpeed = this.speed * 50 * deltaTime;
         const ratio = Math.min(1, moveSpeed / dist);
 
-        this.x += dx * ratio;
-        this.y += dy * ratio;
+        const nextX = this.x + dx * ratio;
+        const nextY = this.y + dy * ratio;
+
+        if (this.game.pathfinder) {
+            const gs = this.game.pathfinder.gridSize;
+            const canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
+            const canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
+
+            if (canMoveX) this.x = nextX;
+            if (canMoveY) this.y = nextY;
+        } else {
+            this.x = nextX;
+            this.y = nextY;
+        }
     }
 
     performAttack(deltaTime) {
@@ -359,6 +390,47 @@ export class Unit {
         this.path = [];
         this.state = 'moving';
         this.holdingPosition = false;
+    }
+
+    separateFromOthers(deltaTime) {
+        let pushX = 0;
+        let pushY = 0;
+        let count = 0;
+
+        for (const other of this.game.units) {
+            if (other === this || other.state === 'dead') continue;
+
+            const dx = this.x - other.x;
+            const dy = this.y - other.y;
+            const distSq = dx * dx + dy * dy;
+            const minDist = (this.size + other.size) * 0.4;
+
+            if (distSq > 0 && distSq < minDist * minDist) {
+                const dist = Math.sqrt(distSq);
+                const pushStrength = (minDist - dist) / minDist;
+                pushX += (dx / dist) * pushStrength;
+                pushY += (dy / dist) * pushStrength;
+                count++;
+            }
+        }
+
+        if (count > 0) {
+            const pushFactor = 80 * deltaTime;
+            const nextX = this.x + (pushX / count) * pushFactor;
+            const nextY = this.y + (pushY / count) * pushFactor;
+
+            if (this.game.pathfinder) {
+                const gs = this.game.pathfinder.gridSize;
+                let canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
+                let canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
+
+                if (canMoveX) this.x = nextX;
+                if (canMoveY) this.y = nextY;
+            } else {
+                this.x = nextX;
+                this.y = nextY;
+            }
+        }
     }
 
     attackTarget(target) {
