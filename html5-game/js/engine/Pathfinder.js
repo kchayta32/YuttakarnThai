@@ -55,7 +55,6 @@ export class Pathfinder {
     /**
      * Mark/Unmark an area as an obstacle
      */
-<<<<<<< HEAD
     markObstacle(obs, isBlocked = true) {
         const value = isBlocked ? 1 : 0;
 
@@ -76,15 +75,6 @@ export class Pathfinder {
             const startY = Math.floor((obs.y - halfSize) / this.gridSize);
             const endX = Math.ceil((obs.x + halfSize) / this.gridSize);
             const endY = Math.ceil((obs.y + halfSize) / this.gridSize);
-=======
-    markObstacle(obs) {
-        if (obs.type === 'water' || obs.type === 'mountain') {
-            const padding = 15; // Prevent large units from visually overlapping water
-            const startX = Math.floor((obs.x - padding) / this.gridSize);
-            const startY = Math.floor((obs.y - padding) / this.gridSize);
-            const endX = Math.ceil((obs.x + obs.width + padding) / this.gridSize);
-            const endY = Math.ceil((obs.y + obs.height + padding) / this.gridSize);
->>>>>>> 200cd90269a7d8a34771f632ea8005d61ccb12b6
 
             for (let y = startY; y < endY && y < this.gridHeight; y++) {
                 for (let x = startX; x < endX && x < this.gridWidth; x++) {
@@ -248,11 +238,7 @@ export class Pathfinder {
         ];
 
         let iterations = 0;
-<<<<<<< HEAD
         const maxIterations = 5000;
-=======
-        const maxIterations = 4000;
->>>>>>> 200cd90269a7d8a34771f632ea8005d61ccb12b6
 
         while (openSet.length > 0 && iterations < maxIterations) {
             iterations++;
@@ -305,13 +291,8 @@ export class Pathfinder {
             }
         }
 
-<<<<<<< HEAD
         // No path found - return null to indicate failure
         return null;
-=======
-        // No path found - return empty array
-        return [];
->>>>>>> 200cd90269a7d8a34771f632ea8005d61ccb12b6
     }
 
     /**
