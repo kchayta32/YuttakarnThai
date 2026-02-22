@@ -427,34 +427,34 @@ export const MAPS = {
         },
 
         playerUnits: [
-            // Main infantry line
-            { type: 'swordsman', x: 3200, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3250, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3300, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3350, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3200, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3250, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3300, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3350, y: 1450, team: 0 },
-            { type: 'spearman', x: 3200, y: 1500, team: 0 },
-            { type: 'spearman', x: 3250, y: 1500, team: 0 },
-            { type: 'spearman', x: 3300, y: 1500, team: 0 },
-            { type: 'spearman', x: 3350, y: 1500, team: 0 },
-            // Archers behind
-            { type: 'archer', x: 3400, y: 1400, team: 0 },
-            { type: 'archer', x: 3450, y: 1400, team: 0 },
-            { type: 'archer', x: 3400, y: 1450, team: 0 },
-            { type: 'archer', x: 3450, y: 1450, team: 0 },
-            { type: 'archer', x: 3400, y: 1500, team: 0 },
-            // Elephants
-            { type: 'elephant', x: 3150, y: 1450, team: 0 },
-            { type: 'elephant', x: 3150, y: 1500, team: 0 },
-            { type: 'elephant', x: 3150, y: 1550, team: 0 },
-            // Cavalry flanks
-            { type: 'cavalry', x: 3100, y: 1300, team: 0 },
-            { type: 'cavalry', x: 3100, y: 1350, team: 0 },
-            { type: 'cavalry', x: 3100, y: 1600, team: 0 },
-            { type: 'cavalry', x: 3100, y: 1650, team: 0 }
+            // Main infantry line (Shifted UP and LEFT to clear Royal Pavilion footprint)
+            { type: 'swordsman', x: 2800, y: 1750, team: 0 },
+            { type: 'swordsman', x: 2850, y: 1750, team: 0 },
+            { type: 'swordsman', x: 2900, y: 1750, team: 0 },
+            { type: 'swordsman', x: 2950, y: 1750, team: 0 },
+            { type: 'swordsman', x: 2800, y: 1800, team: 0 },
+            { type: 'swordsman', x: 2850, y: 1800, team: 0 },
+            { type: 'swordsman', x: 2900, y: 1800, team: 0 },
+            { type: 'swordsman', x: 2950, y: 1800, team: 0 },
+            { type: 'spearman', x: 2800, y: 1850, team: 0 },
+            { type: 'spearman', x: 2850, y: 1850, team: 0 },
+            { type: 'spearman', x: 2900, y: 1850, team: 0 },
+            { type: 'spearman', x: 2950, y: 1850, team: 0 },
+            // Archers behind (also shifted)
+            { type: 'archer', x: 3000, y: 1750, team: 0 },
+            { type: 'archer', x: 3050, y: 1750, team: 0 },
+            { type: 'archer', x: 3000, y: 1800, team: 0 },
+            { type: 'archer', x: 3050, y: 1800, team: 0 },
+            { type: 'archer', x: 3000, y: 1850, team: 0 },
+            // Elephants (Middle defense - Shifted LEFT)
+            { type: 'elephant', x: 2750, y: 1600, team: 0 },
+            { type: 'elephant', x: 2750, y: 1650, team: 0 },
+            { type: 'elephant', x: 2750, y: 1700, team: 0 },
+            // Cavalry flanks (Middle defense - Shifted LEFT)
+            { type: 'cavalry', x: 2700, y: 1550, team: 0 },
+            { type: 'cavalry', x: 2700, y: 1580, team: 0 },
+            { type: 'cavalry', x: 2700, y: 1720, team: 0 },
+            { type: 'cavalry', x: 2700, y: 1750, team: 0 }
         ],
 
         enemyUnits: [
@@ -487,19 +487,19 @@ export const MAPS = {
 
         buildings: [
 
-            // Unique Mission 4 Buildings
-            { type: 'royal_pavilion', x: 3500, y: 1450, team: 0 }, // Player Command (Center)
-            { type: 'field_armory', x: 3500, y: 950, team: 0 },   // Moved Up (Far)
-            { type: 'field_armory', x: 3500, y: 1950, team: 0 },  // Moved Down (Far)
+            // Unique Mission 4 Buildings (Shifted LEFT)
+            { type: 'royal_pavilion', x: 3300, y: 1450, team: 0 }, // Player Command (Center)
+            { type: 'field_armory', x: 3300, y: 1050, team: 0 },   // Moved Down
+            { type: 'field_armory', x: 3300, y: 2050, team: 0 },  // Moved Down
 
-            // Barricades front line (Shifted forward)
-            { type: 'barricades', x: 2800, y: 1300, team: 0 },
-            { type: 'barricades', x: 2800, y: 1600, team: 0 },
-            { type: 'barricades', x: 2800, y: 1450, team: 0 },
+            // Barricades front line (Shifted forward/LEFT)
+            { type: 'barricades', x: 2600, y: 1300, team: 0 },
+            { type: 'barricades', x: 2600, y: 1600, team: 0 },
+            { type: 'barricades', x: 2600, y: 1450, team: 0 },
 
-            { type: 'barracks', x: 3900, y: 1450, team: 0 },      // Moved Back
-            { type: 'farm', x: 3900, y: 1000, team: 0 },          // Moved Back & Up
-            { type: 'farm', x: 3900, y: 1900, team: 0 },          // Moved Back & Down
+            { type: 'barracks', x: 3700, y: 1450, team: 0 },      // Moved Back
+            { type: 'farm', x: 3700, y: 1000, team: 0 },          // Moved Back & Up
+            { type: 'farm', x: 3700, y: 1900, team: 0 },          // Moved Back & Down
             { type: 'barracks', x: 200, y: 1450, team: 1 },
             { type: 'farm', x: 100, y: 1300, team: 1 },
             { type: 'farm', x: 100, y: 1600, team: 1 }
@@ -511,10 +511,10 @@ export const MAPS = {
             { type: 'forest', x: 2200, y: 400, width: 350, height: 250 },
             { type: 'forest', x: 1400, y: 2200, width: 400, height: 300 },
             { type: 'forest', x: 2200, y: 2400, width: 350, height: 250 },
-            // River through middle
-            { type: 'water', x: 1950, y: 0, width: 100, height: 1200 },
-            { type: 'water', x: 1950, y: 1500, width: 100, height: 1500 },
-            { type: 'road', x: 1950, y: 1200, width: 100, height: 300 },
+            // River through middle (Aligned with army at y=1500)
+            { type: 'water', x: 1950, y: 0, width: 100, height: 1500 },
+            { type: 'water', x: 1950, y: 1900, width: 100, height: 1100 },
+            { type: 'road', x: 1950, y: 1500, width: 100, height: 400 },
             // Mountain edges
             { type: 'mountain', x: 0, y: 0, width: 150, height: 800 },
             { type: 'mountain', x: 0, y: 2200, width: 150, height: 800 },
@@ -534,7 +534,7 @@ export const MAPS = {
         },
 
         startingResources: { food: 500, gold: 350 },
-        cameraStart: { x: 2800, y: 1200 }
+        cameraStart: { x: 2600, y: 1500 }
     },
 
     // =====================================================

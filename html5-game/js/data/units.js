@@ -163,7 +163,7 @@ export const UNIT_TYPES = {
         maxHp: 50,
         attack: 8,
         defense: 0,
-        range: 5,
+        range: 8,
         speed: 2.2,
         attackSpeed: 1.5,
         visionRange: 7,
@@ -412,7 +412,7 @@ export const BUILDING_TYPES = {
         name: 'พลับพลาที่ประทับ',
         icon: 'pavilion',
         hp: 4000,
-        size: 700, // Doubled from 350
+        size: 600, // Reduced from 700 to fix stuck units
         description: 'ศูนย์บัญชาการหลักในสนามรบ'
     },
     FIELD_ARMORY: {

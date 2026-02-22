@@ -459,7 +459,7 @@ export class Game {
 
         // Initialize pathfinding
         this.pathfinder = new Pathfinder(this);
-        this.pathfinder.initGrid(this.mapWidth, this.mapHeight, this.currentMap.features || []);
+        this.pathfinder.initGrid(this.mapWidth, this.mapHeight, this.currentMap.features || [], this.currentMap.buildings || []);
 
         // Initialize Fog of War if enabled for this map
         if (this.currentMap.fogOfWar !== false && this.settings.fogOfWarEnabled) {
@@ -1069,6 +1069,10 @@ export class Game {
     removeBuilding(building) {
         const index = this.buildings.indexOf(building);
         if (index > -1) {
+            // Unmark from pathfinding grid
+            if (this.pathfinder) {
+                this.pathfinder.unmarkObstacle(building);
+            }
             this.buildings.splice(index, 1);
         }
     }

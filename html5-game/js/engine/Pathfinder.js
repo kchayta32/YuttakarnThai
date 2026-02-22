@@ -3,6 +3,8 @@
 // Grid-based pathfinding system
 // ===================================
 
+import { BUILDING_TYPES } from '../data/units.js';
+
 export class Pathfinder {
     constructor(game) {
         this.game = game;
@@ -16,7 +18,7 @@ export class Pathfinder {
     /**
      * Initialize pathfinding grid from map
      */
-    initGrid(mapWidth, mapHeight, obstacles) {
+    initGrid(mapWidth, mapHeight, features, buildings = []) {
         this.gridWidth = Math.ceil(mapWidth / this.gridSize);
         this.gridHeight = Math.ceil(mapHeight / this.gridSize);
 
@@ -29,36 +31,72 @@ export class Pathfinder {
             }
         }
 
-        // Mark obstacles in two passes:
+        // Mark obstacles in three passes:
         // 1. First mark water, mountains, and forests as blocked
-        for (const obs of obstacles) {
-            if (obs.type !== 'road') {
-                this.markObstacle(obs);
+        for (const feature of features) {
+            if (feature.type !== 'road') {
+                this.markObstacle(feature);
             }
         }
 
-        // 2. Then mark roads as walkable (overrides water)
-        for (const obs of obstacles) {
-            if (obs.type === 'road') {
-                this.markObstacle(obs);
+        // 2. Mark buildings as blocked
+        for (const building of buildings) {
+            this.markObstacle(building);
+        }
+
+        // 3. Then mark roads as walkable (overrides water)
+        for (const feature of features) {
+            if (feature.type === 'road') {
+                this.markObstacle(feature);
             }
         }
     }
 
     /**
-     * Mark an area as blocked
+     * Mark/Unmark an area as an obstacle
      */
-    markObstacle(obs) {
-        if (obs.type === 'water' || obs.type === 'mountain') {
-            const startX = Math.floor(obs.x / this.gridSize);
-            const startY = Math.floor(obs.y / this.gridSize);
-            const endX = Math.ceil((obs.x + obs.width) / this.gridSize);
-            const endY = Math.ceil((obs.y + obs.height) / this.gridSize);
+    markObstacle(obs, isBlocked = true) {
+        const value = isBlocked ? 1 : 0;
+
+        // Resolve size for buildings if not provided
+        let size = obs.size;
+        if (size === undefined && obs.type) {
+            const typeKey = obs.type.toUpperCase();
+            const typeData = BUILDING_TYPES[typeKey];
+            if (typeData && typeData.size !== undefined) {
+                size = typeData.size;
+            }
+        }
+
+        // Check if it's a building (has x, y as center and size property)
+        if (size !== undefined) {
+            const halfSize = size / 2;
+            const startX = Math.floor((obs.x - halfSize) / this.gridSize);
+            const startY = Math.floor((obs.y - halfSize) / this.gridSize);
+            const endX = Math.ceil((obs.x + halfSize) / this.gridSize);
+            const endY = Math.ceil((obs.y + halfSize) / this.gridSize);
 
             for (let y = startY; y < endY && y < this.gridHeight; y++) {
                 for (let x = startX; x < endX && x < this.gridWidth; x++) {
                     if (y >= 0 && x >= 0) {
-                        this.grid[y][x] = 1;
+                        this.grid[y][x] = value;
+                    }
+                }
+            }
+            return;
+        }
+
+        if (obs.type === 'water' || obs.type === 'mountain') {
+            const padding = (obs.type === 'water') ? this.gridSize : 0; // 1-cell padding for water
+            const startX = Math.floor((obs.x - padding) / this.gridSize);
+            const startY = Math.floor((obs.y - padding) / this.gridSize);
+            const endX = Math.ceil((obs.x + obs.width + padding) / this.gridSize);
+            const endY = Math.ceil((obs.y + obs.height + padding) / this.gridSize);
+
+            for (let y = startY; y < endY && y < this.gridHeight; y++) {
+                for (let x = startX; x < endX && x < this.gridWidth; x++) {
+                    if (y >= 0 && x >= 0) {
+                        this.grid[y][x] = value;
                     }
                 }
             }
@@ -72,7 +110,7 @@ export class Pathfinder {
             for (let y = startY; y < endY && y < this.gridHeight; y++) {
                 for (let x = startX; x < endX && x < this.gridWidth; x++) {
                     if (y >= 0 && x >= 0) {
-                        this.grid[y][x] = 0; // Walkable
+                        this.grid[y][x] = 0; // Walkable always
                     }
                 }
             }
@@ -91,10 +129,17 @@ export class Pathfinder {
                 const gy = Math.floor(treeY / this.gridSize);
 
                 if (gy >= 0 && gy < this.gridHeight && gx >= 0 && gx < this.gridWidth) {
-                    this.grid[gy][gx] = 1;
+                    this.grid[gy][gx] = value;
                 }
             }
         }
+    }
+
+    /**
+     * Unmark an area as an obstacle (make it walkable)
+     */
+    unmarkObstacle(obs) {
+        this.markObstacle(obs, false);
     }
 
     /**
@@ -193,7 +238,7 @@ export class Pathfinder {
         ];
 
         let iterations = 0;
-        const maxIterations = 1000;
+        const maxIterations = 5000;
 
         while (openSet.length > 0 && iterations < maxIterations) {
             iterations++;
@@ -246,8 +291,8 @@ export class Pathfinder {
             }
         }
 
-        // No path found - return direct path
-        return [this.gridToWorld(end.x, end.y)];
+        // No path found - return null to indicate failure
+        return null;
     }
 
     /**

@@ -227,16 +227,18 @@ export class Unit {
                     this.target.x, this.target.y
                 );
 
-                // For ranged units, only move if significantly out of range
-                // and stop at personal range distance
-                if (this.range > 1.5) {
-                    if (dist > attackRange + 10) {
-                        this.setPath(path);
+                if (path) {
+                    // For ranged units, only move if significantly out of range
+                    // and stop at personal range distance
+                    if (this.range > 1.5) {
+                        if (dist > attackRange + 10) {
+                            this.setPath(path);
+                        } else {
+                            this.state = 'idle'; // Wait at edge of range
+                        }
                     } else {
-                        this.state = 'idle'; // Wait at edge of range
+                        this.setPath(path);
                     }
-                } else {
-                    this.setPath(path);
                 }
             } else if (!this.holdingPosition) {
                 this.targetX = this.target.x;
