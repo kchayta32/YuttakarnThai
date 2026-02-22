@@ -257,6 +257,60 @@ export const UNIT_TYPES = {
         buildTime: 15,
         description: 'เรือรบลำเลียงทหารและยิงธนู',
         isNaval: true
+    },
+
+    // === MISSION 6 SPECIFIC UNITS ===
+    THAI_KING: {
+        id: 'thai_king',
+        name: 'สมเด็จพระมหาจักรพรรดิ',
+        nameEn: 'King Maha Chakkraphat',
+        icon: '👑',
+        color: '#f1c40f',
+        hp: 1500,
+        maxHp: 1500,
+        attack: 40,
+        defense: 10,
+        range: 1.5,
+        speed: 1.5,
+        attackSpeed: 2.0,
+        visionRange: 16,
+        description: 'กษัตริย์แห่งสยาม',
+        aoe: true
+    },
+    QUEEN_SURIYOTHAI: {
+        id: 'queen_suriyothai',
+        name: 'สมเด็จพระสุริโยทัย',
+        nameEn: 'Queen Suriyothai',
+        icon: '👸',
+        color: '#e67e22',
+        hp: 1200,
+        maxHp: 1200,
+        attack: 35,
+        defense: 8,
+        range: 1.5,
+        speed: 1.8,
+        attackSpeed: 1.8,
+        visionRange: 16,
+        description: 'วีรสตรีผู้ปกป้องพระสวามี',
+        aoe: true
+    },
+    BURMESE_KING: {
+        id: 'burmese_king',
+        name: 'พระเจ้าตะเบ็งชเวตี้',
+        nameEn: 'King Tabinshwehti',
+        icon: '👑',
+        color: '#c0392b',
+        hp: 2000,
+        maxHp: 2000,
+        attack: 45,
+        defense: 12,
+        range: 1.5,
+        speed: 1.5,
+        attackSpeed: 2.0,
+        visionRange: 16,
+        isEnemy: true,
+        description: 'จอมทัพพม่าผู้เกรียงไกร',
+        aoe: true
     }
 };
 

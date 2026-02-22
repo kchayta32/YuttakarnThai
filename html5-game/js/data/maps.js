@@ -700,9 +700,9 @@ export const MAPS = {
 
         // Siamese royal guard and elephants
         playerUnits: [
-            // === FRONT LINE: THE DUEL (Center) ===
-            { type: 'thai_king', x: 1300, y: 900, team: 0 }, // King Maha Chakkraphat (Facing Left)
-            // Royal Guard for the King (Moved to reinforcements)
+            // === FRONT LINE: THE DUEL (Center-Right) ===
+            { type: 'thai_king', x: 1600, y: 900, team: 0 }, // King Maha Chakkraphat (Facing Left)
+            // Royal Guard for the King
             { type: 'swordsman', x: 2000, y: 850, team: 0 },
             { type: 'swordsman', x: 2000, y: 950, team: 0 },
             { type: 'spearman', x: 2000, y: 900, team: 0 },
@@ -721,17 +721,17 @@ export const MAPS = {
 
         // Burmese assault with boss elephant
         enemyUnits: [
-            // === BURMESE KING (Center - Facing Right) ===
-            { type: 'burmese_king', x: 1100, y: 900, team: 1 },
+            // === BURMESE KING (Center-Left) ===
+            { type: 'burmese_king', x: 800, y: 900, team: 1 },
 
             // Burmese Elite Guard
-            { type: 'enemy_elephant', x: 1050, y: 800, team: 1 },
-            { type: 'enemy_elephant', x: 1050, y: 1000, team: 1 },
-            { type: 'enemy_swordsman', x: 1000, y: 850, team: 1 },
-            { type: 'enemy_swordsman', x: 1000, y: 950, team: 1 },
-            { type: 'enemy_spearman', x: 950, y: 900, team: 1 },
-            { type: 'enemy_archer', x: 900, y: 800, team: 1 },
-            { type: 'enemy_archer', x: 900, y: 1000, team: 1 }
+            { type: 'enemy_elephant', x: 650, y: 800, team: 1 },
+            { type: 'enemy_elephant', x: 650, y: 1000, team: 1 },
+            { type: 'enemy_swordsman', x: 600, y: 850, team: 1 },
+            { type: 'enemy_swordsman', x: 600, y: 950, team: 1 },
+            { type: 'enemy_spearman', x: 550, y: 900, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 800, team: 1 },
+            { type: 'enemy_archer', x: 500, y: 1000, team: 1 }
         ],
 
         buildings: [],

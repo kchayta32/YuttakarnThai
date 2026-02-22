@@ -47,8 +47,15 @@ export class Unit {
 
         // Visual & Collision Size (Adjusted to ~2.25x original)
         this.size = this.typeId.includes('elephant') ? 100 : 63;
-        this.angle = this.team === 0 ? Math.PI : 0; // Player faces left, Enemy faces right
 
+        // Orientation
+        if (this.game.currentMissionId === 'campaign1_mission6') {
+            // In Mission 6, Player is on the right, Enemy is on the left
+            this.angle = this.team === 0 ? Math.PI : 0;
+        } else {
+            // Default orientation
+            this.angle = this.team === 0 ? 0 : Math.PI;
+        }
         // Animation
         this.animFrame = 0;
         this.animTimer = 0;
