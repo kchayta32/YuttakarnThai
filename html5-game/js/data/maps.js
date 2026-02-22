@@ -645,7 +645,7 @@ export const MAPS = {
             { type: 'water', x: 1800, y: 1600, width: 100, height: 200 },
             { type: 'water', x: 1600, y: 1700, width: 300, height: 100 },
             { type: 'water', x: 1600, y: 1700, width: 100, height: 700 },
-            { type: 'water', x: 1600, y: 2300, width: 500, height: 100 },
+            { type: 'water', x: 1600, y: 2300, width: 350, height: 100 },
             { type: 'water', x: 2900, y: 1700, width: 100, height: 700 },
             { type: 'water', x: 2800, y: 2300, width: 200, height: 100 },
             { type: 'water', x: 2800, y: 0, width: 150, height: 1800 },

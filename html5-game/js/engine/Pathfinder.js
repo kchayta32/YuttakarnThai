@@ -193,7 +193,7 @@ export class Pathfinder {
         ];
 
         let iterations = 0;
-        const maxIterations = 1000;
+        const maxIterations = 4000;
 
         while (openSet.length > 0 && iterations < maxIterations) {
             iterations++;
@@ -246,8 +246,8 @@ export class Pathfinder {
             }
         }
 
-        // No path found - return direct path
-        return [this.gridToWorld(end.x, end.y)];
+        // No path found - return empty array
+        return [];
     }
 
     /**

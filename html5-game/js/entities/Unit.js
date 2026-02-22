@@ -86,6 +86,9 @@ export class Unit {
             this.animFrame = (this.animFrame + 1) % 4;
         }
 
+        // Unit separation
+        this.separateFromOthers(deltaTime);
+
         // State machine
         switch (this.state) {
             case 'idle':
@@ -146,7 +149,11 @@ export class Unit {
      */
     followPath(deltaTime) {
         if (this.path.length === 0) {
-            this.moveToTarget(deltaTime);
+            if (this.game.pathfinder) {
+                this.state = 'idle';
+            } else {
+                this.moveToTarget(deltaTime);
+            }
             return;
         }
 
@@ -357,6 +364,47 @@ export class Unit {
         this.path = [];
         this.state = 'moving';
         this.holdingPosition = false;
+    }
+
+    separateFromOthers(deltaTime) {
+        let pushX = 0;
+        let pushY = 0;
+        let count = 0;
+
+        for (const other of this.game.units) {
+            if (other === this || other.state === 'dead') continue;
+
+            const dx = this.x - other.x;
+            const dy = this.y - other.y;
+            const distSq = dx * dx + dy * dy;
+            const minDist = (this.size + other.size) * 0.4;
+
+            if (distSq > 0 && distSq < minDist * minDist) {
+                const dist = Math.sqrt(distSq);
+                const pushStrength = (minDist - dist) / minDist;
+                pushX += (dx / dist) * pushStrength;
+                pushY += (dy / dist) * pushStrength;
+                count++;
+            }
+        }
+
+        if (count > 0) {
+            const pushFactor = 80 * deltaTime;
+            const nextX = this.x + (pushX / count) * pushFactor;
+            const nextY = this.y + (pushY / count) * pushFactor;
+
+            if (this.game.pathfinder) {
+                const gs = this.game.pathfinder.gridSize;
+                let canMoveX = this.game.pathfinder.isWalkable(Math.floor(nextX / gs), Math.floor(this.y / gs));
+                let canMoveY = this.game.pathfinder.isWalkable(Math.floor(this.x / gs), Math.floor(nextY / gs));
+
+                if (canMoveX) this.x = nextX;
+                if (canMoveY) this.y = nextY;
+            } else {
+                this.x = nextX;
+                this.y = nextY;
+            }
+        }
     }
 
     attackTarget(target) {
