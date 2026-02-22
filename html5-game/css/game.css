@@ -774,7 +774,7 @@ body {
     border: 1px solid var(--ui-border);
     border-radius: 8px;
     font-size: 1.2rem;
-    color: #ffffff;
+    color: #d4af37;
     cursor: pointer;
     transition: all 0.2s;
 }
