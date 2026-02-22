@@ -671,17 +671,17 @@ export class Game {
             // Check visibility
             let isVisible = true;
             if (building.team !== 0 && this.fogOfWar) {
-                // Check center first
-                isVisible = this.fogOfWar.isVisible(building.x, building.y);
+                // Check center first (use isExplored so buildings don't flicker when leaving vision)
+                isVisible = this.fogOfWar.isExplored(building.x, building.y);
 
                 // If center not visible, check corners (for large buildings)
                 if (!isVisible) {
                     const halfSize = building.size / 2;
                     // Check 4 corners
-                    isVisible = this.fogOfWar.isVisible(building.x - halfSize, building.y - halfSize) ||
-                        this.fogOfWar.isVisible(building.x + halfSize, building.y - halfSize) ||
-                        this.fogOfWar.isVisible(building.x + halfSize, building.y + halfSize) ||
-                        this.fogOfWar.isVisible(building.x - halfSize, building.y + halfSize);
+                    isVisible = this.fogOfWar.isExplored(building.x - halfSize, building.y - halfSize) ||
+                        this.fogOfWar.isExplored(building.x + halfSize, building.y - halfSize) ||
+                        this.fogOfWar.isExplored(building.x + halfSize, building.y + halfSize) ||
+                        this.fogOfWar.isExplored(building.x - halfSize, building.y + halfSize);
                 }
 
                 if (!isVisible) {

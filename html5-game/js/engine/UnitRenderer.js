@@ -59,9 +59,9 @@ export class UnitRenderer {
         const screenX = (unit.x - camera.x) * zoom;
         const screenY = (unit.y - camera.y) * zoom;
 
-        // Culling check
-        if (screenX < -100 || screenX > camera.width + 100 ||
-            screenY < -100 || screenY > camera.height + 100) {
+        // Culling check (increased margin to prevent popping)
+        if (screenX < -300 || screenX > camera.width + 300 ||
+            screenY < -300 || screenY > camera.height + 300) {
             return;
         }
 
@@ -151,7 +151,8 @@ export class UnitRenderer {
             const facesLeftByDefault = typeId === 'swordsman' ||
                 typeId === 'elephant' ||
                 typeId === 'worker' ||
-                typeId === 'enemy_elephant';
+                typeId === 'enemy_elephant' ||
+                typeId === 'siamese_assault';
 
             if (facesLeftByDefault) {
                 shouldFlip = !shouldFlip;

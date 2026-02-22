@@ -225,10 +225,10 @@ export const MAPS = {
             { type: 'burmese_defender', x: 2750, y: 1150, team: 1 },
             { type: 'burmese_defender', x: 2800, y: 1075, team: 1 },
             { type: 'burmese_defender', x: 2800, y: 1175, team: 1 },
-            // Regular troops
-            { type: 'enemy_swordsman', x: 2850, y: 1100, team: 1 },
-            { type: 'enemy_swordsman', x: 2850, y: 1150, team: 1 },
-            { type: 'enemy_spearman', x: 2700, y: 1125, team: 1 },
+            // Regular troops (Shifted down for space)
+            { type: 'enemy_swordsman', x: 2600, y: 1800, team: 1 },
+            { type: 'enemy_swordsman', x: 2650, y: 1800, team: 1 },
+            { type: 'enemy_spearman', x: 2600, y: 1850, team: 1 },
             // Archers on walls
             { type: 'enemy_archer', x: 2900, y: 1000, team: 1 },
             { type: 'enemy_archer', x: 2900, y: 1050, team: 1 },
@@ -239,7 +239,7 @@ export const MAPS = {
             { type: 'enemy_elephant', x: 2650, y: 1125, team: 1 },
             // Patrol cavalry
             { type: 'enemy_cavalry', x: 1600, y: 800, team: 1 },
-            { type: 'enemy_cavalry', x: 1600, y: 1400, team: 1 },
+            { type: 'enemy_cavalry', x: 1600, y: 1600, team: 1 },
             { type: 'enemy_cavalry', x: 2200, y: 600, team: 1 }
         ],
 
@@ -247,35 +247,31 @@ export const MAPS = {
         buildings: [
             // Burmese fortress (main objective)
             { type: 'burmese_fortress', x: 2850, y: 1125, team: 1 },
-            // Coastal barracks
-            { type: 'coastal_barracks', x: 2950, y: 800, team: 1 },
-            { type: 'coastal_barracks', x: 2950, y: 1400, team: 1 },
+            // Coastal barracks (moved apart for space)
+            { type: 'coastal_barracks', x: 2950, y: 500, team: 1 },
+            { type: 'coastal_barracks', x: 2950, y: 1700, team: 1 },
             // Dock
-            { type: 'dock', x: 2850, y: 1550, team: 1 },
+            { type: 'dock', x: 2850, y: 2000, team: 1 },
             // Farms
-            { type: 'farm', x: 2600, y: 700, team: 1 },
-            { type: 'farm', x: 2600, y: 1500, team: 1 }
+            { type: 'farm', x: 2600, y: 500, team: 1 },
+            { type: 'farm', x: 2600, y: 1900, team: 1 }
         ],
 
         features: [
-            // Coastal water (east) - Andaman Sea
-            { type: 'water', x: 3100, y: 0, width: 200, height: 2400 },
             // Rivers
-            { type: 'water', x: 1500, y: 0, width: 80, height: 900 },
-            { type: 'water', x: 1500, y: 1100, width: 80, height: 1300 },
-            // Bridge crossing
-            { type: 'road', x: 1500, y: 900, width: 80, height: 200 },
+            { type: 'water', x: 1500, y: 0, width: 80, height: 950 },
+            { type: 'water', x: 1500, y: 1250, width: 80, height: 1150 },
+            // Bridge crossing (Adjusted length)
+            { type: 'road', x: 1500, y: 900, width: 80, height: 400 },
             // Tropical forests
             { type: 'forest', x: 500, y: 200, width: 500, height: 350 },
             { type: 'forest', x: 500, y: 1800, width: 500, height: 450 },
             { type: 'forest', x: 1900, y: 350, width: 350, height: 300 },
             { type: 'forest', x: 1900, y: 1650, width: 350, height: 350 },
-            { type: 'forest', x: 1000, y: 1000, width: 200, height: 200 },
+            { type: 'forest', x: 1000, y: 1400, width: 200, height: 200 }, // Moved down
             // Mountains (north & south edges)
             { type: 'mountain', x: 0, y: 0, width: 120, height: 700 },
-            { type: 'mountain', x: 0, y: 1700, width: 120, height: 700 },
-            // Coastal sand
-            { type: 'sand', x: 2900, y: 0, width: 200, height: 2400 }
+            { type: 'mountain', x: 0, y: 1700, width: 120, height: 700 }
         ],
 
         objectives: {
