@@ -783,25 +783,25 @@ export const MAPS = {
 
         // Siamese pursuit force
         playerUnits: [
-            { type: 'swordsman', x: 3500, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3550, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3600, y: 1400, team: 0 },
-            { type: 'swordsman', x: 3500, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3550, y: 1450, team: 0 },
-            { type: 'swordsman', x: 3600, y: 1450, team: 0 },
-            { type: 'spearman', x: 3500, y: 1500, team: 0 },
-            { type: 'spearman', x: 3550, y: 1500, team: 0 },
-            { type: 'spearman', x: 3600, y: 1500, team: 0 },
-            { type: 'archer', x: 3650, y: 1400, team: 0 },
-            { type: 'archer', x: 3650, y: 1450, team: 0 },
-            { type: 'archer', x: 3650, y: 1500, team: 0 },
-            { type: 'elephant', x: 3450, y: 1450, team: 0 },
-            { type: 'elephant', x: 3450, y: 1500, team: 0 },
+            { type: 'swordsman', x: 3300, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3350, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3400, y: 1400, team: 0 },
+            { type: 'swordsman', x: 3300, y: 1450, team: 0 },
+            { type: 'swordsman', x: 3350, y: 1450, team: 0 },
+            { type: 'swordsman', x: 3400, y: 1450, team: 0 },
+            { type: 'spearman', x: 3300, y: 1500, team: 0 },
+            { type: 'spearman', x: 3350, y: 1500, team: 0 },
+            { type: 'spearman', x: 3400, y: 1500, team: 0 },
+            { type: 'archer', x: 3450, y: 1400, team: 0 },
+            { type: 'archer', x: 3450, y: 1450, team: 0 },
+            { type: 'archer', x: 3450, y: 1500, team: 0 },
+            { type: 'elephant', x: 3250, y: 1450, team: 0 },
+            { type: 'elephant', x: 3250, y: 1500, team: 0 },
             // Fast cavalry for pursuit
-            { type: 'cavalry', x: 3400, y: 1350, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1400, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1550, team: 0 },
-            { type: 'cavalry', x: 3400, y: 1600, team: 0 }
+            { type: 'cavalry', x: 3200, y: 1350, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1400, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1550, team: 0 },
+            { type: 'cavalry', x: 3200, y: 1600, team: 0 }
         ],
 
         // Retreating Burmese (scattered)
