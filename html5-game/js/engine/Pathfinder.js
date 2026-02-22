@@ -50,10 +50,11 @@ export class Pathfinder {
      */
     markObstacle(obs) {
         if (obs.type === 'water' || obs.type === 'mountain') {
-            const startX = Math.floor(obs.x / this.gridSize);
-            const startY = Math.floor(obs.y / this.gridSize);
-            const endX = Math.ceil((obs.x + obs.width) / this.gridSize);
-            const endY = Math.ceil((obs.y + obs.height) / this.gridSize);
+            const padding = 15; // Prevent large units from visually overlapping water
+            const startX = Math.floor((obs.x - padding) / this.gridSize);
+            const startY = Math.floor((obs.y - padding) / this.gridSize);
+            const endX = Math.ceil((obs.x + obs.width + padding) / this.gridSize);
+            const endY = Math.ceil((obs.y + obs.height + padding) / this.gridSize);
 
             for (let y = startY; y < endY && y < this.gridHeight; y++) {
                 for (let x = startX; x < endX && x < this.gridWidth; x++) {

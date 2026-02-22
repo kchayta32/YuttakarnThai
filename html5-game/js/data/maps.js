@@ -897,31 +897,31 @@ export const MAPS = {
         // Defenders with mixed force
         playerUnits: [
             // Wall defenders
-            { type: 'swordsman', x: 2400, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2450, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2500, y: 1100, team: 0 },
-            { type: 'swordsman', x: 2400, y: 1150, team: 0 },
-            { type: 'swordsman', x: 2450, y: 1150, team: 0 },
-            { type: 'swordsman', x: 2500, y: 1150, team: 0 },
-            { type: 'spearman', x: 2350, y: 1100, team: 0 },
-            { type: 'spearman', x: 2350, y: 1150, team: 0 },
-            { type: 'spearman', x: 2550, y: 1100, team: 0 },
-            { type: 'spearman', x: 2550, y: 1150, team: 0 },
+            { type: 'swordsman', x: 2400, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2450, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2500, y: 1000, team: 0 },
+            { type: 'swordsman', x: 2400, y: 1050, team: 0 },
+            { type: 'swordsman', x: 2450, y: 1050, team: 0 },
+            { type: 'swordsman', x: 2500, y: 1050, team: 0 },
+            { type: 'spearman', x: 2350, y: 1000, team: 0 },
+            { type: 'spearman', x: 2350, y: 1050, team: 0 },
+            { type: 'spearman', x: 2550, y: 1000, team: 0 },
+            { type: 'spearman', x: 2550, y: 1050, team: 0 },
             // Archers on walls
-            { type: 'archer', x: 2400, y: 1050, team: 0 },
-            { type: 'archer', x: 2450, y: 1050, team: 0 },
-            { type: 'archer', x: 2500, y: 1050, team: 0 },
-            { type: 'archer', x: 2400, y: 1200, team: 0 },
-            { type: 'archer', x: 2450, y: 1200, team: 0 },
-            { type: 'archer', x: 2500, y: 1200, team: 0 },
+            { type: 'archer', x: 2400, y: 950, team: 0 },
+            { type: 'archer', x: 2450, y: 950, team: 0 },
+            { type: 'archer', x: 2500, y: 950, team: 0 },
+            { type: 'archer', x: 2400, y: 1100, team: 0 },
+            { type: 'archer', x: 2450, y: 1100, team: 0 },
+            { type: 'archer', x: 2500, y: 1100, team: 0 },
             // Elephants
-            { type: 'elephant', x: 2600, y: 1125, team: 0 },
-            { type: 'elephant', x: 2650, y: 1125, team: 0 },
-            // Cavalry reserve
-            { type: 'cavalry', x: 2700, y: 1050, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1100, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1150, team: 0 },
-            { type: 'cavalry', x: 2700, y: 1200, team: 0 }
+            { type: 'elephant', x: 2600, y: 1025, team: 0 },
+            { type: 'elephant', x: 2650, y: 1025, team: 0 },
+            // Cavalry reserve (shifted left and up)
+            { type: 'cavalry', x: 2650, y: 950, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1000, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1050, team: 0 },
+            { type: 'cavalry', x: 2650, y: 1100, team: 0 }
         ],
 
         // Attacking Burmese
