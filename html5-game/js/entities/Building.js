@@ -97,10 +97,10 @@ export class Building {
         const item = this.productionQueue.shift();
         this.productionProgress = 0;
 
-        // Spawn unit near building (in front of building)
+        // Spawn unit near building (in front of building) with slight random offset
         const spawnOffset = this.size / 2 + 50;
-        const spawnX = this.x + spawnOffset;
-        const spawnY = this.y + spawnOffset;
+        const spawnX = this.x + spawnOffset + (Math.random() * 20 - 10);
+        const spawnY = this.y + spawnOffset + (Math.random() * 20 - 10);
 
         // Spawn the unit
         const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);

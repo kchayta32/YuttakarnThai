@@ -960,6 +960,22 @@ export class Game {
             return;
         }
 
+        // Check population
+        const maxPop = this.resources.maxPopulation || 20;
+        const currentPop = this.units.filter(u => u.team === 0 && u.state !== 'dead').length;
+        let queuedPop = 0;
+        for (const b of this.buildings) {
+            if (b.team === 0) {
+                queuedPop += b.productionQueue.length;
+            }
+        }
+
+        if (currentPop + queuedPop >= maxPop) {
+            console.log('Population limit reached');
+            // Optional: User feedback for limit reached
+            return;
+        }
+
         // Deduct resources
         this.resources.food -= cost.food;
         this.resources.gold -= cost.gold;
@@ -1000,14 +1016,18 @@ export class Game {
 
         if (!queueItems) return;
 
-        queueItems.innerHTML = '';
-
-        building.productionQueue.forEach((item, index) => {
-            const queueItem = document.createElement('div');
-            queueItem.className = `queue-item ${index === 0 ? 'active' : ''}`;
-            queueItem.textContent = item.icon || '⚔️';
-            queueItems.appendChild(queueItem);
-        });
+        // Rebuild queue DOM only if the queue state changed to avoid GC pressure and DOM flicker
+        const queueString = building.productionQueue.map(q => q.type).join(',');
+        if (queueItems.dataset.queue !== queueString) {
+            queueItems.innerHTML = '';
+            building.productionQueue.forEach((item, index) => {
+                const queueItem = document.createElement('div');
+                queueItem.className = `queue-item ${index === 0 ? 'active' : ''}`;
+                queueItem.textContent = item.icon || '⚔️';
+                queueItems.appendChild(queueItem);
+            });
+            queueItems.dataset.queue = queueString;
+        }
 
         // Show/update progress bar
         if (building.productionQueue.length > 0 && progressContainer && progressBar && progressText) {
