@@ -69,8 +69,8 @@ export const CAMPAIGN2_MAPS = {
         terrain: { grass: '#4a7c59', forest: '#1e3f20', water: '#2980b9', road: '#a68b5b', mountain: '#6b7280' },
         playerUnits: [
             { type: 'c2_hero_rama1', x: 300, y: 1200, team: 0 },
-            { type: 'c2_swordsman', x: 400, y: 1150, team: 0 },
-            { type: 'c2_swordsman', x: 400, y: 1250, team: 0 },
+            { type: 'cavalry', x: 400, y: 1150, team: 0 },
+            { type: 'cavalry', x: 400, y: 1250, team: 0 },
             { type: 'c2_archer', x: 200, y: 1100, team: 0 },
             { type: 'c2_archer', x: 200, y: 1300, team: 0 }
         ],
@@ -107,8 +107,22 @@ export const CAMPAIGN2_MAPS = {
             { type: 'road', x: 2500, y: 0, width: 100, height: 2400 } // ถนนเสบียง
         ],
         objectives: {
-            victory: { type: 'eliminate_all', description: 'ทำลายเกวียนเสบียงพม่าทั้ง 5 คันและกำจัดพรรคพวกทั้งหมด' },
-            defeat: { type: 'lose_hero', target: 'c2_hero_rama1', description: 'พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกมหาราช สวรรคต' }
+            victory: {
+                type: 'multi',
+                description: 'ทำลายเกวียน 3 คันขึ้นไป และกวาดล้างศัตรูทั้งหมด',
+                conditions: [
+                    { type: 'destroy_minimum_type', target: 'c2_supply_cart', min: 3, description: 'ทำลายเกวียนเสบียงพม่า 3 คันขึ้นไป' },
+                    { type: 'eliminate_all', description: 'กำจัดพรรคพวกทั้งหมด' }
+                ]
+            },
+            defeat: {
+                type: 'multi',
+                conditions: [
+                    { type: 'lose_hero', target: 'c2_hero_rama1', description: 'พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกมหาราช สวรรคต' },
+                    { type: 'escape_limit', target: 'c2_supply_cart', max: 2, description: 'เกวียนเสบียงหลุดรอดไปได้เกิน 2 คัน' },
+                    { type: 'lose_all_of_type', target: 'cavalry', description: 'หน่วยม้าเร็วถูกกำจัดทั้งหมด' }
+                ]
+            }
         }
     },
     campaign2_mission3: {

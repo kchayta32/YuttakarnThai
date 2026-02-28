@@ -465,6 +465,14 @@ export class Game {
         this.gameTime = 0;
         this.stats.enemyKills = 0;
         this.stats.startTime = Date.now();
+        this.stats.deadSupplyCarts = 0;
+        this.stats.escapedSupplyCarts = 0;
+
+        // Setup objective UI
+        const objTextEl = document.getElementById('objective-text');
+        if (objTextEl && this.currentMap && this.currentMap.objectives && this.currentMap.objectives.victory) {
+            objTextEl.textContent = this.currentMap.objectives.victory.description || 'กำจัดศัตรูทั้งหมด';
+        }
 
         // Reset resources
         this.resources.food = this.currentMap.startingResources?.food || 500;
@@ -656,6 +664,26 @@ export class Game {
         // Update units
         for (const unit of this.units) {
             unit.update(deltaTime);
+
+            // Custom logic for Campaign 2 Mission 2: Supply Carts
+            if (this.currentMissionId === 'campaign2_mission2' && unit.typeId === 'c2_supply_cart' && unit.team !== 0) {
+                // Force AI carts to move down the road to escape
+                if (unit.state === 'idle' && !unit.isMoving) {
+                    unit.moveTo(2500, 2400);
+                }
+
+                // Track escape (reached bottom of map)
+                if (unit.y >= 2350 && unit.state !== 'dead') {
+                    unit.state = 'dead'; // Remove from map
+                    unit.hp = 0;
+                    this.stats.escapedSupplyCarts++;
+                }
+                // Track destroyed by player
+                else if (unit.hp <= 0 && unit.state === 'dead' && !unit.countedAsDead) {
+                    unit.countedAsDead = true;
+                    this.stats.deadSupplyCarts++;
+                }
+            }
         }
 
         // Update buildings
@@ -913,10 +941,32 @@ export class Game {
             timeEl.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
 
-        // Enemy count
-        const enemyCount = this.units.filter(u => u.team !== 0 && u.state !== 'dead').length;
+        // Enemy count and Objective Progress
         const enemyEl = document.getElementById('enemy-count');
-        if (enemyEl) enemyEl.textContent = enemyCount;
+        const progressEl = document.querySelector('.objective-progress');
+
+        if (progressEl) {
+            if (this.currentMissionId === 'campaign2_mission2') {
+                const destroyed = this.stats.deadSupplyCarts || 0;
+                const escaped = this.stats.escapedSupplyCarts || 0;
+                const enemyCount = this.units.filter(u => u.team !== 0 && u.state !== 'dead').length;
+
+                progressEl.innerHTML = `
+                    <div style="font-size: 0.9em; margin-bottom: 5px;">
+                        เกวียนที่ทำลาย: <strong style="color:#e74c3c">${destroyed}</strong>/3 | 
+                        หลุดรอด: <strong style="color:#f39c12">${escaped}</strong>/2
+                    </div>
+                    <span>ศัตรูเหลือ: <strong id="enemy-count">${enemyCount}</strong></span>
+                `;
+            } else {
+                const enemyCount = this.units.filter(u => u.team !== 0 && u.state !== 'dead').length;
+                if (!progressEl.innerHTML.includes('ศัตรูเหลือ: <strong')) {
+                    progressEl.innerHTML = `<span>ศัตรูเหลือ: <strong id="enemy-count">${enemyCount}</strong></span>`;
+                } else if (enemyEl) {
+                    enemyEl.textContent = enemyCount;
+                }
+            }
+        }
     }
 
     updateUnitPanel() {
@@ -1302,6 +1352,9 @@ export class Game {
             }
 
             // --- Victory types ---
+            if (t === 'destroy_minimum_type') {
+                return (this.stats.deadSupplyCarts || 0) >= cond.min;
+            }
             if (t === 'kill_hero') {
                 const heroExists = enemyUnits.some(u => u.typeId === cond.target);
                 return !heroExists;
@@ -1360,6 +1413,9 @@ export class Game {
             }
             if (t === 'timeout') {
                 return this.gameTime > (cond.timeLimit || 600);
+            }
+            if (t === 'escape_limit') {
+                return (this.stats.escapedSupplyCarts || 0) > cond.max;
             }
 
             return false;
