@@ -869,7 +869,25 @@ export class Game {
             document.getElementById('selected-count').textContent = '';
         } else if (selected.length === 1) {
             const unit = selected[0];
-            document.getElementById('unit-portrait').innerHTML = `<span>${unit.icon}</span>`;
+
+            // --- Profile Picture Logic ---
+            if (unit.id === 'thai_king' || unit.nameEn === 'King Maha Chakkraphat') {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (สมเด็จพระมหาจักรพรรดิ):
+                 * "A majestic close-up portrait of King Maha Chakkraphat of Ayutthaya kingdom, wearing traditional royal golden armor and crown, regal and commanding expression. Thai historical art style, high quality, digital painting, fantasy portrait."
+                 */
+                document.getElementById('unit-portrait').innerHTML = `<img src="assets/images/portraits/thai_king.png" alt="King Maha Chakkraphat" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
+            } else if (unit.id === 'queen_suriyothai' || unit.nameEn === 'Queen Suriyothai') {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (สมเด็จพระสุริโยทัย):
+                 * "A brave and heroic close-up portrait of Queen Suriyothai of Ayutthaya, wearing Thai female warrior armor, fierce and determined expression. Thai historical art style, high quality, digital painting, fantasy portrait."
+                 */
+                document.getElementById('unit-portrait').innerHTML = `<img src="assets/images/portraits/queen_suriyothai.png" alt="Queen Suriyothai" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
+            } else {
+                document.getElementById('unit-portrait').innerHTML = `<span>${unit.icon}</span>`;
+            }
+            // -----------------------------
+
             document.getElementById('unit-name').textContent = unit.name;
             document.getElementById('unit-hp-text').textContent = `${Math.round(unit.hp)}/${unit.maxHp}`;
             document.getElementById('unit-hp-bar').style.width = `${(unit.hp / unit.maxHp) * 100}%`;
