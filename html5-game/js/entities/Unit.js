@@ -50,8 +50,9 @@ export class Unit {
 
         // Orientation
         if (this.game.currentMissionId === 'campaign1_mission1' ||
+            this.game.currentMissionId === 'campaign1_mission3' ||
             this.game.currentMissionId === 'campaign1_mission6') {
-            // In Mission 1 & 6, Player is on the right, Enemy is on the left
+            // In these missions, Player is on the right, Enemy is on the left
             this.angle = this.team === 0 ? Math.PI : 0;
         } else {
             // Default orientation: Player on left faces right, Enemy on right faces left
