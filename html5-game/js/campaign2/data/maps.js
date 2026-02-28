@@ -13,11 +13,11 @@ export const CAMPAIGN2_MAPS = {
         cameraStart: { x: 0, y: 1500 },
         terrain: { grass: '#4a7c59', forest: '#1e3f20', water: '#2980b9', road: '#a68b5b', mountain: '#6b7280' },
         playerUnits: [
-            { type: 'c2_hero_prince', x: 250, y: 1400, team: 0 },
-            { type: 'cavalry', x: 300, y: 1350, team: 0 },
-            { type: 'cavalry', x: 300, y: 1450, team: 0 },
-            { type: 'c2_archer', x: 200, y: 1300, team: 0 },
-            { type: 'c2_archer', x: 250, y: 1300, team: 0 }
+            { type: 'c2_hero_prince', x: 250, y: 950, team: 0 },
+            { type: 'cavalry', x: 350, y: 900, team: 0 },
+            { type: 'cavalry', x: 350, y: 1000, team: 0 },
+            { type: 'c2_archer', x: 200, y: 850, team: 0 },
+            { type: 'c2_archer', x: 200, y: 1050, team: 0 }
         ],
         enemyUnits: [
             { type: 'c2_enemy_infantry', x: 2800, y: 500, team: 1 },
@@ -25,7 +25,7 @@ export const CAMPAIGN2_MAPS = {
         ],
         buildings: [
             // พลับพลา (Town Hall) มุมแมพติดป่า (Size: 500)
-            { type: 'c2_town_hall', x: 280, y: 1720, team: 0 },
+            { type: 'c2_town_hall', x: 280, y: 1400, team: 0 },
             // โรงเสบียง (Granary) ใกล้แหล่งน้ำ (Size: 300)
             { type: 'c2_granary', x: 900, y: 1750, team: 0 },
             // หอคอย (Watchtower) บนที่สูง (Size: 240)
@@ -37,7 +37,7 @@ export const CAMPAIGN2_MAPS = {
             { type: 'water', x: 1500, y: 0, width: 200, height: 900 },
             { type: 'road', x: 1500, y: 900, width: 200, height: 200 }, // Bridge
             { type: 'water', x: 1500, y: 1100, width: 200, height: 900 },
-            { type: 'mountain', x: 500, y: 1300, width: 200, height: 200 }, // High ground for watchtower
+            { type: 'mountain', x: 500, y: 1300, width: 200, height: 200, blockLos: false }, // High ground for watchtower (ไม่บล็อก LOS ให้หอคอยเห็นพื้นที่รอบๆ)
             { type: 'mountain', x: 700, y: 700, width: 200, height: 200 }, // High ground
             { type: 'mountain', x: 1000, y: 200, width: 200, height: 500 }
         ],
