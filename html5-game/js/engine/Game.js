@@ -467,6 +467,7 @@ export class Game {
         this.stats.startTime = Date.now();
         this.stats.deadSupplyCarts = 0;
         this.stats.escapedSupplyCarts = 0;
+        this.missionCompleted = false;
 
         // Setup objective UI
         const objTextEl = document.getElementById('objective-text');
@@ -1652,6 +1653,7 @@ export class Game {
             this.effects = [];
             this.damageNumbers = [];
             this.controlGroups = {};
+            this.missionCompleted = false;
 
             // Restore game time and stats
             this.gameTime = saveData.gameTime || 0;
