@@ -97,13 +97,24 @@ export class Building {
         const item = this.productionQueue.shift();
         this.productionProgress = 0;
 
-        // Spawn unit near building (in front of building) with slight random offset
-        const spawnOffset = this.size / 2 + 50;
-        const spawnX = this.x + spawnOffset + (Math.random() * 20 - 10);
-        const spawnY = this.y + spawnOffset + (Math.random() * 20 - 10);
+        // Spawn unit outside the building footprint using randomized angle
+        const angle = Math.random() * Math.PI * 2;
+        // For large buildings (Farm size=360), use larger clearance to avoid spawning inside corners
+        const spawnDist = (this.size >= 300) ? (this.size * 0.75 + 60) : (this.size / 2 + 60);
+        const spawnX = this.x + Math.cos(angle) * spawnDist;
+        const spawnY = this.y + Math.sin(angle) * spawnDist;
 
-        // Spawn the unit
+        // Spawn the unit (correct positional constructor via game helper)
         const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
+
+        // Command unit to walk further away from building immediately
+        if (newUnit && typeof newUnit.moveTo === 'function') {
+            const exitDist = 120;
+            newUnit.moveTo(
+                spawnX + Math.cos(angle) * exitDist,
+                spawnY + Math.sin(angle) * exitDist
+            );
+        }
 
         // Notify game that training is complete (for auto-selection)
         if (newUnit && this.game.onUnitTrainingComplete) {

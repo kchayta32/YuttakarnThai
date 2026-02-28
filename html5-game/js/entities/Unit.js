@@ -167,11 +167,15 @@ export class Unit {
      */
     followPath(deltaTime) {
         if (this.path.length === 0) {
-            if (this.game.pathfinder) {
-                this.stop();
-            } else {
+            // Linear movement fallback: allows moveTo() to work even with pathfinder active
+            const dx = (this.targetX || 0) - this.x;
+            const dy = (this.targetY || 0) - this.y;
+            if (Math.sqrt(dx * dx + dy * dy) > 5) {
                 this.moveToTarget(deltaTime);
+                return;
             }
+
+            this.stop();
             return;
         }
 
