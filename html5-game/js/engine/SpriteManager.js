@@ -94,7 +94,7 @@ export class SpriteManager {
 
             // Campaign 2 Buildings
             'c2_town_hall': 'images/campain 2/Buildings/พลับพลาที่ประทับ(Town Hall).png',
-            'c2_barracks': 'images/campain 2/Buildings/ค่ายทหาร(Barracks).jpg', // Fallback to standard barracks as campaign 2 specific might be missing
+            'c2_barracks': 'images/campain 2/Buildings/ค่ายทหาร(Barracks).png', // Fallback to standard barracks as campaign 2 specific might be missing
             'c2_elephant_stable': 'images/campain 2/Buildings/โรงช้าง(Elephant Stable).png',
             'c2_granary': 'images/campain 2/Buildings/โรงเสบียง(Granary).png',
             'c2_watchtower': 'images/campain 2/Buildings/หอคอยเฝ้าระวัง(Watchtower).png',
