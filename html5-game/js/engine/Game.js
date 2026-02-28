@@ -550,12 +550,48 @@ export class Game {
 
     spawnUnits() {
         const map = this.currentMap;
+        let carryoverData = null;
+
+        // Try to load carryover troops
+        try {
+            const savedData = localStorage.getItem('rts_carryover');
+            if (savedData) {
+                carryoverData = JSON.parse(savedData);
+                // Clear wait so it doesn't pile up across multiple sessions or restarts
+                localStorage.removeItem('rts_carryover');
+            }
+        } catch (e) {
+            console.warn('Failed to parse carryover data', e);
+        }
 
         // Spawn player units
         if (map.playerUnits) {
-            for (const data of map.playerUnits) {
-                const unit = new Unit(this, data.type, data.x, data.y, data.team);
-                this.units.push(unit);
+            if (carryoverData && carryoverData.units && carryoverData.units.length > 0) {
+                // If we have carryover troops, spawn them INSTEAD of the default army (except maybe heroes if we wanted, but we bring everything)
+                // Need a base location. Let's use the first mapped unit's area as a spawn zone.
+                const spawnBaseX = map.playerUnits[0].x;
+                const spawnBaseY = map.playerUnits[0].y;
+
+                // Add carried over resources
+                if (carryoverData.resources) {
+                    this.resources.food += carryoverData.resources.food;
+                    this.resources.gold += carryoverData.resources.gold;
+                }
+
+                carryoverData.units.forEach((uData, i) => {
+                    // Spread them out slightly
+                    const offsetX = (i % 5) * 50;
+                    const offsetY = Math.floor(i / 5) * 50;
+                    const unit = new Unit(this, uData.typeId, spawnBaseX + offsetX, spawnBaseY + offsetY, 0);
+                    unit.hp = uData.hp || unit.maxHp;
+                    this.units.push(unit);
+                });
+            } else {
+                // Normal spawn
+                for (const data of map.playerUnits) {
+                    const unit = new Unit(this, data.type, data.x, data.y, data.team);
+                    this.units.push(unit);
+                }
             }
         }
 
@@ -652,11 +688,6 @@ export class Game {
         // Check victory/defeat
         this.checkGameEnd();
 
-        // Check Transition Gate
-        if (this.missionCompleted) {
-            this.checkGateTransition();
-        }
-
         // Generate resources
         this.generateResources(deltaTime);
     }
@@ -709,32 +740,6 @@ export class Game {
             building.render(ctx, this.camera);
         }
 
-        // Render Transition Gate (Before Units)
-        if (this.transitionGate) {
-            const screenX = (this.transitionGate.x - this.camera.x) * zoom;
-            const screenY = (this.transitionGate.y - this.camera.y) * zoom;
-            const size = this.transitionGate.width * zoom;
-
-            ctx.save();
-            ctx.fillStyle = `rgba(255, 215, 0, ${0.3 + Math.sin(this.gameTime * 5) * 0.2})`;
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 15 * zoom;
-            ctx.beginPath();
-            ctx.arc(screenX + size / 2, screenY + size / 2, size / 2, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.strokeStyle = '#FFD700';
-            ctx.lineWidth = 3 * zoom;
-            ctx.stroke();
-
-            // Text indicator
-            ctx.shadowBlur = 0;
-            ctx.fillStyle = '#FFFFFF';
-            ctx.font = `bold ${14 * zoom}px Kanit`;
-            ctx.textAlign = 'center';
-            ctx.fillText('ทางผ่าน (นำฮีโร่มาที่นี่)', screenX + size / 2, screenY - 10 * zoom);
-            ctx.restore();
-        }
 
         // Filter units for fog of war visibility
         let visibleUnits = this.units;
@@ -1328,61 +1333,12 @@ export class Game {
 
         if (isVictory) {
             this.missionCompleted = true;
-            this.spawnTransitionGate();
+            this.showResult('victory');
             // Show a temporary effect/notification
             this.createCommandEffect(this.camera.x + this.camera.width / 2, this.camera.y + this.camera.height / 2, 'attack');
         }
     }
 
-    spawnTransitionGate() {
-        const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
-        if (playerUnits.length > 0) {
-            // Spawn right near a player unit to ensure it's reachable
-            this.transitionGate = {
-                x: playerUnits[0].x - 50,
-                y: playerUnits[0].y - 50,
-                width: 100,
-                height: 100
-            };
-        } else {
-            // Fallback
-            this.transitionGate = {
-                x: this.camera.x + this.camera.width / 2 - 50,
-                y: this.camera.y + this.camera.height / 2 - 50,
-                width: 100,
-                height: 100
-            };
-        }
-    }
-
-    checkGateTransition() {
-        if (!this.transitionGate) return;
-
-        const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
-        let heroEntered = false;
-
-        // Check if player has any hero units
-        const hasHero = playerUnits.some(u => u.isHero || u.typeId.includes('hero') || u.typeId === 'thai_king' || u.typeId === 'c2_hero_rama1' || u.typeId === 'c2_hero_prince');
-
-        for (const unit of playerUnits) {
-            const isHeroUnit = unit.isHero || unit.typeId.includes('hero') || unit.typeId === 'thai_king' || unit.typeId === 'c2_hero_rama1' || unit.typeId === 'c2_hero_prince';
-
-            // Allow any unit if there's no hero, otherwise force a hero to enter
-            if (!hasHero || isHeroUnit) {
-                // Determine bounding box
-                if (unit.x > this.transitionGate.x && unit.x < this.transitionGate.x + this.transitionGate.width &&
-                    unit.y > this.transitionGate.y && unit.y < this.transitionGate.y + this.transitionGate.height) {
-                    heroEntered = true;
-                    break;
-                }
-            }
-        }
-
-        if (heroEntered) {
-            this.transitionGate = null; // Prevent double trigger
-            this.showResult('victory');
-        }
-    }
 
     showResult(result) {
         this.state = result;
@@ -1394,6 +1350,32 @@ export class Game {
         const nextMissionBtn = document.getElementById('btn-next-mission');
 
         if (result === 'victory') {
+
+            // STOP ALL UNITS ALIVE
+            for (const unit of this.units) {
+                if (unit.state !== 'dead') {
+                    if (unit.stop) unit.stop();
+                    unit.state = 'idle';
+                }
+            }
+
+            // Save surviving troops and resources
+            const survivingUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead').map(u => ({
+                typeId: u.typeId,
+                hp: u.hp,
+                isHero: u.isHero || false
+            }));
+
+            const carryoverData = {
+                units: survivingUnits,
+                resources: {
+                    food: Math.floor(this.resources.food),
+                    gold: Math.floor(this.resources.gold)
+                }
+            };
+
+            localStorage.setItem('rts_carryover', JSON.stringify(carryoverData));
+
             // Unlock and save progress
             this.unlockNextMission();
 
@@ -1401,7 +1383,7 @@ export class Game {
                 title.textContent = 'ชัยชนะ!';
                 title.className = '';
             }
-            if (desc) desc.textContent = 'คุณปกป้องพระนครได้สำเร็จ!';
+            if (desc) desc.textContent = 'คุณปกป้องพระนครได้สำเร็จ! (ทหารรอด: ' + survivingUnits.length + ' กอง)';
             if (icon) icon.textContent = '🏆';
 
             // Show next mission button if there's a next mission
