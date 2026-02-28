@@ -152,7 +152,8 @@ export class UnitRenderer {
                 typeId === 'elephant' ||
                 typeId === 'worker' ||
                 typeId === 'enemy_elephant' ||
-                typeId === 'siamese_assault';
+                typeId === 'siamese_assault' ||
+                typeId === 'burmese_defender';
 
             if (facesLeftByDefault) {
                 shouldFlip = !shouldFlip;
