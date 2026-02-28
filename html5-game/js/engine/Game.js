@@ -1307,8 +1307,10 @@ export class Game {
                 return !heroExists;
             }
             if (t === 'destroy_building' || t === 'destroy_all_targets') {
-                const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === cond.target && b.hp > 0);
-                return !buildingExists && this.gameTime > 5;
+                if (!isDefeatCheck) {
+                    const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === cond.target && b.hp > 0);
+                    return !buildingExists && this.gameTime > 5;
+                }
             }
             if (t === 'eliminate_all') {
                 return enemyUnits.length === 0 && playerUnits.length > 0;
