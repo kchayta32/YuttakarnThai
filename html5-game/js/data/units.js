@@ -525,7 +525,7 @@ export const BUILDING_TYPES = {
         attack: 20,
         range: 6,
         attackSpeed: 2.5,
-        size: 400,
+        size: 300,
         description: 'ป้อมปราการศิลาแลงอันแข็งแกร่ง'
     },
     PORTUGUESE_CAMP: {
@@ -535,7 +535,7 @@ export const BUILDING_TYPES = {
         hp: 2000,
         builds: ['portuguese_merc'],
         cost: { food: 200, gold: 200 },
-        size: 350,
+        size: 250,
         description: 'ที่ตั้งของทหารรับจ้างแม่นปืน'
     }
 };
