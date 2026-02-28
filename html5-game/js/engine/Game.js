@@ -674,13 +674,14 @@ export class Game {
                 }
 
                 // Track escape (reached bottom of map)
-                if (unit.y >= 2350 && unit.state !== 'dead') {
+                if (unit.y >= 2350 && unit.state !== 'dead' && !unit.hasEscaped) {
                     unit.state = 'dead'; // Remove from map
                     unit.hp = 0;
+                    unit.hasEscaped = true; // Flag to prevent double counting
                     this.stats.escapedSupplyCarts++;
                 }
-                // Track destroyed by player
-                else if (unit.hp <= 0 && unit.state === 'dead' && !unit.countedAsDead) {
+                // Track destroyed by player (Ensure it didn't just escape)
+                else if (unit.hp <= 0 && unit.state === 'dead' && !unit.countedAsDead && !unit.hasEscaped) {
                     unit.countedAsDead = true;
                     this.stats.deadSupplyCarts++;
                 }
@@ -1443,6 +1444,20 @@ export class Game {
 
         if (victoryObj) {
             isVictory = evaluateCondition(victoryObj, false);
+
+            // --- DEBUG MISSION 2 VICTORY ---
+            if (this.currentMissionId === 'campaign2_mission2' && this.gameTime % 2 < 0.1) {
+                console.log('--- M2 VICTORY CHECK ---');
+                console.log('isVictory:', isVictory);
+                console.log('deadCarts:', this.stats.deadSupplyCarts);
+                console.log('enemyUnits:', enemyUnits.length);
+                console.log('playerUnits:', playerUnits.length);
+                if (victoryObj.type === 'multi') {
+                    victoryObj.conditions.forEach((cond, i) => {
+                        console.log(`Cond ${i} (${cond.type}):`, evaluateCondition(cond, false));
+                    });
+                }
+            }
         } else if (enemyUnits.length === 0 && playerUnits.length > 0) {
             isVictory = true;
         }
