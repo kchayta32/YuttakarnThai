@@ -144,7 +144,7 @@ export const CAMPAIGN2_UNITS = {
         attack: 0,
         defense: 0,
         range: 0,
-        speed: 0.8,
+        speed: 0.2,
         attackSpeed: 0,
         visionRange: 6,
         isEnemy: true,
