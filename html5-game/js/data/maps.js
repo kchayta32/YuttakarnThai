@@ -960,13 +960,13 @@ export const MAPS = {
 
         buildings: [
             // City defenses
-            { type: 'kamphaeng_phet_wall', x: 2800, y: 1100, team: 0 },
-            { type: 'portuguese_camp', x: 2900, y: 950, team: 0 },
-            { type: 'farm', x: 2900, y: 1250, team: 0 },
+            { type: 'kamphaeng_phet_wall', x: 2600, y: 1100, team: 0 },
+            { type: 'portuguese_camp', x: 2950, y: 850, team: 0 },
+            { type: 'farm', x: 3000, y: 1350, team: 0 },
             // Burmese camp
-            { type: 'burmese_camp', x: 150, y: 1100, team: 1 },
-            { type: 'burmese_camp', x: 100, y: 900, team: 1 },
-            { type: 'burmese_camp', x: 100, y: 1300, team: 1 }
+            { type: 'burmese_camp', x: 350, y: 1100, team: 1 },
+            { type: 'burmese_camp', x: 150, y: 800, team: 1 },
+            { type: 'burmese_camp', x: 150, y: 1400, team: 1 }
         ],
 
         features: [

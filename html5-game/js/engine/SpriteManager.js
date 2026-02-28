@@ -58,6 +58,11 @@ export class SpriteManager {
             'field_armory': 'images/buildings/mission4/field_armory.png',
             'barricades': 'images/buildings/mission4/barricades.png',
 
+            // Mission 7/8 Buildings
+            'burmese_camp': 'images/buildings/mission8/burmese_camp.png',
+            'kamphaeng_phet_wall': 'images/buildings/mission8/kamphaeng_phet_wall.png',
+            'portuguese_camp': 'images/buildings/mission8/portuguese_camp.png',
+
             // Mission 2 Units
             'burmese_defender': 'images/units/mission2/burmese_defender.png',
             'siamese_assault': 'images/units/mission2/siamese_assault_infantry.png',
