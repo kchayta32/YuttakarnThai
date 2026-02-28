@@ -1328,15 +1328,7 @@ export class Game {
 
         if (isVictory) {
             this.missionCompleted = true;
-
-            const victoryType = objectives?.victory?.type;
-            if (victoryType === 'eliminate_all' || victoryType === 'kill_hero' || !victoryType) {
-                // Trigger instant victory for combat clear objectives
-                this.showResult('victory');
-            } else {
-                // Spawn gate for other missions (like explore/escape)
-                this.spawnTransitionGate();
-            }
+            this.spawnTransitionGate();
             // Show a temporary effect/notification
             this.createCommandEffect(this.camera.x + this.camera.width / 2, this.camera.y + this.camera.height / 2, 'attack');
         }
