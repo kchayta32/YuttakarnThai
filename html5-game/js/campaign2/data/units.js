@@ -1,0 +1,202 @@
+export const CAMPAIGN2_UNITS = {
+    // === SIAM (Player) Units Campaign 2 ===
+    C2_SWORDSMAN: {
+        id: 'c2_swordsman',
+        name: 'พลดาบ-พลโล่',
+        nameEn: 'Shield Swordsman',
+        icon: '🛡️',
+        color: '#27ae60',
+        hp: 120,
+        maxHp: 120,
+        attack: 10,
+        defense: 4,
+        range: 1,
+        speed: 1.8,
+        attackSpeed: 1.0,
+        visionRange: 12,
+        cost: { food: 50, gold: 10 },
+        buildTime: 5,
+        description: 'ทหารราบหุ้มเกราะ พลังป้องกันสูง'
+    },
+    C2_ARCHER: {
+        id: 'c2_archer',
+        name: 'พลธนู',
+        nameEn: 'Archer',
+        icon: '🏹',
+        color: '#8e44ad',
+        hp: 60,
+        maxHp: 60,
+        attack: 10,
+        defense: 0,
+        range: 5,
+        speed: 2.2,
+        attackSpeed: 1.5,
+        visionRange: 15,
+        cost: { food: 30, gold: 20 },
+        buildTime: 7,
+        description: 'ทหารยิงไกล เหมาะกับการตั้งรับ'
+    },
+    C2_ELEPHANT: {
+        id: 'c2_elephant',
+        name: 'ช้างศึก',
+        nameEn: 'War Elephant',
+        icon: '🐘',
+        color: '#d35400',
+        hp: 500,
+        maxHp: 500,
+        attack: 35,
+        defense: 8,
+        range: 1.5,
+        speed: 1.7,
+        attackSpeed: 2.0,
+        visionRange: 16,
+        cost: { food: 200, gold: 100 },
+        buildTime: 20,
+        description: 'ช้างศึกทรงพลัง มีความสามารถรับและทำความเสียหายมหาศาล',
+        aoe: true
+    },
+    C2_HERO_RAMA1: {
+        id: 'c2_hero_rama1',
+        name: 'สมเด็จพระพุทธยอดฟ้าจุฬาโลก',
+        nameEn: 'King Rama I',
+        icon: '👑',
+        color: '#f1c40f',
+        hp: 1800,
+        maxHp: 1800,
+        attack: 45,
+        defense: 12,
+        range: 1.5,
+        speed: 2.0,
+        attackSpeed: 1.8,
+        visionRange: 16,
+        description: 'จอมทัพแห่งสยาม มอบพลังโจมตีให้ทหารรบข้างเคียง',
+        isHero: true,
+        aoe: true,
+        auraType: 'attack',
+        auraRange: 200,
+        auraMultiplier: 1.5
+    },
+    C2_HERO_PRINCE: {
+        id: 'c2_hero_prince',
+        name: 'กรมพระราชวังบวรฯ',
+        nameEn: 'Front Palace Prince',
+        icon: '👑',
+        color: '#e67e22',
+        hp: 1500,
+        maxHp: 1500,
+        attack: 50,
+        defense: 10,
+        range: 1.5,
+        speed: 3.0,
+        attackSpeed: 1.5,
+        visionRange: 16,
+        description: 'แม่ทัพแนวหน้า เน้นการบุกทะลวงเร็ว มอบความเร็วเคลื่อนที่ให้ทหารรบข้างเคียง',
+        isHero: true,
+        aoe: true,
+        auraType: 'speed',
+        auraRange: 200,
+        auraMultiplier: 1.5
+    },
+
+    // === BURMA (Enemy) Units Campaign 2 ===
+    C2_ENEMY_INFANTRY: {
+        id: 'c2_enemy_infantry',
+        name: 'ทหารพม่า',
+        nameEn: 'Burmese Infantry',
+        icon: '⚔️',
+        color: '#c0392b',
+        hp: 90,
+        maxHp: 90,
+        attack: 10,
+        defense: 2,
+        range: 1,
+        speed: 2.0,
+        attackSpeed: 1.2,
+        visionRange: 12,
+        isEnemy: true,
+        description: 'ทหารกระจัดกระจายอยู่ในบริเวณป่า'
+    },
+    C2_ENEMY_MUSKETEER: {
+        id: 'c2_enemy_musketeer',
+        name: 'พลปืนไฟพม่า',
+        nameEn: 'Burmese Musketeer',
+        icon: '🔫',
+        color: '#8b0000',
+        hp: 70,
+        maxHp: 70,
+        attack: 30, // High damage
+        defense: 1,
+        range: 8,
+        speed: 1.8,
+        attackSpeed: 3.5, // Slow reload
+        visionRange: 14,
+        isEnemy: true,
+        description: 'ทหารปืนไฟ พลังทำลายล้างสูงแต่บรรจุกระสุนช้า'
+    }
+};
+
+export const CAMPAIGN2_BUILDINGS = {
+    C2_TOWN_HALL: {
+        id: 'c2_town_hall',
+        name: 'พลับพลาที่ประทับ',
+        icon: '🏯',
+        hp: 5000,
+        cost: { food: 0, gold: 0 },
+        size: 500,
+        description: 'ศูนย์บัญชาการของทัพหลวง หากถูกทำลายจะพ่ายแพ้ทันที'
+    },
+    C2_BARRACKS: {
+        id: 'c2_barracks',
+        name: 'ค่ายทหาร',
+        icon: '🏛️',
+        hp: 1200,
+        builds: ['c2_swordsman', 'c2_archer'],
+        cost: { food: 0, gold: 150 },
+        size: 400
+    },
+    C2_ELEPHANT_STABLE: {
+        id: 'c2_elephant_stable',
+        name: 'โรงช้าง',
+        icon: '🐘',
+        hp: 1500,
+        builds: ['c2_elephant'],
+        cost: { food: 200, gold: 200 },
+        size: 500
+    },
+    C2_GRANARY: {
+        id: 'c2_granary',
+        name: 'โรงเสบียง',
+        icon: '🌾',
+        hp: 600,
+        produces: 'food',
+        rate: 15,
+        cost: { food: 0, gold: 50 },
+        size: 300,
+        description: 'แหล่งผลิตเสบียงให้กองทัพ ควรสร้างใกล้แม่น้ำ'
+    },
+    C2_WATCHTOWER: {
+        id: 'c2_watchtower',
+        name: 'หอคอยเฝ้าระวัง',
+        icon: '🗼',
+        hp: 1000,
+        attack: 18,
+        range: 9,
+        attackSpeed: 2.0,
+        cost: { food: 0, gold: 120 },
+        size: 240,
+        visionRange: 16,
+        description: 'ใช้สำหรับสอดแนมและป้องกันค่ายเบื้องต้น'
+    },
+
+    // Enemy buildings
+    C2_BURMESE_CAMP: {
+        id: 'c2_burmese_camp',
+        name: 'ค่ายพม่า',
+        icon: '⛺',
+        hp: 2000,
+        cost: { food: 0, gold: 0 },
+        size: 500,
+        description: 'ค่ายทหารฝั่งศัตรู เมื่อทำลายได้ทั้งหมดจะเปิดทางไปต่อ',
+        isEnemy: true
+    }
+};

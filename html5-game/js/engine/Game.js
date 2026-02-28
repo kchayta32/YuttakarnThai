@@ -180,7 +180,12 @@ export class Game {
     getNextMissionId() {
         const currentNum = this.getMissionNumber(this.currentMissionId);
         const nextNum = currentNum + 1;
-        const nextMissionId = `campaign1_mission${nextNum}`;
+
+        // Extract the prefix (e.g., 'campaign1_', 'campaign2_')
+        const prefixMatch = this.currentMissionId.match(/^(.*_mission)\d+$/);
+        const prefix = prefixMatch ? prefixMatch[1] : 'campaign1_mission';
+
+        const nextMissionId = `${prefix}${nextNum}`;
 
         // Check if next mission exists
         if (MAPS[nextMissionId]) {
@@ -391,7 +396,15 @@ export class Game {
             // Show mission selection
             document.getElementById('mission-modal')?.classList.remove('hidden');
         } else {
-            // For other campaigns, play story then tutorial
+            // For other campaigns, setup initial map and play story then tutorial
+            const firstMission = CAMPAIGN_MISSIONS[campaignId]?.[0];
+            if (firstMission && MAPS[firstMission]) {
+                this.currentMissionId = firstMission;
+                this.currentMap = MAPS[firstMission];
+                this.mapWidth = this.currentMap.width;
+                this.mapHeight = this.currentMap.height;
+            }
+
             this.storyCutscene.play(campaignId, () => {
                 document.getElementById('tutorial-modal')?.classList.remove('hidden');
             });
@@ -639,6 +652,11 @@ export class Game {
         // Check victory/defeat
         this.checkGameEnd();
 
+        // Check Transition Gate
+        if (this.missionCompleted) {
+            this.checkGateTransition();
+        }
+
         // Generate resources
         this.generateResources(deltaTime);
     }
@@ -689,6 +707,33 @@ export class Game {
                 }
             }
             building.render(ctx, this.camera);
+        }
+
+        // Render Transition Gate (Before Units)
+        if (this.transitionGate) {
+            const screenX = (this.transitionGate.x - this.camera.x) * zoom;
+            const screenY = (this.transitionGate.y - this.camera.y) * zoom;
+            const size = this.transitionGate.width * zoom;
+
+            ctx.save();
+            ctx.fillStyle = `rgba(255, 215, 0, ${0.3 + Math.sin(this.gameTime * 5) * 0.2})`;
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 15 * zoom;
+            ctx.beginPath();
+            ctx.arc(screenX + size / 2, screenY + size / 2, size / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#FFD700';
+            ctx.lineWidth = 3 * zoom;
+            ctx.stroke();
+
+            // Text indicator
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `bold ${14 * zoom}px Kanit`;
+            ctx.textAlign = 'center';
+            ctx.fillText('ทางผ่าน (นำฮีโร่มาที่นี่)', screenX + size / 2, screenY - 10 * zoom);
+            ctx.restore();
         }
 
         // Filter units for fog of war visibility
@@ -828,6 +873,17 @@ export class Game {
             (this.camera.width / this.camera.zoom) * scaleX,
             (this.camera.height / this.camera.zoom) * scaleY
         );
+
+        // Transition Gate on minimap
+        if (this.missionCompleted && this.transitionGate) {
+            ctx.fillStyle = '#ff00ff';
+            ctx.fillRect(
+                this.transitionGate.x * scaleX,
+                this.transitionGate.y * scaleY,
+                this.transitionGate.width * scaleX,
+                this.transitionGate.height * scaleY
+            );
+        }
     }
 
     updateHUD() {
@@ -1216,13 +1272,88 @@ export class Game {
     }
 
     checkGameEnd() {
+        if (this.state === 'defeat' || this.state === 'victory' || this.missionCompleted) return;
+
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
-        if (enemyUnits.length === 0 && playerUnits.length > 0) {
-            this.showResult('victory');
-        } else if (playerUnits.length === 0) {
+        // Check Defeat First
+        let isDefeat = playerUnits.length === 0;
+
+        if (this.currentMap.objectives && this.currentMap.objectives.defeat) {
+            const defObj = this.currentMap.objectives.defeat;
+            if (defObj.type === 'lose_hero') {
+                const heroAlive = playerUnits.some(u => u.typeId === defObj.target || u.id === defObj.target);
+                if (!heroAlive) isDefeat = true;
+            } else if (defObj.type === 'destroy_building') {
+                const targetBuilding = this.buildings.find(b => b.typeId === defObj.target);
+                if (!targetBuilding && this.gameTime > 5) isDefeat = true;
+            }
+        }
+
+        if (isDefeat) {
             this.showResult('defeat');
+            return;
+        }
+
+        // Check Victory
+        let isVictory = false;
+        if (this.currentMap.objectives && this.currentMap.objectives.victory) {
+            const vicObj = this.currentMap.objectives.victory;
+            if (vicObj.type === 'eliminate_all') {
+                isVictory = enemyUnits.length === 0;
+            } else if (vicObj.type === 'destroy_building') {
+                const targetBuilding = this.buildings.find(b => b.typeId === vicObj.target);
+                if (!targetBuilding && this.gameTime > 5) isVictory = true;
+            } else if (vicObj.type === 'explore') {
+                const explorativeUnits = playerUnits.filter(u => u.x > 2500); // Reach far right area
+                if (explorativeUnits.length > 0) isVictory = true;
+            }
+        } else {
+            // Default condition
+            isVictory = enemyUnits.length === 0 && playerUnits.length > 0;
+        }
+
+        if (isVictory) {
+            this.missionCompleted = true;
+            this.spawnTransitionGate();
+            // Show a temporary effect/notification
+            this.createCommandEffect(this.camera.x + this.camera.width / 2, this.camera.y + this.camera.height / 2, 'attack');
+        }
+    }
+
+    spawnTransitionGate() {
+        // Spawn the transition gate randomly at the right edge if unexplored, or center screen if fully explored
+        // To be safe, spawn it slightly off-center of the camera
+        this.transitionGate = {
+            x: this.camera.x + this.camera.width / 2,
+            y: this.camera.y + this.camera.height / 2,
+            width: 100,
+            height: 100
+        };
+        // In renderTerrain, maybe we should draw it, but doing it in Game.js is fine using effects or just draw it directly.
+    }
+
+    checkGateTransition() {
+        if (!this.transitionGate) return;
+
+        const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
+        let heroEntered = false;
+
+        for (const unit of playerUnits) {
+            if (unit.isHero || unit.typeId.includes('hero') || unit.typeId === 'thai_king' || unit.typeId === 'c2_hero_rama1' || unit.typeId === 'c2_hero_prince') {
+                // Determine bounding box
+                if (unit.x > this.transitionGate.x && unit.x < this.transitionGate.x + this.transitionGate.width &&
+                    unit.y > this.transitionGate.y && unit.y < this.transitionGate.y + this.transitionGate.height) {
+                    heroEntered = true;
+                    break;
+                }
+            }
+        }
+
+        if (heroEntered) {
+            this.transitionGate = null; // Prevent double trigger
+            this.showResult('victory');
         }
     }
 

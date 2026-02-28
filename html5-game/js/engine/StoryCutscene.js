@@ -108,6 +108,82 @@ export const STORY_DATA = {
                 duration: 6000
             }
         ]
+    },
+
+    // ======================================
+    // Campaign 2: สงครามท่าดินแดง
+    // ======================================
+    tha_din_daeng: {
+        title: 'สงครามท่าดินแดง',
+        titleEn: 'Tha Din Daeng Campaign',
+        year: 'พ.ศ. 2329 (ค.ศ. 1786)',
+        scenes: [
+            {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ฉากเปิดแคมเปญ 2 สงครามท่าดินแดง):
+                 * "A dramatic cinematic illustration of King Bodawpaya of Burma's massive army setting up camp at Tha Din Daeng and Sam Sop. Thousands of tents, campfires, and soldiers in the dense Thai-Burmese border jungle, preparing for an invasion. Epic scale, historical fantasy art style, digital painting."
+                 */
+                image: 'images/campain 2/title_1.jpg',
+                subtitle: 'หลังสงครามเก้าทัพ พระเจ้าปดุงยกทัพมาตั้งมั่น ณ ท่าดินแดงและสามสบ หวังจะเข้าตีพระนครอีกครั้ง...',
+                duration: 6000
+            }
+        ]
+    },
+    campaign2_mission1: {
+        title: 'การสำรวจต้นน้ำ',
+        scenes: [
+            {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ภารกิจ 1 การสำรวจต้นน้ำ):
+                 * "The Front Palace Prince (Maha Sura Singhanat) of Siam leading a group of fast cavalry scouts through a dense, foggy tropical jungle. They are stealthily searching for the hidden Burmese camps. Tense and mysterious atmosphere, high quality, historical fantasy art style, digital painting."
+                 */
+                image: 'images/campain 2/title_2.jpg',
+                subtitle: 'กรมพระราชวังบวรฯ ทรงนำทัพล่วงหน้า นำหน่วยม้าเร็วบุกป่าฝ่าดง เพื่อสืบหาที่ตั้งค่ายของข้าศึก',
+                duration: 6000
+            }
+        ]
+    },
+    campaign2_mission2: {
+        title: 'ตัดเส้นทางเสบียง',
+        scenes: [
+            {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ภารกิจ 2 ตัดเส้นทางเสบียง):
+                 * "Siam forces hiding in the dense jungle underbrush, launching a surprise ambush on a Burmese supply convoy and granaries. Arrows flying, swords clashing, chaotic battle in the forest. Epic lighting, historical fantasy art style, digital painting."
+                 */
+                image: 'images/campain 2/title_3.jpg',
+                subtitle: 'ทัพหลวงของพระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกมหาราช วางกำลังดักซุ่มกลางป่า ทำลายขบวนเสบียงพม่า',
+                duration: 6000
+            }
+        ]
+    },
+    campaign2_mission3: {
+        title: 'ยุทธการท่าดินแดง',
+        scenes: [
+            {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ภารกิจ 3 ยุทธการท่าดินแดง):
+                 * "The climax of the Tha Din Daeng campaign. An epic full-scale battle where the King Rama I's main army and the Front Palace Prince's vanguard army converge to attack three massive Burmese fortress camps simultaneously. Elephants charging, muskets firing, walls burning. Masterpiece, highly detailed, historical fantasy art style, digital painting."
+                 */
+                image: 'images/campain 2/title_4.jpg',
+                subtitle: 'ถึงเวลาแตกหัก ทัพหน้าและทัพหลวงบรรจบกัน บุกโจมตีค่ายพม่าทั้งสามแห่งพร้อมกัน!',
+                duration: 6000
+            }
+        ]
+    },
+    campaign2_mission4: {
+        title: 'การรุกไล่',
+        scenes: [
+            {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ภารกิจ 4 การรุกไล่):
+                 * "Victorious Siamese forces chasing retreating Burmese soldiers through the rugged terrain of the border. In the background, Burmese camps are engulfed in flames. The Siamese army standing triumphant but exhausted. Dramatic lighting, historical fantasy art style, digital painting."
+                 */
+                image: 'images/campain 2/title_5.jpg',
+                subtitle: 'ค่ายพม่าถูกเผาทำลายสิ้น กรมพระราชวังบวรฯ ทรงนำทัพไล่ตีข้าศึกที่หนีเตลิดไปจนพ้นพรมแดนสยาม',
+                duration: 6000
+            }
+        ]
     }
 };
 

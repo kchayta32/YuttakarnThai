@@ -4,6 +4,8 @@
 // Complete map with obstacles
 // ===================================
 
+import { CAMPAIGN2_MAPS } from '../campaign2/data/maps.js';
+
 export const MAPS = {
     campaign1_mission1: {
         id: 'campaign1_mission1',
@@ -1000,7 +1002,10 @@ export const MAPS = {
 
         startingResources: { food: 400, gold: 350 },
         cameraStart: { x: 2100, y: 900 }
-    }
+    },
+
+    // Campaign 2 Maps
+    ...CAMPAIGN2_MAPS
 };
 
 // Campaign mission list for UI
@@ -1014,6 +1019,12 @@ export const CAMPAIGN_MISSIONS = {
         'campaign1_mission6',
         'campaign1_mission7',
         'campaign1_mission8'
+    ],
+    tha_din_daeng: [
+        'campaign2_mission1',
+        'campaign2_mission2',
+        'campaign2_mission3',
+        'campaign2_mission4'
     ]
 };
 

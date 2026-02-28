@@ -24,6 +24,11 @@ export class Unit {
         Object.assign(this, typeData);
         this.typeId = typeId;
 
+        // Assign random sprite variant for Campaign 2 Burmese Infantry
+        if (this.typeId === 'c2_enemy_infantry') {
+            this.spriteVariant = 'c2_enemy_infantry' + Math.floor(Math.random() * 12 + 1);
+        }
+
         // Position
         this.x = x;
         this.y = y;
@@ -49,7 +54,9 @@ export class Unit {
         this.size = (this.typeId.includes('elephant') ||
             this.typeId === 'thai_king' ||
             this.typeId === 'burmese_king' ||
-            this.typeId === 'queen_suriyothai') ? 100 : 63;
+            this.typeId === 'queen_suriyothai' ||
+            this.typeId === 'c2_hero_rama1' ||
+            this.typeId === 'c2_hero_prince') ? 100 : 63;
 
         // Orientation
         if (this.game.currentMissionId === 'campaign1_mission1' ||
@@ -64,6 +71,11 @@ export class Unit {
             // Default orientation: Player on left faces right, Enemy on right faces left
             this.angle = this.team === 0 ? 0 : Math.PI;
         }
+
+        // Dynamic stats
+        this.currentSpeed = this.speed;
+        this.currentAttack = this.attack;
+
         // Animation
         this.animFrame = 0;
         this.animTimer = 0;
@@ -94,6 +106,9 @@ export class Unit {
             this.attackCooldown -= deltaTime;
         }
 
+        // Apply Auras
+        this.applyAuras();
+
         // Animation
         this.animTimer += deltaTime;
         if (this.animTimer >= 0.2) {
@@ -118,6 +133,26 @@ export class Unit {
                 this.performAttack(deltaTime);
                 break;
         }
+    }
+
+    applyAuras() {
+        let activeSpeedMult = 1;
+        let activeAttackMult = 1;
+
+        if (this.game && this.game.units) {
+            for (const other of this.game.units) {
+                if (other.team === this.team && other.isHero && other.auraType && other.state !== 'dead') {
+                    const dist = this.distanceTo(other);
+                    if (dist <= other.auraRange) {
+                        if (other.auraType === 'speed') activeSpeedMult = Math.max(activeSpeedMult, other.auraMultiplier);
+                        if (other.auraType === 'attack') activeAttackMult = Math.max(activeAttackMult, other.auraMultiplier);
+                    }
+                }
+            }
+        }
+
+        this.currentSpeed = this.speed * activeSpeedMult;
+        this.currentAttack = this.attack * activeAttackMult;
     }
 
     findNearbyEnemy() {
@@ -206,7 +241,7 @@ export class Unit {
 
         // Move towards waypoint
         this.angle = Math.atan2(dy, dx);
-        const moveSpeed = this.speed * 50 * deltaTime;
+        const moveSpeed = this.currentSpeed * 50 * deltaTime;
         const ratio = Math.min(1, moveSpeed / dist);
 
         const nextX = this.x + dx * ratio;
@@ -243,7 +278,7 @@ export class Unit {
         this.angle = Math.atan2(dy, dx);
 
         // Move towards target
-        const moveSpeed = this.speed * 50 * deltaTime;
+        const moveSpeed = this.currentSpeed * 50 * deltaTime;
         const ratio = Math.min(1, moveSpeed / dist);
 
         const nextX = this.x + dx * ratio;
@@ -357,7 +392,7 @@ export class Unit {
 
     calculateDamage(target) {
         // Calculate damage
-        let damage = this.attack;
+        let damage = this.currentAttack;
 
         // Apply bonus damage
         if (this.bonusVs && target.typeId) {

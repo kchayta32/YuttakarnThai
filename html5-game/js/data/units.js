@@ -3,6 +3,8 @@
 // Unit Definitions
 // ===================================
 
+import { CAMPAIGN2_UNITS, CAMPAIGN2_BUILDINGS } from '../campaign2/data/units.js';
+
 export const UNIT_TYPES = {
     // === SIAM (Player) Units ===
     SWORDSMAN: {
@@ -331,7 +333,8 @@ export const UNIT_TYPES = {
         cost: { food: 50, gold: 50 },
         buildTime: 8,
         description: 'หน่วยปืนไฟ พลังโจมตีสูงแต่ยิงช้า'
-    }
+    },
+    ...CAMPAIGN2_UNITS
 };
 
 export const BUILDING_TYPES = {
@@ -537,5 +540,6 @@ export const BUILDING_TYPES = {
         cost: { food: 200, gold: 200 },
         size: 250,
         description: 'ที่ตั้งของทหารรับจ้างแม่นปืน'
-    }
+    },
+    ...CAMPAIGN2_BUILDINGS
 };

@@ -90,7 +90,36 @@ export class SpriteManager {
             'story_m2_opening': 'images/story/mission2/Opening Scene - กองทัพสยามเตรียมบุก.png',
             'story_m2_map': 'images/story/mission2/Map_Strategy Scene - แผนที่เมืองท่าวาย.png',
             'story_m2_battle': 'images/story/mission2/Battle Scene - ข้ามแม่น้ำบุกเมือง.png',
-            'story_m2_victory': 'images/story/mission2/Victory Scene - ยึดเมืองสำเร็จ.png'
+            'story_m2_victory': 'images/story/mission2/Victory Scene - ยึดเมืองสำเร็จ.png',
+
+            // Campaign 2 Buildings
+            'c2_town_hall': 'images/campain 2/Buildings/พลับพลาที่ประทับ(Town Hall).png',
+            'c2_barracks': 'images/campain 2/Buildings/ค่ายทหาร(Barracks).png',
+            'c2_elephant_stable': 'images/campain 2/Buildings/โรงช้าง(Elephant Stable).png',
+            'c2_granary': 'images/campain 2/Buildings/โรงเสบียง(Granary).png',
+            'c2_watchtower': 'images/campain 2/Buildings/หอคอยเฝ้าระวัง(Watchtower).png',
+
+            // Campaign 2 Thai Units
+            'c2_hero_prince': 'images/campain 2/ThaiForces/ตัวละครฮีโร่-กรมพระราชวังบวรฯ(Hero2-FrontPalacePrince).png',
+            'c2_elephant': 'images/campain 2/ThaiForces/ช้างศึก(ThaiForce-War Elephant).png',
+            'c2_hero_rama1': 'images/campain 2/ThaiForces/ตัวละครฮีโร่-รัชกาลที่1(Hero1-RamaI).png',
+            'c2_swordsman': 'images/campain 2/ThaiForces/พลดาบ-พลโล่(ThaiForce-Swordsman-Shieldman).png',
+            'c2_archer': 'images/campain 2/ThaiForces/พลธนู(ThaiForce-Archer).png',
+
+            // Campaign 2 Burmese Units
+            'c2_enemy_musketeer': 'images/campain 2/BurmeseForces/พลปืนไฟ(BurmeseForce-Musketeer).png',
+            'c2_enemy_infantry1': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry1.png',
+            'c2_enemy_infantry2': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry2.png',
+            'c2_enemy_infantry3': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry3.png',
+            'c2_enemy_infantry4': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry4.png',
+            'c2_enemy_infantry5': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry5.png',
+            'c2_enemy_infantry6': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry6.png',
+            'c2_enemy_infantry7': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry7.png',
+            'c2_enemy_infantry8': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry8.png',
+            'c2_enemy_infantry9': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry9.png',
+            'c2_enemy_infantry10': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry10.png',
+            'c2_enemy_infantry11': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry11.png',
+            'c2_enemy_infantry12': 'images/campain 2/BurmeseForces/BurmeseForce-Infantry12.png'
         };
     }
 
@@ -164,6 +193,8 @@ export class SpriteManager {
             // Enemy variants
             if (id.includes('burmese_defender')) return 'burmese_defender';
             if (id.includes('burmese_king')) return 'burmese_king'; // New Hero
+            if (id.includes('c2_enemy_musketeer')) return 'c2_enemy_musketeer';
+            if (id.includes('c2_enemy_infantry')) return unit.spriteVariant || 'c2_enemy_infantry1';
             if (id.includes('swordsman')) return 'enemy_swordsman';
             if (id.includes('spearman')) return 'enemy_spearman';
             if (id.includes('archer')) return 'enemy_archer';
@@ -174,6 +205,11 @@ export class SpriteManager {
             // Player units
             if (id.includes('siamese_assault')) return 'siamese_assault';
             if (id.includes('war_boat')) return 'war_boat';
+            if (id.includes('c2_hero_rama1')) return 'c2_hero_rama1';
+            if (id.includes('c2_hero_prince')) return 'c2_hero_prince';
+            if (id.includes('c2_swordsman')) return 'c2_swordsman';
+            if (id.includes('c2_archer')) return 'c2_archer';
+            if (id.includes('c2_elephant')) return 'c2_elephant';
             if (id.includes('thai_king')) return 'thai_king'; // New Hero
             if (id.includes('queen_suriyothai')) return 'queen_suriyothai'; // New Hero
             if (id.includes('portuguese_merc')) return 'portuguese_merc';
