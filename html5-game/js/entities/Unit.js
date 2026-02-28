@@ -51,6 +51,7 @@ export class Unit {
         // Orientation
         if (this.game.currentMissionId === 'campaign1_mission1' ||
             this.game.currentMissionId === 'campaign1_mission3' ||
+            this.game.currentMissionId === 'campaign1_mission4' ||
             this.game.currentMissionId === 'campaign1_mission6') {
             // In these missions, Player is on the right, Enemy is on the left
             this.angle = this.team === 0 ? Math.PI : 0;
