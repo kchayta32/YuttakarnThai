@@ -70,7 +70,7 @@ export const CAMPAIGN2_MAPS = {
         ],
         buildings: [
             // ค่ายทหาร (Forward base) ซ่อนในป่าใกล้ถนน (Size: 400)
-            { type: 'c2_barracks', x: 500, y: 600, team: 0 },
+            { type: 'c2_barracks', x: 400, y: 1525, team: 0 },
             // หอคอยเรียงตามแม่น้ำ (Size: 240) - shifted X slightly to avoid grass/tree edges
             { type: 'c2_watchtower', x: 750, y: 400, team: 0 },
             { type: 'c2_watchtower', x: 750, y: 1200, team: 0 },
@@ -80,7 +80,7 @@ export const CAMPAIGN2_MAPS = {
             { type: 'c2_granary', x: 2800, y: 1800, team: 1 }
         ],
         features: [
-            { type: 'forest', x: 400, y: 500, width: 300, height: 300 }, // ป่าซ่อนค่าย
+            { type: 'forest', x: 400, y: 550, width: 300, height: 250, blockMovement: true }, // ป่าซ่อนค่าย (ขยับลงเพื่อไม่ทับหอคอย)
             { type: 'water', x: 1000, y: 0, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนบน)
             { type: 'road', x: 1000, y: 1100, width: 150, height: 200 }, // สะพานข้ามแม่น้ำ
             { type: 'water', x: 1000, y: 1300, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนล่าง)
