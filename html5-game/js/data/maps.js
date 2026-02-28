@@ -276,9 +276,8 @@ export const MAPS = {
 
         objectives: {
             victory: {
-                type: 'destroy_building',
-                target: 'burmese_fortress',
-                description: 'ทำลายป้อมปราการพม่าและยึดเมืองท่าวาย'
+                type: 'eliminate_all',
+                description: 'กำจัดกองทัพพม่าประจำเมืองท่าวายทั้งหมด'
             },
             defeat: {
                 type: 'lose_all_units',
