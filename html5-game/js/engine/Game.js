@@ -1352,8 +1352,14 @@ export class Game {
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         let heroEntered = false;
 
+        // Check if player has any hero units
+        const hasHero = playerUnits.some(u => u.isHero || u.typeId.includes('hero') || u.typeId === 'thai_king' || u.typeId === 'c2_hero_rama1' || u.typeId === 'c2_hero_prince');
+
         for (const unit of playerUnits) {
-            if (unit.isHero || unit.typeId.includes('hero') || unit.typeId === 'thai_king' || unit.typeId === 'c2_hero_rama1' || unit.typeId === 'c2_hero_prince') {
+            const isHeroUnit = unit.isHero || unit.typeId.includes('hero') || unit.typeId === 'thai_king' || unit.typeId === 'c2_hero_rama1' || unit.typeId === 'c2_hero_prince';
+
+            // Allow any unit if there's no hero, otherwise force a hero to enter
+            if (!hasHero || isHeroUnit) {
                 // Determine bounding box
                 if (unit.x > this.transitionGate.x && unit.x < this.transitionGate.x + this.transitionGate.width &&
                     unit.y > this.transitionGate.y && unit.y < this.transitionGate.y + this.transitionGate.height) {
