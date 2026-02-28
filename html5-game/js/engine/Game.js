@@ -1274,21 +1274,30 @@ export class Game {
     checkGameEnd() {
         if (this.state === 'defeat' || this.state === 'victory' || this.missionCompleted) return;
 
+        const objectives = this.currentMap.objectives;
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
-        // Check Defeat First
-        let isDefeat = playerUnits.length === 0;
+        // 1. Check Defeat Conditions
+        let isDefeat = false;
+        const defeatObj = objectives?.defeat;
 
-        if (this.currentMap.objectives && this.currentMap.objectives.defeat) {
-            const defObj = this.currentMap.objectives.defeat;
-            if (defObj.type === 'lose_hero') {
-                const heroAlive = playerUnits.some(u => u.typeId === defObj.target || u.id === defObj.target);
-                if (!heroAlive) isDefeat = true;
-            } else if (defObj.type === 'destroy_building') {
-                const targetBuilding = this.buildings.find(b => b.typeId === defObj.target);
+        if (defeatObj) {
+            if (defeatObj.type === 'protect_hero' || defeatObj.type === 'lose_hero') {
+                const heroExists = playerUnits.some(u => u.typeId === defeatObj.target || u.id === defeatObj.target);
+                if (!heroExists) {
+                    isDefeat = true;
+                }
+            } else if (defeatObj.type === 'destroy_building') {
+                const targetBuilding = this.buildings.find(b => b.typeId === defeatObj.target && b.team === 0);
                 if (!targetBuilding && this.gameTime > 5) isDefeat = true;
+            } else if (defeatObj.type === 'lose_all_units' || !defeatObj.type) {
+                if (playerUnits.length === 0) {
+                    isDefeat = true;
+                }
             }
+        } else if (playerUnits.length === 0) {
+            isDefeat = true;
         }
 
         if (isDefeat) {
@@ -1296,22 +1305,25 @@ export class Game {
             return;
         }
 
-        // Check Victory
+        // 2. Check Victory Conditions
         let isVictory = false;
-        if (this.currentMap.objectives && this.currentMap.objectives.victory) {
-            const vicObj = this.currentMap.objectives.victory;
-            if (vicObj.type === 'eliminate_all') {
-                isVictory = enemyUnits.length === 0;
-            } else if (vicObj.type === 'destroy_building') {
-                const targetBuilding = this.buildings.find(b => b.typeId === vicObj.target);
-                if (!targetBuilding && this.gameTime > 5) isVictory = true;
-            } else if (vicObj.type === 'explore') {
+        const victoryObj = objectives?.victory;
+
+        if (victoryObj) {
+            if (victoryObj.type === 'kill_hero') {
+                const heroExists = enemyUnits.some(u => u.typeId === victoryObj.target);
+                if (!heroExists) isVictory = true;
+            } else if (victoryObj.type === 'destroy_building') {
+                const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === victoryObj.target && b.hp > 0);
+                if (!buildingExists && this.gameTime > 5) isVictory = true;
+            } else if (victoryObj.type === 'eliminate_all' || !victoryObj.type) {
+                if (enemyUnits.length === 0 && playerUnits.length > 0) isVictory = true;
+            } else if (victoryObj.type === 'explore') {
                 const explorativeUnits = playerUnits.filter(u => u.x > 2500); // Reach far right area
                 if (explorativeUnits.length > 0) isVictory = true;
             }
-        } else {
-            // Default condition
-            isVictory = enemyUnits.length === 0 && playerUnits.length > 0;
+        } else if (enemyUnits.length === 0 && playerUnits.length > 0) {
+            isVictory = true;
         }
 
         if (isVictory) {

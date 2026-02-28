@@ -113,14 +113,8 @@ export class Building {
         // Spawn the unit (correct positional constructor via game helper)
         const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
 
-        // Command unit to walk further out in front of the camp
-        if (newUnit && typeof newUnit.moveTo === 'function') {
-            const exitDist = 150;
-            newUnit.moveTo(
-                spawnX + Math.cos(angle) * exitDist,
-                spawnY + Math.sin(angle) * exitDist
-            );
-        }
+
+
 
         // Notify game that training is complete (for auto-selection)
         if (newUnit && this.game.onUnitTrainingComplete) {
