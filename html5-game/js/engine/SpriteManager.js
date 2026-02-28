@@ -74,6 +74,13 @@ export class SpriteManager {
             'burmese_king': 'images/units/mission6/burmese_king.png',
             'queen_suriyothai': 'images/units/mission6/queen_suriyothai.png',
 
+            // Mission 8 Units
+            /*
+             * TEXT PROMPT FOR IMAGE GENERATION (ทหารรับจ้างโปรตุเกส สำหรับใส่ใน images/units/portuguese_merc.png):
+             * "A 16th-century Portuguese mercenary soldier in Ayutthaya, holding a matchlock musket. Top-down isometric perspective game sprite asset, clean pixel art style, transparent background."
+             */
+            'portuguese_merc': 'images/units/portuguese_merc.png',
+
             // Mission 2 Story
             'story_m2_opening': 'images/story/mission2/Opening Scene - กองทัพสยามเตรียมบุก.png',
             'story_m2_map': 'images/story/mission2/Map_Strategy Scene - แผนที่เมืองท่าวาย.png',
@@ -164,6 +171,7 @@ export class SpriteManager {
             if (id.includes('war_boat')) return 'war_boat';
             if (id.includes('thai_king')) return 'thai_king'; // New Hero
             if (id.includes('queen_suriyothai')) return 'queen_suriyothai'; // New Hero
+            if (id.includes('portuguese_merc')) return 'portuguese_merc';
             if (id.includes('swordsman')) return 'swordsman';
             if (id.includes('spearman')) return 'spearman';
             if (id.includes('archer')) return 'archer';

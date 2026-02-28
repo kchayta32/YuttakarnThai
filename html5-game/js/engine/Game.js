@@ -883,12 +883,6 @@ export class Game {
                  * "A brave and heroic close-up portrait of Queen Suriyothai of Ayutthaya, wearing Thai female warrior armor, fierce and determined expression. Thai historical art style, high quality, digital painting, fantasy portrait."
                  */
                 document.getElementById('unit-portrait').innerHTML = `<img src="images/portraits/queen_suriyothai.png" alt="Queen Suriyothai" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
-            } else if (unit.id === 'portuguese_merc' || unit.nameEn === 'Portuguese Mercenary') {
-                /*
-                 * TEXT PROMPT FOR IMAGE GENERATION (ทหารรับจ้างโปรตุเกส):
-                 * "A rugged 16th-century Portuguese mercenary portrait, wearing European morion helmet and breastplate, holding a matchlock musket. Weathered face, beard, determined gaze. Historical fantasy art style, high quality, digital painting, character portrait."
-                 */
-                document.getElementById('unit-portrait').innerHTML = `<img src="images/portraits/portuguese_merc.png" alt="Portuguese Mercenary" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
             } else {
                 document.getElementById('unit-portrait').innerHTML = `<span>${unit.icon}</span>`;
             }
@@ -923,19 +917,19 @@ export class Game {
              * TEXT PROMPT FOR IMAGE GENERATION (ป้อมกำแพงเพชร):
              * "A strong, ancient Thai city brick wall of Kamphaeng Phet, reinforced with wooden structures and cannons. Battle-scarred, standing tall against the siege. High quality, isometric perspective, game asset style, digital painting."
              */
-            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/kamphaeng_phet_wall.png" alt="Kamphaeng Phet Wall" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+            document.getElementById('unit-portrait').innerHTML = `<img src="assets/images/portraits/kamphaeng_phet_wall.png" alt="Kamphaeng Phet Wall" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
         } else if (building.id === 'portuguese_camp') {
             /*
              * TEXT PROMPT FOR IMAGE GENERATION (ค่ายทหารโปรตุเกส):
              * "A 16th-century European-style mercenary camp set up within an ancient Thai city. Tents with Portuguese cross flags, weapon racks with matchlock rifles, and barrels of gunpowder. High quality, isometric perspective, game asset style, digital painting."
              */
-            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/portuguese_camp.png" alt="Portuguese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+            document.getElementById('unit-portrait').innerHTML = `<img src="assets/images/portraits/portuguese_camp.png" alt="Portuguese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
         } else if (building.id === 'burmese_camp') {
             /*
              * TEXT PROMPT FOR IMAGE GENERATION (ค่ายพักแรมพม่า):
              * "A hastily built, rugged Burmese military camp in the jungle, with wooden palisades, tents, and campfires. The atmosphere is tense and chaotic as the army is retreating. High quality, isometric perspective, game asset style, digital painting."
              */
-            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/burmese_camp.png" alt="Burmese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+            document.getElementById('unit-portrait').innerHTML = `<img src="assets/images/portraits/burmese_camp.png" alt="Burmese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
         } else {
             document.getElementById('unit-portrait').innerHTML = `<span>${building.icon}</span>`;
         }
@@ -1222,40 +1216,12 @@ export class Game {
     }
 
     checkGameEnd() {
-        const objectives = this.currentMap.objectives;
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
-        // 1. Victory Conditions
-        let isVictory = false;
-        if (objectives.victory.type === 'eliminate_all') {
-            isVictory = (enemyUnits.length === 0 && playerUnits.length > 0);
-        } else if (objectives.victory.type === 'kill_hero') {
-            const targetType = objectives.victory.target;
-            const targetAlive = enemyUnits.some(u => u.typeId === targetType);
-            isVictory = !targetAlive && playerUnits.length > 0;
-        } else if (objectives.victory.type === 'destroy_building') {
-            const targetType = objectives.victory.target;
-            const targetBuilding = this.buildings.find(b => b.typeId === targetType);
-            isVictory = !targetBuilding && playerUnits.length > 0;
-        }
-
-        if (isVictory) {
+        if (enemyUnits.length === 0 && playerUnits.length > 0) {
             this.showResult('victory');
-            return;
-        }
-
-        // 2. Defeat Conditions
-        let isDefeat = false;
-        if (objectives.defeat.type === 'lose_all_units') {
-            isDefeat = (playerUnits.length === 0);
-        } else if (objectives.defeat.type === 'protect_hero') {
-            const heroType = objectives.defeat.target;
-            const heroAlive = playerUnits.some(u => u.typeId === heroType);
-            isDefeat = !heroAlive;
-        }
-
-        if (isDefeat) {
+        } else if (playerUnits.length === 0) {
             this.showResult('defeat');
         }
     }
