@@ -97,8 +97,14 @@ export class Building {
         const item = this.productionQueue.shift();
         this.productionProgress = 0;
 
-        // Spawn unit outside the building footprint using randomized angle
-        const angle = Math.random() * Math.PI * 2;
+        // Determine "front" direction based on team
+        // Team 0 (player, right side of map) → face left toward enemy (angle = π)
+        // Team 1 (enemy, left side of map) → face right toward player (angle = 0)
+        const baseAngle = this.team === 0 ? Math.PI : 0;
+        // Small random spread (±15°) so multiple units don't stack exactly
+        const spread = (Math.random() - 0.5) * (Math.PI / 6);
+        const angle = baseAngle + spread;
+
         // For large buildings (Farm size=360), use larger clearance to avoid spawning inside corners
         const spawnDist = (this.size >= 300) ? (this.size * 0.75 + 60) : (this.size / 2 + 60);
         const spawnX = this.x + Math.cos(angle) * spawnDist;
@@ -107,9 +113,9 @@ export class Building {
         // Spawn the unit (correct positional constructor via game helper)
         const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
 
-        // Command unit to walk further away from building immediately
+        // Command unit to walk further out in front of the camp
         if (newUnit && typeof newUnit.moveTo === 'function') {
-            const exitDist = 120;
+            const exitDist = 150;
             newUnit.moveTo(
                 spawnX + Math.cos(angle) * exitDist,
                 spawnY + Math.sin(angle) * exitDist
