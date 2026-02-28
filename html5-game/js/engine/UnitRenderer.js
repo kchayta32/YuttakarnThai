@@ -148,13 +148,18 @@ export class UnitRenderer {
             // Assets that face Left by default:
             // - Original player units: swordsman, elephant, worker
             // - New enemy assets: enemy_elephant (enemy_war_elephant.png faces left)
-            const facesLeftByDefault = typeId === 'swordsman' ||
+            let facesLeftByDefault = typeId === 'swordsman' ||
                 typeId === 'elephant' ||
                 typeId === 'worker' ||
                 typeId === 'enemy_elephant' ||
                 typeId === 'siamese_assault' ||
                 typeId === 'burmese_defender' ||
                 typeId === 'burmese_king';
+
+            // Specific fix for Campaign 2, Stage 2 Hero (Rama I)
+            if (this.game.currentMissionId === 'campaign2_mission2' && typeId === 'c2_hero_rama1') {
+                facesLeftByDefault = true;
+            }
 
             if (facesLeftByDefault) {
                 shouldFlip = !shouldFlip;
