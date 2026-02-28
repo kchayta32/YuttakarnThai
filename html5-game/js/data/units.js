@@ -311,6 +311,26 @@ export const UNIT_TYPES = {
         isEnemy: true,
         description: 'จอมทัพพม่าผู้เกรียงไกร',
         aoe: true
+    },
+
+    // === MISSION 8 SPECIFIC UNITS ===
+    PORTUGUESE_MERC: {
+        id: 'portuguese_merc',
+        name: 'ทหารรับจ้างโปรตุเกส',
+        nameEn: 'Portuguese Mercenary',
+        icon: '🔫',
+        color: '#3498db',
+        hp: 80,
+        maxHp: 80,
+        attack: 25,
+        defense: 2,
+        range: 6,
+        speed: 1.5,
+        attackSpeed: 3.0,
+        visionRange: 16,
+        cost: { food: 50, gold: 50 },
+        buildTime: 8,
+        description: 'หน่วยปืนไฟ พลังโจมตีสูงแต่ยิงช้า'
     }
 };
 
@@ -477,12 +497,45 @@ export const BUILDING_TYPES = {
         size: 400, // Doubled from 200
         description: 'จุดเก็บอาวุธและเสบียงกรัง'
     },
-    BARRICADES: {
+    BARRIER: {
         id: 'barricades',
         name: 'แนวป้องกัน',
         icon: 'barricade',
         hp: 2000,
         size: 300, // Doubled from 150
         description: 'ขวากหนามป้องกันการบุกรุก'
+    },
+
+    // === MISSION 7 SPECIFIC BUILDINGS ===
+    BURMESE_CAMP: {
+        id: 'burmese_camp',
+        name: 'ค่ายพักแรมพม่า',
+        icon: '⛺',
+        hp: 1500,
+        size: 300,
+        description: 'ค่ายพักชั่วคราวของกองทัพพม่าที่กำลังล่าถอย'
+    },
+
+    // === MISSION 8 SPECIFIC BUILDINGS ===
+    KAMPHAENG_PHET_WALL: {
+        id: 'kamphaeng_phet_wall',
+        name: 'ป้อมกำแพงเพชร',
+        icon: '🧱',
+        hp: 4000,
+        attack: 20,
+        range: 6,
+        attackSpeed: 2.5,
+        size: 400,
+        description: 'ป้อมปราการศิลาแลงอันแข็งแกร่ง'
+    },
+    PORTUGUESE_CAMP: {
+        id: 'portuguese_camp',
+        name: 'ค่ายทหารโปรตุเกส',
+        icon: '🏰',
+        hp: 2000,
+        builds: ['portuguese_merc'],
+        cost: { food: 200, gold: 200 },
+        size: 350,
+        description: 'ที่ตั้งของทหารรับจ้างแม่นปืน'
     }
 };

@@ -838,9 +838,9 @@ export const MAPS = {
             { type: 'farm', x: 3800, y: 1300, team: 0 },
             { type: 'farm', x: 3800, y: 1600, team: 0 },
             // Burmese camp (target)
-            { type: 'barracks', x: 200, y: 1450, team: 1 },
-            { type: 'farm', x: 100, y: 1300, team: 1 },
-            { type: 'farm', x: 100, y: 1600, team: 1 }
+            { type: 'burmese_camp', x: 200, y: 1450, team: 1 },
+            { type: 'burmese_camp', x: 100, y: 1300, team: 1 },
+            { type: 'burmese_camp', x: 100, y: 1600, team: 1 }
         ],
 
         features: [
@@ -960,13 +960,13 @@ export const MAPS = {
 
         buildings: [
             // City defenses
-            { type: 'barracks', x: 2800, y: 1100, team: 0 },
-            { type: 'farm', x: 2900, y: 950, team: 0 },
+            { type: 'kamphaeng_phet_wall', x: 2800, y: 1100, team: 0 },
+            { type: 'portuguese_camp', x: 2900, y: 950, team: 0 },
             { type: 'farm', x: 2900, y: 1250, team: 0 },
             // Burmese camp
-            { type: 'barracks', x: 150, y: 1100, team: 1 },
-            { type: 'farm', x: 100, y: 900, team: 1 },
-            { type: 'farm', x: 100, y: 1300, team: 1 }
+            { type: 'burmese_camp', x: 150, y: 1100, team: 1 },
+            { type: 'burmese_camp', x: 100, y: 900, team: 1 },
+            { type: 'burmese_camp', x: 100, y: 1300, team: 1 }
         ],
 
         features: [

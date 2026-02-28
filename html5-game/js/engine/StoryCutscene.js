@@ -99,7 +99,11 @@ export const STORY_DATA = {
         title: 'กำแพงเพชร',
         scenes: [
             {
-                image: 'images/story/mission_8.png',
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ฉากเปิดภารกิจ 8 กำแพงเพชร):
+                 * "An epic cinematic wide shot of the historical Thai city of Kamphaeng Phet under brutal siege by the Burmese army. In the foreground, Ayutthaya soldiers are fighting alongside Portuguese mercenaries armed with matchlock muskets on the city walls, defending against waves of attackers. Smoke and fire in the background. High quality, digital painting, historical fantasy art style, dramatic lighting."
+                 */
+                image: 'images/story/mission_8v2.png',
                 subtitle: 'การรบครั้งสุดท้าย ณ เมืองกำแพงเพชร ร่วมมือกับทหารรับจ้างโปรตุเกสปกป้องเมือง!',
                 duration: 6000
             }
