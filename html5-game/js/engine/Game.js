@@ -883,6 +883,12 @@ export class Game {
                  * "A brave and heroic close-up portrait of Queen Suriyothai of Ayutthaya, wearing Thai female warrior armor, fierce and determined expression. Thai historical art style, high quality, digital painting, fantasy portrait."
                  */
                 document.getElementById('unit-portrait').innerHTML = `<img src="images/portraits/queen_suriyothai.png" alt="Queen Suriyothai" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
+            } else if (unit.id === 'portuguese_merc' || unit.nameEn === 'Portuguese Mercenary') {
+                /*
+                 * TEXT PROMPT FOR IMAGE GENERATION (ทหารรับจ้างโปรตุเกส):
+                 * "A rugged 16th-century Portuguese mercenary portrait, wearing European morion helmet and breastplate, holding a matchlock musket. Weathered face, beard, determined gaze. Historical fantasy art style, high quality, digital painting, character portrait."
+                 */
+                document.getElementById('unit-portrait').innerHTML = `<img src="images/portraits/portuguese_merc.png" alt="Portuguese Mercenary" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
             } else {
                 document.getElementById('unit-portrait').innerHTML = `<span>${unit.icon}</span>`;
             }
@@ -911,7 +917,30 @@ export class Game {
     updateBuildingPanel(building) {
         this.selectedBuilding = building;
 
-        document.getElementById('unit-portrait').innerHTML = `<span>${building.icon}</span>`;
+        // --- Profile Picture Logic ---
+        if (building.id === 'kamphaeng_phet_wall') {
+            /*
+             * TEXT PROMPT FOR IMAGE GENERATION (ป้อมกำแพงเพชร):
+             * "A strong, ancient Thai city brick wall of Kamphaeng Phet, reinforced with wooden structures and cannons. Battle-scarred, standing tall against the siege. High quality, isometric perspective, game asset style, digital painting."
+             */
+            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/kamphaeng_phet_wall.png" alt="Kamphaeng Phet Wall" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+        } else if (building.id === 'portuguese_camp') {
+            /*
+             * TEXT PROMPT FOR IMAGE GENERATION (ค่ายทหารโปรตุเกส):
+             * "A 16th-century European-style mercenary camp set up within an ancient Thai city. Tents with Portuguese cross flags, weapon racks with matchlock rifles, and barrels of gunpowder. High quality, isometric perspective, game asset style, digital painting."
+             */
+            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/portuguese_camp.png" alt="Portuguese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+        } else if (building.id === 'burmese_camp') {
+            /*
+             * TEXT PROMPT FOR IMAGE GENERATION (ค่ายพักแรมพม่า):
+             * "A hastily built, rugged Burmese military camp in the jungle, with wooden palisades, tents, and campfires. The atmosphere is tense and chaotic as the army is retreating. High quality, isometric perspective, game asset style, digital painting."
+             */
+            document.getElementById('unit-portrait').innerHTML = `<img src="images/buildings/mission8/burmese_camp.png" alt="Burmese Camp" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${building.icon}</span>');">`;
+        } else {
+            document.getElementById('unit-portrait').innerHTML = `<span>${building.icon}</span>`;
+        }
+        // -----------------------------
+
         document.getElementById('unit-name').textContent = building.name;
         document.getElementById('unit-hp-text').textContent = `${Math.round(building.hp)}/${building.maxHp}`;
         document.getElementById('unit-hp-bar').style.width = `${(building.hp / building.maxHp) * 100}%`;
