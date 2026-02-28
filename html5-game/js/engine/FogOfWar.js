@@ -142,7 +142,7 @@ export class FogOfWar {
             const worldY = y * this.tileSize + this.tileSize / 2;
 
             for (const feature of terrainFeatures) {
-                if (feature.type === 'mountain') {
+                if (feature.type === 'mountain' && feature.blockLos !== false) {
                     if (this.pointInRect(worldX, worldY, feature)) {
                         return false; // Blocked by mountain
                     }
