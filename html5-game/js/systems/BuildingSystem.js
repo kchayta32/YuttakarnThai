@@ -221,27 +221,31 @@ export class BuildingSystem {
      * Spawn unit from building
      */
     spawnUnit(building, unitTypeKey) {
-        const { Unit } = require('../entities/Unit.js');
-        const { UNIT_TYPES } = require('../data/units.js');
+        // Get building size from data or fallback
+        const buildingData = BUILDING_TYPES[building.type.toUpperCase()];
+        const buildingSize = buildingData?.size || building.width || 120;
 
-        const unitType = UNIT_TYPES[unitTypeKey.toUpperCase()];
-        if (!unitType) return;
-
-        // Find spawn position (near building)
+        // Calculate safe spawn position outside the building footprint
         const angle = Math.random() * Math.PI * 2;
-        const dist = building.width / 2 + 40;
+        // Large buildings (>= 300) need extra clearance to avoid corner collision
+        const dist = (buildingSize >= 300) ? (buildingSize * 0.8 + 60) : (buildingSize / 2 + 50);
         const spawnX = building.x + Math.cos(angle) * dist;
         const spawnY = building.y + Math.sin(angle) * dist;
 
-        const unit = new Unit({
-            ...unitType,
-            x: spawnX,
-            y: spawnY,
-            isEnemy: false
-        });
+        // Correct instantiation: Unit(game, typeId, x, y, team)
+        const team = building.team !== undefined ? building.team : (building.isEnemy ? 1 : 0);
+        const unit = this.game.spawnUnit(unitTypeKey, spawnX, spawnY, team);
 
-        this.game.units.push(unit);
-        this.game.showMessage(`${unitType.name} พร้อมรบ!`);
+        // Auto-move the unit away from the building so it doesn't get stuck
+        if (unit && typeof unit.moveTo === 'function') {
+            const exitDist = 120;
+            unit.moveTo(
+                spawnX + Math.cos(angle) * exitDist,
+                spawnY + Math.sin(angle) * exitDist
+            );
+        }
+
+        this.game.showMessage(`${unit ? unit.name : 'หน่วยรบ'} พร้อมรบ!`);
     }
 
     /**
