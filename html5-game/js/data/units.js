@@ -324,7 +324,7 @@ export const UNIT_TYPES = {
         maxHp: 80,
         attack: 25,
         defense: 2,
-        range: 6,
+        range: 10,
         speed: 1.5,
         attackSpeed: 3.0,
         visionRange: 16,
