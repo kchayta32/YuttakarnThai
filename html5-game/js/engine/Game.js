@@ -1216,13 +1216,56 @@ export class Game {
     }
 
     checkGameEnd() {
+        if (this.state !== 'playing') return;
+
+        const objectives = this.currentMap.objectives;
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
-        if (enemyUnits.length === 0 && playerUnits.length > 0) {
-            this.showResult('victory');
+        // 1. Check Defeat Conditions
+        const defeatObj = objectives?.defeat;
+        if (defeatObj) {
+            if (defeatObj.type === 'protect_hero') {
+                const heroExists = playerUnits.some(u => u.typeId === defeatObj.target);
+                if (!heroExists) {
+                    this.showResult('defeat');
+                    return;
+                }
+            } else if (defeatObj.type === 'lose_all_units' || !defeatObj.type) {
+                if (playerUnits.length === 0) {
+                    this.showResult('defeat');
+                    return;
+                }
+            }
         } else if (playerUnits.length === 0) {
             this.showResult('defeat');
+            return;
+        }
+
+        // 2. Check Victory Conditions
+        const victoryObj = objectives?.victory;
+        if (victoryObj) {
+            if (victoryObj.type === 'kill_hero') {
+                const heroExists = enemyUnits.some(u => u.typeId === victoryObj.target);
+                if (!heroExists) {
+                    this.showResult('victory');
+                    return;
+                }
+            } else if (victoryObj.type === 'destroy_building') {
+                const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === victoryObj.target && b.hp > 0);
+                if (!buildingExists) {
+                    this.showResult('victory');
+                    return;
+                }
+            } else if (victoryObj.type === 'eliminate_all' || !victoryObj.type) {
+                if (enemyUnits.length === 0 && playerUnits.length > 0) {
+                    this.showResult('victory');
+                    return;
+                }
+            }
+        } else if (enemyUnits.length === 0 && playerUnits.length > 0) {
+            this.showResult('victory');
+            return;
         }
     }
 
