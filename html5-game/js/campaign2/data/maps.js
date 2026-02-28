@@ -13,11 +13,11 @@ export const CAMPAIGN2_MAPS = {
         cameraStart: { x: 0, y: 1500 },
         terrain: { grass: '#4a7c59', forest: '#1e3f20', water: '#2980b9', road: '#a68b5b', mountain: '#6b7280' },
         playerUnits: [
-            { type: 'c2_hero_prince', x: 250, y: 1600, team: 0 },
-            { type: 'cavalry', x: 300, y: 1550, team: 0 },
-            { type: 'cavalry', x: 300, y: 1650, team: 0 },
-            { type: 'c2_archer', x: 200, y: 1500, team: 0 },
-            { type: 'c2_archer', x: 250, y: 1500, team: 0 }
+            { type: 'c2_hero_prince', x: 250, y: 1400, team: 0 },
+            { type: 'cavalry', x: 300, y: 1350, team: 0 },
+            { type: 'cavalry', x: 300, y: 1450, team: 0 },
+            { type: 'c2_archer', x: 200, y: 1300, team: 0 },
+            { type: 'c2_archer', x: 250, y: 1300, team: 0 }
         ],
         enemyUnits: [
             { type: 'c2_enemy_infantry', x: 2800, y: 500, team: 1 },
@@ -71,17 +71,19 @@ export const CAMPAIGN2_MAPS = {
         buildings: [
             // ค่ายทหาร (Forward base) ซ่อนในป่าใกล้ถนน (Size: 400)
             { type: 'c2_barracks', x: 500, y: 600, team: 0 },
-            // หอคอยเรียงตามแม่น้ำ (Size: 240)
-            { type: 'c2_watchtower', x: 800, y: 400, team: 0 },
-            { type: 'c2_watchtower', x: 800, y: 1200, team: 0 },
-            { type: 'c2_watchtower', x: 800, y: 2000, team: 0 },
+            // หอคอยเรียงตามแม่น้ำ (Size: 240) - shifted X slightly to avoid grass/tree edges
+            { type: 'c2_watchtower', x: 750, y: 400, team: 0 },
+            { type: 'c2_watchtower', x: 750, y: 1200, team: 0 },
+            { type: 'c2_watchtower', x: 750, y: 2000, team: 0 },
             // โรงเสบียงพม่า (Size: 300)
             { type: 'c2_granary', x: 2800, y: 1000, team: 1 },
             { type: 'c2_granary', x: 2800, y: 1800, team: 1 }
         ],
         features: [
             { type: 'forest', x: 400, y: 500, width: 300, height: 300 }, // ป่าซ่อนค่าย
-            { type: 'water', x: 1000, y: 0, width: 150, height: 2400 }, // แม่น้ำแคว
+            { type: 'water', x: 1000, y: 0, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนบน)
+            { type: 'road', x: 1000, y: 1100, width: 150, height: 200 }, // สะพานข้ามแม่น้ำ
+            { type: 'water', x: 1000, y: 1300, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนล่าง)
             { type: 'road', x: 2500, y: 0, width: 100, height: 2400 } // ถนนเสบียง
         ],
         objectives: {
