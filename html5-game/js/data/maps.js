@@ -629,7 +629,7 @@ export const MAPS = {
 
         buildings: [
             // Ayutthaya city (center)
-            { type: 'barracks', x: 2400, y: 2150, team: 0 },
+            { type: 'barracks', x: 2400, y: 2250, team: 0 },
             { type: 'farm', x: 2250, y: 2450, team: 0 },
             { type: 'farm', x: 2550, y: 2450, team: 0 },
             { type: 'farm', x: 2400, y: 2650, team: 0 },
