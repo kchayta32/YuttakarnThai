@@ -748,12 +748,14 @@ export const MAPS = {
 
         objectives: {
             victory: {
-                type: 'eliminate_all',
-                description: 'เอาชนะศึกยุทธหัตถี!'
+                type: 'kill_hero',
+                target: 'burmese_king',
+                description: 'เอาชนะพระเจ้าตะเบ็งชเวตี้ในศึกยุทธหัตถี!'
             },
             defeat: {
-                type: 'lose_all_units',
-                description: 'หน่วยรบทั้งหมดถูกทำลาย'
+                type: 'protect_hero',
+                target: 'thai_king',
+                description: 'สมเด็จพระมหาจักรพรรดิถูกปลงพระชนม์'
             }
         },
 

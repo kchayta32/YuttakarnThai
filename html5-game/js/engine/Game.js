@@ -1222,12 +1222,40 @@ export class Game {
     }
 
     checkGameEnd() {
+        const objectives = this.currentMap.objectives;
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
-        if (enemyUnits.length === 0 && playerUnits.length > 0) {
+        // 1. Victory Conditions
+        let isVictory = false;
+        if (objectives.victory.type === 'eliminate_all') {
+            isVictory = (enemyUnits.length === 0 && playerUnits.length > 0);
+        } else if (objectives.victory.type === 'kill_hero') {
+            const targetType = objectives.victory.target;
+            const targetAlive = enemyUnits.some(u => u.typeId === targetType);
+            isVictory = !targetAlive && playerUnits.length > 0;
+        } else if (objectives.victory.type === 'destroy_building') {
+            const targetType = objectives.victory.target;
+            const targetBuilding = this.buildings.find(b => b.typeId === targetType);
+            isVictory = !targetBuilding && playerUnits.length > 0;
+        }
+
+        if (isVictory) {
             this.showResult('victory');
-        } else if (playerUnits.length === 0) {
+            return;
+        }
+
+        // 2. Defeat Conditions
+        let isDefeat = false;
+        if (objectives.defeat.type === 'lose_all_units') {
+            isDefeat = (playerUnits.length === 0);
+        } else if (objectives.defeat.type === 'protect_hero') {
+            const heroType = objectives.defeat.target;
+            const heroAlive = playerUnits.some(u => u.typeId === heroType);
+            isDefeat = !heroAlive;
+        }
+
+        if (isDefeat) {
             this.showResult('defeat');
         }
     }
