@@ -46,7 +46,10 @@ export class Unit {
         this.pathIndex = 0;
 
         // Visual & Collision Size (Adjusted to ~2.25x original)
-        this.size = this.typeId.includes('elephant') ? 100 : 63;
+        this.size = (this.typeId.includes('elephant') ||
+            this.typeId === 'thai_king' ||
+            this.typeId === 'burmese_king' ||
+            this.typeId === 'queen_suriyothai') ? 100 : 63;
 
         // Orientation
         if (this.game.currentMissionId === 'campaign1_mission1' ||
