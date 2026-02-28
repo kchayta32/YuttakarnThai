@@ -132,6 +132,46 @@ export const CAMPAIGN2_UNITS = {
         visionRange: 14,
         isEnemy: true,
         description: 'ทหารปืนไฟ พลังทำลายล้างสูงแต่บรรจุกระสุนช้า'
+    },
+    C2_SUPPLY_CART: {
+        id: 'c2_supply_cart',
+        name: 'เกวียนเสบียงพม่า',
+        nameEn: 'Burmese Supply Cart',
+        icon: '🛒',
+        color: '#8B4513',
+        hp: 150,
+        maxHp: 150,
+        attack: 0,
+        defense: 0,
+        range: 0,
+        speed: 0.8,
+        attackSpeed: 0,
+        visionRange: 6,
+        isEnemy: true,
+        description: 'เกวียนขนเสบียง เคลื่อนที่ช้า ไม่มีการโจมตี ทำลายเพื่อปล้นทรัพยากร',
+        isSupplyCart: true
+    },
+    C2_BURMESE_GENERAL: {
+        id: 'c2_burmese_general',
+        name: 'แม่ทัพพม่า',
+        nameEn: 'Burmese General',
+        icon: '👹',
+        color: '#4a0000',
+        hp: 2500,
+        maxHp: 2500,
+        attack: 55,
+        defense: 15,
+        range: 1.5,
+        speed: 2.0,
+        attackSpeed: 1.8,
+        visionRange: 16,
+        isEnemy: true,
+        isHero: true,
+        aoe: true,
+        auraType: 'attack',
+        auraRange: 250,
+        auraMultiplier: 1.3,
+        description: 'ผู้บัญชาการสูงสุดกองทัพพม่า มีพลังโจมตีและความทนทานสูงมาก'
     }
 };
 
@@ -198,5 +238,45 @@ export const CAMPAIGN2_BUILDINGS = {
         size: 500,
         description: 'ค่ายทหารฝั่งศัตรู เมื่อทำลายได้ทั้งหมดจะเปิดทางไปต่อ',
         isEnemy: true
+    },
+    C2_CAMP_THADINDAENG: {
+        id: 'c2_camp_thadindaeng',
+        name: 'ค่ายท่าดินแดง',
+        icon: '🏕️',
+        hp: 3000,
+        cost: { food: 0, gold: 0 },
+        size: 500,
+        description: 'ค่ายหลักของพม่าแห่งที่ 1 ที่ท่าดินแดง',
+        isEnemy: true
+    },
+    C2_CAMP_SAMSOB: {
+        id: 'c2_camp_samsob',
+        name: 'ค่ายสามสบ',
+        icon: '🏕️',
+        hp: 3000,
+        cost: { food: 0, gold: 0 },
+        size: 500,
+        description: 'ค่ายหลักของพม่าแห่งที่ 2 ที่สามสบ',
+        isEnemy: true
+    },
+    C2_GENERAL_HQ: {
+        id: 'c2_general_hq',
+        name: 'ศูนย์บัญชาการพม่า',
+        icon: '🏰',
+        hp: 4000,
+        cost: { food: 0, gold: 0 },
+        size: 600,
+        description: 'ศูนย์บัญชาการของแม่ทัพพม่า ใจกลางแนวรบ',
+        isEnemy: true
+    },
+    C2_THREE_PAGODAS_GATE: {
+        id: 'c2_three_pagodas_gate',
+        name: 'ด่านเจดีย์สามองค์',
+        icon: '⛩️',
+        hp: 99999, // Indestructible objective marker
+        cost: { food: 0, gold: 0 },
+        size: 400,
+        description: 'ประตูด่านเจดีย์สามองค์ นำฮีโร่มาที่นี่เพื่อจบภารกิจ',
+        isGate: true
     }
 };

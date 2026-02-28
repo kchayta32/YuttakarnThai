@@ -37,19 +37,32 @@ export const CAMPAIGN2_MAPS = {
             { type: 'water', x: 1500, y: 0, width: 200, height: 900 },
             { type: 'road', x: 1500, y: 900, width: 200, height: 200 }, // Bridge
             { type: 'water', x: 1500, y: 1100, width: 200, height: 900 },
-            { type: 'mountain', x: 500, y: 1300, width: 200, height: 200, blockLos: false }, // High ground for watchtower (ไม่บล็อก LOS ให้หอคอยเห็นพื้นที่รอบๆ)
-            { type: 'mountain', x: 700, y: 700, width: 200, height: 200 }, // High ground
+            { type: 'mountain', x: 500, y: 1300, width: 200, height: 200, blockLos: false },
+            { type: 'mountain', x: 700, y: 700, width: 200, height: 200 },
             { type: 'mountain', x: 1000, y: 200, width: 200, height: 500 }
         ],
         objectives: {
-            victory: { type: 'eliminate_all', description: 'กำจัดอริราชศัตรูให้สิ้นซาก' },
-            defeat: { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' }
+            victory: {
+                type: 'multi',
+                description: 'สำรวจพิกัดค่ายพม่าและกำจัดศัตรูทั้งหมด',
+                conditions: [
+                    { type: 'explore_zone', zone: { x: 2600, y: 300, w: 400, h: 1400 }, description: 'ส่งยูนิตไปถึงพิกัดค่ายพม่า' },
+                    { type: 'eliminate_all', description: 'กำจัดศัตรูให้สิ้นซาก' }
+                ]
+            },
+            defeat: {
+                type: 'multi',
+                conditions: [
+                    { type: 'lose_all_units', description: 'ยูนิตทั้งหมดถูกกำจัด' },
+                    { type: 'destroy_building', target: 'c2_town_hall', description: 'ค่ายหลักถูกทำลาย' }
+                ]
+            }
         }
     },
     campaign2_mission2: {
         id: 'campaign2_mission2',
         name: 'ตัดเส้นทางเสบียง',
-        description: 'ซุ่มโจมตีขบวนขนส่งเสบียงของพม่าริมแม่น้ำ',
+        description: 'ซุ่มโจมตีขบวนขนส่งเสบียงของพม่าริมแม่น้ำ ทำลายเกวียนเสบียงทั้งหมด',
         width: 3200,
         height: 2400,
         cameraStart: { x: 200, y: 1000 },
@@ -62,16 +75,23 @@ export const CAMPAIGN2_MAPS = {
             { type: 'c2_archer', x: 200, y: 1300, team: 0 }
         ],
         enemyUnits: [
-            // ขบวนเสบียง
-            { type: 'c2_enemy_infantry', x: 2500, y: 800, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2500, y: 1200, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2500, y: 1600, team: 1 },
-            { type: 'c2_enemy_musketeer', x: 2600, y: 1000, team: 1 }
+            // เกวียนเสบียง 5 คัน (กระจายตามถนน)
+            { type: 'c2_supply_cart', x: 2500, y: 400, team: 1 },
+            { type: 'c2_supply_cart', x: 2500, y: 800, team: 1 },
+            { type: 'c2_supply_cart', x: 2500, y: 1200, team: 1 },
+            { type: 'c2_supply_cart', x: 2500, y: 1600, team: 1 },
+            { type: 'c2_supply_cart', x: 2500, y: 2000, team: 1 },
+            // ทหารคุ้มกัน
+            { type: 'c2_enemy_infantry', x: 2400, y: 600, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2400, y: 1000, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2400, y: 1400, team: 1 },
+            { type: 'c2_enemy_musketeer', x: 2600, y: 1000, team: 1 },
+            { type: 'c2_enemy_musketeer', x: 2600, y: 1800, team: 1 }
         ],
         buildings: [
-            // ค่ายทหาร (Forward base) ซ่อนในป่าใกล้ถนน (Size: 400)
+            // ค่ายทหาร (Forward base) ใกล้ฐาน (Size: 400)
             { type: 'c2_barracks', x: 400, y: 1525, team: 0 },
-            // หอคอยเรียงตามแม่น้ำ (Size: 240) - shifted X slightly to avoid grass/tree edges
+            // หอคอยเรียงตามแม่น้ำ (Size: 240)
             { type: 'c2_watchtower', x: 750, y: 400, team: 0 },
             { type: 'c2_watchtower', x: 750, y: 1200, team: 0 },
             { type: 'c2_watchtower', x: 750, y: 2000, team: 0 },
@@ -80,21 +100,21 @@ export const CAMPAIGN2_MAPS = {
             { type: 'c2_granary', x: 2800, y: 1800, team: 1 }
         ],
         features: [
-            { type: 'forest', x: 400, y: 550, width: 300, height: 250, blockMovement: true }, // ป่าซ่อนค่าย (ขยับลงเพื่อไม่ทับหอคอย)
-            { type: 'water', x: 1000, y: 0, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนบน)
-            { type: 'road', x: 1000, y: 1100, width: 150, height: 200 }, // สะพานข้ามแม่น้ำ
-            { type: 'water', x: 1000, y: 1300, width: 150, height: 1100 }, // แม่น้ำแคว (ตอนล่าง)
+            { type: 'forest', x: 400, y: 550, width: 300, height: 250, blockMovement: true },
+            { type: 'water', x: 1000, y: 0, width: 150, height: 1100 },
+            { type: 'road', x: 1000, y: 1100, width: 150, height: 200 }, // สะพาน
+            { type: 'water', x: 1000, y: 1300, width: 150, height: 1100 },
             { type: 'road', x: 2500, y: 0, width: 100, height: 2400 } // ถนนเสบียง
         ],
         objectives: {
-            victory: { type: 'eliminate_all', description: 'กำจัดขบวนขนส่งเสบียงพม่าและพรรคพวกทั้งหมด' },
+            victory: { type: 'eliminate_all', description: 'ทำลายเกวียนเสบียงพม่าทั้ง 5 คันและกำจัดพรรคพวกทั้งหมด' },
             defeat: { type: 'lose_hero', target: 'c2_hero_rama1', description: 'พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกมหาราช สวรรคต' }
         }
     },
     campaign2_mission3: {
         id: 'campaign2_mission3',
         name: 'ยุทธการท่าดินแดง',
-        description: 'ตั้งค่ายริมแม่น้ำและบุกทำลาย 3 ค่ายใหญ่ของพม่า',
+        description: 'บุกทำลาย 3 ค่ายใหญ่ของพม่า และสังหารแม่ทัพพม่า',
         width: 4000,
         height: 3000,
         cameraStart: { x: 300, y: 1500 },
@@ -104,38 +124,47 @@ export const CAMPAIGN2_MAPS = {
             { type: 'c2_hero_prince', x: 400, y: 1600, team: 0 },
             { type: 'c2_elephant', x: 350, y: 1550, team: 0 },
             { type: 'c2_swordsman', x: 600, y: 1450, team: 0 },
-            { type: 'c2_swordsman', x: 600, y: 1650, team: 0 }
+            { type: 'c2_swordsman', x: 600, y: 1650, team: 0 },
+            { type: 'c2_archer', x: 500, y: 1350, team: 0 },
+            { type: 'c2_archer', x: 500, y: 1750, team: 0 }
         ],
         enemyUnits: [
-            { type: 'c2_enemy_musketeer', x: 2500, y: 1000, team: 1 },
-            { type: 'c2_enemy_musketeer', x: 2500, y: 1500, team: 1 },
-            { type: 'c2_enemy_musketeer', x: 2500, y: 2000, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2200, y: 1500, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2200, y: 1400, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2200, y: 1600, team: 1 }
+            // แม่ทัพพม่า (Boss)
+            { type: 'c2_burmese_general', x: 3500, y: 1500, team: 1 },
+            // ทหารคุ้มกันค่ายท่าดินแดง
+            { type: 'c2_enemy_musketeer', x: 2500, y: 800, team: 1 },
+            { type: 'c2_enemy_musketeer', x: 2700, y: 700, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2400, y: 600, team: 1 },
+            // ทหารคุ้มกันค่ายสามสบ
+            { type: 'c2_enemy_musketeer', x: 2500, y: 2200, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2400, y: 2400, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2700, y: 2300, team: 1 },
+            // ทหารคุ้มกันศูนย์บัญชาการ
+            { type: 'c2_enemy_musketeer', x: 3300, y: 1400, team: 1 },
+            { type: 'c2_enemy_musketeer', x: 3300, y: 1600, team: 1 },
+            { type: 'c2_enemy_infantry', x: 3200, y: 1500, team: 1 },
+            { type: 'c2_enemy_infantry', x: 3400, y: 1300, team: 1 },
+            { type: 'c2_enemy_infantry', x: 3400, y: 1700, team: 1 }
         ],
         buildings: [
-            // พลับพลาอยู่หลังสุด (Size: 500)
+            // ฝั่งไทย
             { type: 'c2_town_hall', x: 300, y: 1500, team: 0 },
-            // โรงช้างใจกลางฐาน (Size: 500)
             { type: 'c2_elephant_stable', x: 900, y: 1500, team: 0 },
-            // หอคอยล้อมรอบ (Size: 240)
             { type: 'c2_watchtower', x: 300, y: 1000, team: 0 },
             { type: 'c2_watchtower', x: 300, y: 2000, team: 0 },
-            // ค่ายทหารและหอคอยประชิดสะพาน (คอขวด) (Size: 400, 240)
             { type: 'c2_barracks', x: 1200, y: 1000, team: 0 },
             { type: 'c2_barracks', x: 1200, y: 2000, team: 0 },
             { type: 'c2_watchtower', x: 1350, y: 1300, team: 0 },
             { type: 'c2_watchtower', x: 1350, y: 1700, team: 0 },
 
-            // ค่ายพม่าด่านหน้า (Size: 500)
-            { type: 'c2_burmese_camp', x: 3200, y: 600, team: 1 },
-            { type: 'c2_burmese_camp', x: 3500, y: 1500, team: 1 },
-            { type: 'c2_burmese_camp', x: 3200, y: 2400, team: 1 },
+            // 3 ค่ายพม่า (ใช้ Building เฉพาะ)
+            { type: 'c2_camp_thadindaeng', x: 2800, y: 600, team: 1 },  // ค่ายท่าดินแดง
+            { type: 'c2_camp_samsob', x: 2800, y: 2400, team: 1 },       // ค่ายสามสบ
+            { type: 'c2_general_hq', x: 3600, y: 1500, team: 1 },        // ศูนย์บัญชาการ
 
-            // ป้อมปืนพม่า (Size: 240)
-            { type: 'c2_watchtower', x: 2800, y: 1200, team: 1 },
-            { type: 'c2_watchtower', x: 2800, y: 1800, team: 1 }
+            // ป้อมปืนพม่า
+            { type: 'c2_watchtower', x: 2500, y: 1200, team: 1 },
+            { type: 'c2_watchtower', x: 2500, y: 1800, team: 1 }
         ],
         features: [
             // แม่น้ำกั้นกลาง
@@ -144,14 +173,30 @@ export const CAMPAIGN2_MAPS = {
             { type: 'water', x: 1500, y: 1650, width: 300, height: 1350 }
         ],
         objectives: {
-            victory: { type: 'destroy_building', target: 'c2_burmese_camp', description: 'ทำลายค่ายพม่าทั้ง 3 ค่าย' },
-            defeat: { type: 'destroy_building', target: 'c2_town_hall', description: 'พลับพลาประทับถูกทำลาย' }
+            victory: {
+                type: 'multi',
+                description: 'ทำลายค่ายพม่าทั้ง 3 แห่งและสังหารแม่ทัพพม่า',
+                conditions: [
+                    { type: 'destroy_all_targets', target: 'c2_camp_thadindaeng', description: 'ทำลายค่ายท่าดินแดง' },
+                    { type: 'destroy_all_targets', target: 'c2_camp_samsob', description: 'ทำลายค่ายสามสบ' },
+                    { type: 'destroy_all_targets', target: 'c2_general_hq', description: 'ทำลายศูนย์บัญชาการ' },
+                    { type: 'kill_hero', target: 'c2_burmese_general', description: 'สังหารแม่ทัพพม่า' }
+                ]
+            },
+            defeat: {
+                type: 'multi',
+                conditions: [
+                    { type: 'lose_hero', target: 'c2_hero_rama1', description: 'พระบาทสมเด็จพระพุทธยอดฟ้าฯ สวรรคต' },
+                    { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' },
+                    { type: 'destroy_building', target: 'c2_town_hall', description: 'ฐานทัพไทยถูกตีแตก' }
+                ]
+            }
         }
     },
     campaign2_mission4: {
         id: 'campaign2_mission4',
-        name: 'การรุกไล่',
-        description: 'ไล่กวดศัตรูที่แตกพ่าย และสร้างค่ายสกัดกั้น',
+        name: 'การรุกไล่ข้ามพรมแดน',
+        description: 'ไล่กวดศัตรูที่แตกพ่ายและนำทัพสู่ด่านเจดีย์สามองค์ ภายในเวลา 10 นาที',
         width: 4000,
         height: 2000,
         cameraStart: { x: 400, y: 1000 },
@@ -159,33 +204,52 @@ export const CAMPAIGN2_MAPS = {
         playerUnits: [
             { type: 'c2_hero_prince', x: 500, y: 1000, team: 0 },
             { type: 'cavalry', x: 400, y: 900, team: 0 },
-            { type: 'cavalry', x: 400, y: 1100, team: 0 }
+            { type: 'cavalry', x: 400, y: 1100, team: 0 },
+            { type: 'c2_swordsman', x: 600, y: 950, team: 0 },
+            { type: 'c2_swordsman', x: 600, y: 1050, team: 0 }
         ],
         enemyUnits: [
             { type: 'c2_enemy_infantry', x: 1000, y: 1000, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2000, y: 800, team: 1 },
-            { type: 'c2_enemy_infantry', x: 2500, y: 1200, team: 1 },
-            { type: 'c2_enemy_infantry', x: 3500, y: 1000, team: 1 }
+            { type: 'c2_enemy_infantry', x: 1500, y: 800, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2000, y: 1200, team: 1 },
+            { type: 'c2_enemy_infantry', x: 2500, y: 900, team: 1 },
+            { type: 'c2_enemy_infantry', x: 3000, y: 1100, team: 1 },
+            { type: 'c2_enemy_musketeer', x: 3200, y: 1000, team: 1 }
         ],
         buildings: [
-            // เรามีพลับพลาชั่วคราวเล็กๆ (Size: 500)
+            // ฐานชั่วคราว
             { type: 'c2_town_hall', x: 300, y: 1000, team: 0 },
-            // ค่ายทหารเล็กน้อยให้สร้างเพิ่มตามทางได้ (Size: 400)
             { type: 'c2_barracks', x: 900, y: 800, team: 0 },
 
-            // หอคอยสกัดจับที่ประตูพรมแดนปลายแมพ (Size: 240)
-            { type: 'c2_watchtower', x: 3700, y: 700, team: 0 },
-            { type: 'c2_watchtower', x: 3700, y: 1300, team: 0 }
+            // ด่านเจดีย์สามองค์ (ปลายแมพ)
+            { type: 'c2_three_pagodas_gate', x: 3800, y: 1000, team: 0 },
+
+            // หอคอยสกัดจับที่ประตูพรมแดน
+            { type: 'c2_watchtower', x: 3600, y: 700, team: 0 },
+            { type: 'c2_watchtower', x: 3600, y: 1300, team: 0 }
         ],
         features: [
             { type: 'forest', x: 800, y: 0, width: 200, height: 600 },
             { type: 'forest', x: 1800, y: 1400, width: 300, height: 600 },
             { type: 'road', x: 400, y: 900, width: 3600, height: 200 }, // ทางหนี
-            { type: 'mountain', x: 3900, y: 0, width: 100, height: 2000 } // เทือกเขาตระนาวศรีปลายทาง
+            { type: 'mountain', x: 3900, y: 0, width: 100, height: 2000 } // เทือกเขาตระนาวศรี
         ],
         objectives: {
-            victory: { type: 'eliminate_all', description: 'กำจัดศัตรูที่เหลือรอดทั้งหมด' },
-            defeat: { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' }
+            victory: {
+                type: 'multi',
+                description: 'นำฮีโร่ไปถึงด่านเจดีย์สามองค์ภายใน 10 นาที และกวาดล้างศัตรูที่ขวางทาง',
+                conditions: [
+                    { type: 'hero_reach_gate', target: 'c2_three_pagodas_gate', description: 'นำฮีโร่ไปถึงด่านเจดีย์สามองค์' },
+                    { type: 'eliminate_all', description: 'กำจัดทหารพม่าที่ขวางทาง' }
+                ]
+            },
+            defeat: {
+                type: 'multi',
+                conditions: [
+                    { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' },
+                    { type: 'timeout', timeLimit: 600, description: 'หมดเวลา 10 นาที ทัพเสริมพม่ามาถึงแล้ว!' }
+                ]
+            }
         }
     }
 };

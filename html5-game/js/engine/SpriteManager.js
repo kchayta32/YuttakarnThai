@@ -98,6 +98,16 @@ export class SpriteManager {
             'c2_elephant_stable': 'images/campain 2/Buildings/โรงช้าง(Elephant Stable).png',
             'c2_granary': 'images/campain 2/Buildings/โรงเสบียง(Granary).png',
             'c2_watchtower': 'images/campain 2/Buildings/หอคอยเฝ้าระวัง(Watchtower).png',
+            'c2_supply_cart': 'images/campain 2/Buildings/เกวียนเสบียงพม่า.png',
+
+            // Campaign 3 Buildings
+            'c2_camp_thadindaeng': 'images/campain 3/อาคารหลัก (Main Camps) ของพม่าแห่งที่ 1 ท่าดินแดง (Thadindaeng).png',
+            'c2_camp_samsob': 'images/campain 3/อาคารหลัก (Main Camps) ของพม่าแห่งที่ 2 สามสบ (Sambop).png',
+            'c2_general_hq': "images/campain 3/อาคารหลัก (Main Camps) ของพม่าแห่งที่ 3 ศูนย์บัญชาการ (General's HQ).png",
+            'c2_burmese_general': 'images/campain 3/แม่ทัพพม่า (Burmese General).png',
+
+            // Campaign 4 Buildings
+            'c2_three_pagodas_gate': 'images/campain 4/ประตูเมือง-ด่านเจดีย์สามองค์ (The Gate - Three Pagodas Pass).png',
 
             // Campaign 2 Thai Units
             'c2_hero_prince': 'images/campain 2/ThaiForces/ตัวละครฮีโร่-กรมพระราชวังบวรฯ(Hero2-FrontPalacePrince).png',
@@ -194,6 +204,8 @@ export class SpriteManager {
             if (id.includes('burmese_defender')) return 'burmese_defender';
             if (id.includes('burmese_king')) return 'burmese_king'; // New Hero
             if (id.includes('c2_enemy_musketeer')) return 'c2_enemy_musketeer';
+            if (id.includes('c2_burmese_general')) return 'c2_burmese_general';
+            if (id.includes('c2_supply_cart')) return 'c2_supply_cart';
             if (id.includes('c2_enemy_infantry')) return unit.spriteVariant || 'c2_enemy_infantry1';
             if (id.includes('swordsman')) return 'enemy_swordsman';
             if (id.includes('spearman')) return 'enemy_spearman';

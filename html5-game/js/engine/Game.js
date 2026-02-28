@@ -1285,24 +1285,90 @@ export class Game {
         const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
         const enemyUnits = this.units.filter(u => u.team !== 0 && u.state !== 'dead');
 
+        // === Helper: evaluate a single condition ===
+        const evaluateCondition = (cond, isDefeatCheck) => {
+            if (!cond) return false;
+            const t = cond.type;
+
+            // --- Multi: array of sub-conditions ---
+            if (t === 'multi' && Array.isArray(cond.conditions)) {
+                if (isDefeatCheck) {
+                    // Defeat: ANY sub-condition triggers defeat
+                    return cond.conditions.some(sub => evaluateCondition(sub, true));
+                } else {
+                    // Victory: ALL sub-conditions must be true
+                    return cond.conditions.every(sub => evaluateCondition(sub, false));
+                }
+            }
+
+            // --- Victory types ---
+            if (t === 'kill_hero') {
+                const heroExists = enemyUnits.some(u => u.typeId === cond.target);
+                return !heroExists;
+            }
+            if (t === 'destroy_building' || t === 'destroy_all_targets') {
+                const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === cond.target && b.hp > 0);
+                return !buildingExists && this.gameTime > 5;
+            }
+            if (t === 'eliminate_all') {
+                return enemyUnits.length === 0 && playerUnits.length > 0;
+            }
+            if (t === 'explore' || t === 'explore_zone') {
+                if (cond.zone) {
+                    return playerUnits.some(u =>
+                        u.x >= cond.zone.x && u.x <= cond.zone.x + cond.zone.w &&
+                        u.y >= cond.zone.y && u.y <= cond.zone.y + cond.zone.h
+                    );
+                }
+                return playerUnits.some(u => u.x > 2500);
+            }
+            if (t === 'hero_reach_gate') {
+                // Check if any hero unit is inside a gate building's bounding box
+                const gateBuildings = this.buildings.filter(b => b.isGate || b.typeId === cond.target);
+                for (const gate of gateBuildings) {
+                    const halfSize = gate.size / 2;
+                    const heroInGate = playerUnits.some(u =>
+                        (u.isHero || u.typeId.includes('hero') || u.typeId === 'c2_hero_rama1' || u.typeId === 'c2_hero_prince') &&
+                        u.x >= gate.x - halfSize && u.x <= gate.x + halfSize &&
+                        u.y >= gate.y - halfSize && u.y <= gate.y + halfSize
+                    );
+                    if (heroInGate) return true;
+                }
+                return false;
+            }
+
+            // --- Defeat types ---
+            if (t === 'protect_hero' || t === 'lose_hero') {
+                const heroExists = playerUnits.some(u => u.typeId === cond.target || u.id === cond.target);
+                return !heroExists;
+            }
+            if (t === 'destroy_building') {
+                // For defeat: check if OUR building is destroyed
+                if (isDefeatCheck) {
+                    const targetBuilding = this.buildings.find(b => b.typeId === cond.target && b.team === 0);
+                    return !targetBuilding && this.gameTime > 5;
+                }
+            }
+            if (t === 'lose_all_units') {
+                return playerUnits.length === 0;
+            }
+            if (t === 'lose_all_of_type') {
+                const unitsOfType = playerUnits.filter(u => u.typeId === cond.target);
+                return unitsOfType.length === 0 && this.gameTime > 5;
+            }
+            if (t === 'timeout') {
+                return this.gameTime > (cond.timeLimit || 600);
+            }
+
+            return false;
+        };
+
         // 1. Check Defeat Conditions
         let isDefeat = false;
         const defeatObj = objectives?.defeat;
 
         if (defeatObj) {
-            if (defeatObj.type === 'protect_hero' || defeatObj.type === 'lose_hero') {
-                const heroExists = playerUnits.some(u => u.typeId === defeatObj.target || u.id === defeatObj.target);
-                if (!heroExists) {
-                    isDefeat = true;
-                }
-            } else if (defeatObj.type === 'destroy_building') {
-                const targetBuilding = this.buildings.find(b => b.typeId === defeatObj.target && b.team === 0);
-                if (!targetBuilding && this.gameTime > 5) isDefeat = true;
-            } else if (defeatObj.type === 'lose_all_units' || !defeatObj.type) {
-                if (playerUnits.length === 0) {
-                    isDefeat = true;
-                }
-            }
+            isDefeat = evaluateCondition(defeatObj, true);
         } else if (playerUnits.length === 0) {
             isDefeat = true;
         }
@@ -1317,18 +1383,7 @@ export class Game {
         const victoryObj = objectives?.victory;
 
         if (victoryObj) {
-            if (victoryObj.type === 'kill_hero') {
-                const heroExists = enemyUnits.some(u => u.typeId === victoryObj.target);
-                if (!heroExists) isVictory = true;
-            } else if (victoryObj.type === 'destroy_building') {
-                const buildingExists = this.buildings.some(b => b.team !== 0 && b.typeId === victoryObj.target && b.hp > 0);
-                if (!buildingExists && this.gameTime > 5) isVictory = true;
-            } else if (victoryObj.type === 'eliminate_all' || !victoryObj.type) {
-                if (enemyUnits.length === 0 && playerUnits.length > 0) isVictory = true;
-            } else if (victoryObj.type === 'explore') {
-                const explorativeUnits = playerUnits.filter(u => u.x > 2500); // Reach far right area
-                if (explorativeUnits.length > 0) isVictory = true;
-            }
+            isVictory = evaluateCondition(victoryObj, false);
         } else if (enemyUnits.length === 0 && playerUnits.length > 0) {
             isVictory = true;
         }
