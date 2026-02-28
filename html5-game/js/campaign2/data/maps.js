@@ -42,7 +42,7 @@ export const CAMPAIGN2_MAPS = {
             { type: 'mountain', x: 1000, y: 200, width: 200, height: 500 }
         ],
         objectives: {
-            victory: { type: 'explore', description: 'ค้นหาบริเวณที่ตั้งค่ายพม่า (เดินทัพข้ามแม่น้ำ)' },
+            victory: { type: 'eliminate_all', description: 'กำจัดอริราชศัตรูให้สิ้นซาก' },
             defeat: { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' }
         }
     },
@@ -87,7 +87,7 @@ export const CAMPAIGN2_MAPS = {
             { type: 'road', x: 2500, y: 0, width: 100, height: 2400 } // ถนนเสบียง
         ],
         objectives: {
-            victory: { type: 'destroy_building', target: 'c2_granary', description: 'ทำลายโรงเสบียงพม่าทั้งหมด' },
+            victory: { type: 'eliminate_all', description: 'กำจัดขบวนขนส่งเสบียงพม่าและพรรคพวกทั้งหมด' },
             defeat: { type: 'lose_hero', target: 'c2_hero_rama1', description: 'พระบาทสมเด็จพระพุทธยอดฟ้าจุฬาโลกมหาราช สวรรคต' }
         }
     },
