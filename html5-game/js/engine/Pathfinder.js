@@ -86,8 +86,11 @@ export class Pathfinder {
             return;
         }
 
-        if (obs.type === 'water' || obs.type === 'mountain') {
-            const padding = (obs.type === 'water') ? this.gridSize : 0; // 1-cell padding for water
+        if (obs.type === 'water' || obs.type === 'mountain' || (obs.type === 'forest' && obs.blockMovement)) {
+            let padding = 0;
+            if (obs.type === 'water') padding = this.gridSize;
+            if (obs.type === 'forest') padding = 80; // Match 80px padding in TerrainRenderer.js
+
             const startX = Math.floor((obs.x - padding) / this.gridSize);
             const startY = Math.floor((obs.y - padding) / this.gridSize);
             const endX = Math.ceil((obs.x + obs.width + padding) / this.gridSize);
@@ -114,7 +117,7 @@ export class Pathfinder {
                     }
                 }
             }
-        } else if (obs.type === 'forest') {
+        } else if (obs.type === 'forest' && !obs.blockMovement) {
             // Mark individual trees as obstacles based on deterministic layout
             const treeDensity = 9000; // Match TerrainRenderer
             const treeCount = Math.floor((obs.width * obs.height) / treeDensity);
