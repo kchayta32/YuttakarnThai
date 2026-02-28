@@ -97,29 +97,32 @@ export class Building {
         const item = this.productionQueue.shift();
         this.productionProgress = 0;
 
-        // Determine "front" direction based on team
-        // Team 0 (player, right side of map) → face left toward enemy (angle = π)
-        // Team 1 (enemy, left side of map) → face right toward player (angle = 0)
-        const baseAngle = this.team === 0 ? Math.PI : 0;
-        // Small random spread (±15°) so multiple units don't stack exactly
-        const spread = (Math.random() - 0.5) * (Math.PI / 6);
-        const angle = baseAngle + spread;
+        // Determine spawn angle
+        let angle;
+        if (this.game.currentMissionId === 'campaign1_mission8') {
+            // Stage 8: Fixed "Left-Up" (Northwest) spawning as requested by user
+            // Math.PI * 1.25 = 225 degrees (Left and Up)
+            angle = Math.PI * 1.25;
+        } else {
+            // For other missions, use randomized angle
+            angle = Math.random() * Math.PI * 2;
+        }
 
-        // For large buildings (Farm size=360), use larger clearance to avoid spawning inside corners
-        const spawnDist = (this.size >= 300) ? (this.size * 0.75 + 60) : (this.size / 2 + 60);
+        // Use a more aggressive clear distance for very large buildings
+        const spawnDist = (this.size >= 300) ? (this.size * 1.0 + 80) : (this.size / 2 + 70);
         const spawnX = this.x + Math.cos(angle) * spawnDist;
         const spawnY = this.y + Math.sin(angle) * spawnDist;
 
         // Spawn the unit (correct positional constructor via game helper)
         const newUnit = this.game.spawnUnit(item.type, spawnX, spawnY, this.team);
 
-        // Command unit to walk further out in front of the camp
+        // Command unit to walk further away from building immediately
+        // Increased distance to 180 to ensure they move well clear of the wall's grid footprint
         if (newUnit && typeof newUnit.moveTo === 'function') {
-            const exitDist = 150;
-            newUnit.moveTo(
-                spawnX + Math.cos(angle) * exitDist,
-                spawnY + Math.sin(angle) * exitDist
-            );
+            const exitDist = 180;
+            const targetX = spawnX + Math.cos(angle) * exitDist;
+            const targetY = spawnY + Math.sin(angle) * exitDist;
+            newUnit.moveTo(targetX, targetY);
         }
 
         // Notify game that training is complete (for auto-selection)
