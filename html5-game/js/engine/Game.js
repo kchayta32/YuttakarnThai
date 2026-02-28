@@ -566,10 +566,14 @@ export class Game {
 
         // Spawn player units
         if (map.playerUnits) {
+            // Normal spawn
+            for (const data of map.playerUnits) {
+                const unit = new Unit(this, data.type, data.x, data.y, data.team);
+                this.units.push(unit);
+            }
+
             if (carryoverData && carryoverData.units && carryoverData.units.length > 0) {
-                // If we have carryover troops, spawn them INSTEAD of the default army (except maybe heroes if we wanted, but we bring everything)
-                // Need a base location. Let's use the first mapped unit's area as a spawn zone.
-                const spawnBaseX = map.playerUnits[0].x;
+                const spawnBaseX = map.playerUnits[0].x - 100;
                 const spawnBaseY = map.playerUnits[0].y;
 
                 // Add carried over resources
@@ -578,20 +582,18 @@ export class Game {
                     this.resources.gold += carryoverData.resources.gold;
                 }
 
-                carryoverData.units.forEach((uData, i) => {
-                    // Spread them out slightly
-                    const offsetX = (i % 5) * 50;
-                    const offsetY = Math.floor(i / 5) * 50;
+                let reinforcementIndex = 0;
+                carryoverData.units.forEach((uData) => {
+                    // Spread them out slightly. Exclude Heroes to prevent duplication if map spawned one
+                    if (uData.isHero) return;
+
+                    const offsetX = (reinforcementIndex % 5) * 50;
+                    const offsetY = Math.floor(reinforcementIndex / 5) * 50;
                     const unit = new Unit(this, uData.typeId, spawnBaseX + offsetX, spawnBaseY + offsetY, 0);
                     unit.hp = uData.hp || unit.maxHp;
                     this.units.push(unit);
+                    reinforcementIndex++;
                 });
-            } else {
-                // Normal spawn
-                for (const data of map.playerUnits) {
-                    const unit = new Unit(this, data.type, data.x, data.y, data.team);
-                    this.units.push(unit);
-                }
             }
         }
 
