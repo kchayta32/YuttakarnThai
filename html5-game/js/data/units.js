@@ -497,7 +497,7 @@ export const BUILDING_TYPES = {
         size: 400, // Doubled from 200
         description: 'จุดเก็บอาวุธและเสบียงกรัง'
     },
-    BARRIER: {
+    BARRICADES: {
         id: 'barricades',
         name: 'แนวป้องกัน',
         icon: 'barricade',
