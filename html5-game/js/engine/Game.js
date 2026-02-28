@@ -1328,22 +1328,39 @@ export class Game {
 
         if (isVictory) {
             this.missionCompleted = true;
-            this.spawnTransitionGate();
+
+            const victoryType = objectives?.victory?.type;
+            if (victoryType === 'eliminate_all' || victoryType === 'kill_hero' || !victoryType) {
+                // Trigger instant victory for combat clear objectives
+                this.showResult('victory');
+            } else {
+                // Spawn gate for other missions (like explore/escape)
+                this.spawnTransitionGate();
+            }
             // Show a temporary effect/notification
             this.createCommandEffect(this.camera.x + this.camera.width / 2, this.camera.y + this.camera.height / 2, 'attack');
         }
     }
 
     spawnTransitionGate() {
-        // Spawn the transition gate randomly at the right edge if unexplored, or center screen if fully explored
-        // To be safe, spawn it slightly off-center of the camera
-        this.transitionGate = {
-            x: this.camera.x + this.camera.width / 2,
-            y: this.camera.y + this.camera.height / 2,
-            width: 100,
-            height: 100
-        };
-        // In renderTerrain, maybe we should draw it, but doing it in Game.js is fine using effects or just draw it directly.
+        const playerUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead');
+        if (playerUnits.length > 0) {
+            // Spawn right near a player unit to ensure it's reachable
+            this.transitionGate = {
+                x: playerUnits[0].x - 50,
+                y: playerUnits[0].y - 50,
+                width: 100,
+                height: 100
+            };
+        } else {
+            // Fallback
+            this.transitionGate = {
+                x: this.camera.x + this.camera.width / 2 - 50,
+                y: this.camera.y + this.camera.height / 2 - 50,
+                width: 100,
+                height: 100
+            };
+        }
     }
 
     checkGateTransition() {
