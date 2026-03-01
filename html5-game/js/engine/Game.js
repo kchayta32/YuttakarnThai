@@ -17,6 +17,7 @@ import { UNIT_TYPES } from '../data/units.js';
 import { spriteManager } from './SpriteManager.js';
 import { Projectile } from '../entities/Projectile.js';
 import { FogOfWar } from './FogOfWar.js';
+import { Campaign3 } from '../campaign3/Campaign3.js';
 
 export class Game {
     constructor() {
@@ -418,6 +419,21 @@ export class Game {
             this.updateMissionUI();
             // Show mission selection for campaign 2
             document.getElementById('mission-modal-c2')?.classList.remove('hidden');
+        } else if (campaignId === 'paknam') {
+            // Start Campaign 3
+            if (this.state === 'playing') return;
+            document.getElementById('campaign-modal')?.classList.add('hidden');
+
+            // Show loading screen, then start
+            this.showLoading().then(() => {
+                this.state = 'playing';
+                this.mainMenu?.classList.add('hidden');
+                this.gameContainer?.classList.remove('hidden');
+
+                // Initialize Campaign 3
+                this.campaign3 = new Campaign3(this);
+                this.campaign3.init();
+            });
         } else {
             // For other campaigns, setup initial map and play story then tutorial
             const firstMission = CAMPAIGN_MISSIONS[campaignId]?.[0];
