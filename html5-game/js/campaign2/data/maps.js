@@ -134,9 +134,9 @@ export const CAMPAIGN2_MAPS = {
         cameraStart: { x: 300, y: 1500 },
         terrain: { grass: '#4a7c59', forest: '#1e3f20', water: '#2980b9', road: '#a68b5b', mountain: '#6b7280' },
         playerUnits: [
-            { type: 'c2_hero_rama1', x: 300, y: 1500, team: 0 },
-            { type: 'c2_hero_prince', x: 400, y: 1600, team: 0 },
-            { type: 'c2_elephant', x: 350, y: 1550, team: 0 },
+            { type: 'c2_hero_rama1', x: 300, y: 1800, team: 0 },
+            { type: 'c2_hero_prince', x: 400, y: 1800, team: 0 },
+            { type: 'c2_elephant', x: 350, y: 1850, team: 0 },
             { type: 'c2_swordsman', x: 600, y: 1450, team: 0 },
             { type: 'c2_swordsman', x: 600, y: 1650, team: 0 },
             { type: 'c2_archer', x: 500, y: 1350, team: 0 },

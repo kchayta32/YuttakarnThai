@@ -161,6 +161,11 @@ export class UnitRenderer {
                 facesLeftByDefault = true;
             }
 
+            // Specific fix for Campaign 2, Stage 4 (Variant 9 walking backward)
+            if (this.game.currentMissionId === 'campaign2_mission4' && spriteKey === 'c2_enemy_infantry9') {
+                facesLeftByDefault = true;
+            }
+
             if (facesLeftByDefault) {
                 shouldFlip = !shouldFlip;
             }
