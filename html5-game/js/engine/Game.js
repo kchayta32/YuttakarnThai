@@ -561,16 +561,21 @@ export class Game {
         const map = this.currentMap;
         let carryoverData = null;
 
-        // Try to load carryover troops
-        try {
-            const savedData = localStorage.getItem('rts_carryover');
-            if (savedData) {
-                carryoverData = JSON.parse(savedData);
-                // Clear wait so it doesn't pile up across multiple sessions or restarts
-                localStorage.removeItem('rts_carryover');
+        if (this.selectedCampaign === 'white_elephant') {
+            // STRICTLY NO CARRYOVER for Campaign 1. Clear it if it exists.
+            localStorage.removeItem('rts_carryover');
+        } else {
+            // Try to load carryover troops
+            try {
+                const savedData = localStorage.getItem('rts_carryover');
+                if (savedData) {
+                    carryoverData = JSON.parse(savedData);
+                    // Clear wait so it doesn't pile up across multiple sessions or restarts
+                    localStorage.removeItem('rts_carryover');
+                }
+            } catch (e) {
+                console.warn('Failed to parse carryover data', e);
             }
-        } catch (e) {
-            console.warn('Failed to parse carryover data', e);
         }
 
         // Spawn player units
@@ -1117,7 +1122,9 @@ export class Game {
         }
 
         // Check population
-        const maxPop = this.resources.maxPopulation || 20;
+        const baseLimit = this.resources.maxPopulation || 20;
+        const maxPop = (this.selectedCampaign === 'white_elephant') ? 20 : baseLimit;
+
         const currentPop = this.units.filter(u => u.team === 0 && u.state !== 'dead').length;
         let queuedPop = 0;
         for (const b of this.buildings) {
@@ -1490,22 +1497,26 @@ export class Game {
                 }
             }
 
-            // Save surviving troops and resources
             const survivingUnits = this.units.filter(u => u.team === 0 && u.state !== 'dead').map(u => ({
                 typeId: u.typeId,
                 hp: u.hp,
                 isHero: u.isHero || false
             }));
 
-            const carryoverData = {
-                units: survivingUnits,
-                resources: {
-                    food: Math.floor(this.resources.food),
-                    gold: Math.floor(this.resources.gold)
-                }
-            };
+            if (this.selectedCampaign === 'white_elephant') {
+                // DO NOT save carryover for Campaign 1 to prevent exceeding pop limit
+                localStorage.removeItem('rts_carryover');
+            } else {
+                const carryoverData = {
+                    units: survivingUnits,
+                    resources: {
+                        food: Math.floor(this.resources.food),
+                        gold: Math.floor(this.resources.gold)
+                    }
+                };
 
-            localStorage.setItem('rts_carryover', JSON.stringify(carryoverData));
+                localStorage.setItem('rts_carryover', JSON.stringify(carryoverData));
+            }
 
             // Unlock and save progress
             this.unlockNextMission();
