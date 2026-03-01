@@ -171,7 +171,7 @@ export class UnitRenderer {
             // Granular fix for Campaign 2 Enemy Units (Explicit list to avoid breaking good ones)
             if (this.game.currentMissionId === 'campaign2_mission4' || this.game.currentMissionId === 'campaign2_mission3') {
                 const leftFacingBurmese = [
-                    'c2_enemy_infantry2', 'c2_enemy_infantry3',
+                    'c2_enemy_infantry2',
                     'c2_enemy_infantry5', 'c2_enemy_infantry6',
                     'c2_enemy_infantry7', 'c2_enemy_infantry8', 'c2_enemy_infantry9'
                 ];
