@@ -514,6 +514,14 @@ export const CAMPAIGN1_BUILDINGS = {
         size: 300,
         description: 'ค่ายพักชั่วคราวของกองทัพพม่าที่กำลังล่าถอย'
     },
+    BURMESE_CAMP_M7: {
+        id: 'burmese_camp',
+        name: 'ค่ายพักแรมพม่า',
+        icon: '⛺',
+        hp: 1500,
+        size: 225, // Matches Siamese barracks size as requested
+        description: 'ค่ายพักชั่วคราวของกองทัพพม่าที่กำลังล่าถอย'
+    },
 
     // === MISSION 8 SPECIFIC BUILDINGS ===
     KAMPHAENG_PHET_WALL: {

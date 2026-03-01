@@ -9,7 +9,8 @@ import { spriteManager } from '../engine/SpriteManager.js';
 export class Building {
     constructor(game, typeId, x, y, team = 0) {
         this.game = game;
-        this.id = Math.random().toString(36).substr(2, 9);
+        this.instanceId = Math.random().toString(36).substr(2, 9);
+        this.uid = this.instanceId; // Backwards compatibility if used elsewhere
 
         // Get type data
         const typeKey = typeId.toUpperCase();
@@ -37,8 +38,9 @@ export class Building {
         this.selected = false;
         this.size = typeData.size || 100; // Use size from data
 
-        // Sprite
-        let spriteKey = this.typeId;
+        // Sprite selection: prioritize specific id from data, then fall back to typeId
+        let spriteKey = this.id || this.typeId;
+
         if (this.typeId === 'barracks') {
             spriteKey = this.team === 0 ? 'wood_factory' : 'enemy_barracks';
         }
