@@ -444,8 +444,24 @@ export class StoryCutscene {
         }, 30);
     }
 
+    stop() {
+        if (this.sceneTimer) {
+            clearTimeout(this.sceneTimer);
+            this.sceneTimer = null;
+        }
+        if (this.typewriterInterval) {
+            clearInterval(this.typewriterInterval);
+            this.typewriterInterval = null;
+        }
+        this.isPlaying = false;
+        this.onComplete = null;
+    }
+
     nextScene() {
-        clearTimeout(this.sceneTimer);
+        if (this.sceneTimer) {
+            clearTimeout(this.sceneTimer);
+            this.sceneTimer = null;
+        }
 
         const storyData = STORY_DATA[this.currentCampaign];
         if (this.currentScene + 1 >= storyData.scenes.length) {
@@ -456,12 +472,22 @@ export class StoryCutscene {
     }
 
     skip() {
-        clearTimeout(this.sceneTimer);
+        if (this.sceneTimer) {
+            clearTimeout(this.sceneTimer);
+            this.sceneTimer = null;
+        }
         this.complete();
     }
 
     complete() {
+        if (!this.isPlaying) return;
         this.isPlaying = false;
+
+        if (this.sceneTimer) {
+            clearTimeout(this.sceneTimer);
+            this.sceneTimer = null;
+        }
+
         if (this.typewriterInterval) {
             clearInterval(this.typewriterInterval);
             this.typewriterInterval = null;
@@ -471,7 +497,11 @@ export class StoryCutscene {
         const overlay = document.getElementById('story-overlay');
         overlay?.classList.add('hidden');
 
-        // Call completion callback
-        this.onComplete?.();
+        // Call completion callback once and clear it
+        if (this.onComplete) {
+            const callback = this.onComplete;
+            this.onComplete = null;
+            callback();
+        }
     }
 }

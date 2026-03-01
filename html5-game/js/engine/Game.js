@@ -132,6 +132,10 @@ export class Game {
             white_elephant: {
                 unlockedMission: 1,
                 completedMissions: []
+            },
+            tha_din_daeng: {
+                unlockedMission: 1,
+                completedMissions: []
             }
         };
     }
@@ -342,6 +346,20 @@ export class Game {
             document.getElementById('campaign-modal')?.classList.remove('hidden');
         });
 
+        document.getElementById('close-mission-c2')?.addEventListener('click', () => {
+            document.getElementById('mission-modal-c2')?.classList.add('hidden');
+            document.getElementById('campaign-modal')?.classList.remove('hidden');
+        });
+
+        // Campaign 2 mission buttons
+        const missionCardsC2 = document.querySelectorAll('#mission-modal-c2 .mission-card');
+        missionCardsC2.forEach(card => {
+            card.addEventListener('click', () => {
+                const missionId = card?.dataset.mission;
+                this.selectMission(missionId);
+            });
+        });
+
         // Pause menu buttons
         document.getElementById('btn-pause')?.addEventListener('click', () => this.togglePause());
         document.getElementById('btn-menu')?.addEventListener('click', () => this.togglePause());
@@ -395,6 +413,11 @@ export class Game {
             this.updateMissionUI();
             // Show mission selection
             document.getElementById('mission-modal')?.classList.remove('hidden');
+        } else if (campaignId === 'tha_din_daeng') {
+            // Update UI to show locked/unlocked missions for campaign 2
+            this.updateMissionUI();
+            // Show mission selection for campaign 2
+            document.getElementById('mission-modal-c2')?.classList.remove('hidden');
         } else {
             // For other campaigns, setup initial map and play story then tutorial
             const firstMission = CAMPAIGN_MISSIONS[campaignId]?.[0];
@@ -405,6 +428,8 @@ export class Game {
                 this.mapHeight = this.currentMap.height;
             }
 
+            if (this.state === 'playing') return; // Prevent triggering if already in game
+
             this.storyCutscene.play(campaignId, () => {
                 document.getElementById('tutorial-modal')?.classList.remove('hidden');
             });
@@ -412,6 +437,7 @@ export class Game {
     }
 
     selectMission(missionId) {
+        if (this.state === 'playing') return; // Prevent triggering if already in game
         console.log('Selected mission:', missionId);
 
         // Check if mission is unlocked
@@ -428,8 +454,9 @@ export class Game {
             this.mapHeight = this.currentMap.height;
         }
 
-        // Hide mission modal
+        // Hide mission modals
         document.getElementById('mission-modal')?.classList.add('hidden');
+        document.getElementById('mission-modal-c2')?.classList.add('hidden');
 
         // Play story cutscene, then show tutorial
         this.storyCutscene.play(this.currentMissionId, () => {
@@ -451,6 +478,7 @@ export class Game {
 
     startGame() {
         this.state = 'playing';
+        this.storyCutscene?.stop(); // Ensure any background cutscene timers are stopped
         this.mainMenu?.classList.add('hidden');
         this.gameContainer?.classList.remove('hidden');
         this.pauseMenu?.classList.add('hidden');
