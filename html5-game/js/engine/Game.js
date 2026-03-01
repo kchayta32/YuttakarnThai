@@ -519,6 +519,20 @@ export class Game {
             objTextEl.textContent = this.currentMap.objectives.victory.description || 'กำจัดศัตรูทั้งหมด';
         }
 
+        // Update campaign name and year in header based on selected campaign
+        // Only update for campaign 2 (tha_din_daeng) - campaign 1 keeps default HTML values
+        if (this.selectedCampaign === 'tha_din_daeng' || this.currentMissionId?.startsWith('campaign2_')) {
+            const campaignNameEl = document.querySelector('.campaign-name');
+            const campaignYearEl = document.querySelector('.campaign-year');
+            
+            if (campaignNameEl) {
+                campaignNameEl.textContent = 'สงครามท่าดินแดง';
+            }
+            if (campaignYearEl) {
+                campaignYearEl.textContent = 'พ.ศ. 2329';
+            }
+        }
+
         // Reset resources
         this.resources.food = this.currentMap.startingResources?.food || 500;
         this.resources.gold = this.currentMap.startingResources?.gold || 200;
