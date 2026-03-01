@@ -161,6 +161,13 @@ export class UnitRenderer {
                 facesLeftByDefault = true;
             }
 
+            // Specific fix for Campaign 2, Stage 3 (Rama I and Elephant walking backward)
+            if (this.game.currentMissionId === 'campaign2_mission3') {
+                if (typeId === 'c2_hero_rama1' || typeId === 'c2_elephant') {
+                    facesLeftByDefault = true;
+                }
+            }
+
             // Specific fix for Campaign 2, Stage 4 (Variant 9 walking backward)
             if (this.game.currentMissionId === 'campaign2_mission4' && spriteKey === 'c2_enemy_infantry9') {
                 facesLeftByDefault = true;
