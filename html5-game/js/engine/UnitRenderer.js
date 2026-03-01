@@ -168,9 +168,11 @@ export class UnitRenderer {
                 }
             }
 
-            // Specific fix for Campaign 2, Stage 4 (Variant 9 walking backward)
-            if (this.game.currentMissionId === 'campaign2_mission4' && spriteKey === 'c2_enemy_infantry9') {
-                facesLeftByDefault = true;
+            // Specific fix for Campaign 2, Stage 4 (Variant 2, 8, and 9 walking backward)
+            if (this.game.currentMissionId === 'campaign2_mission4') {
+                if (spriteKey === 'c2_enemy_infantry9' || spriteKey === 'c2_enemy_infantry2' || spriteKey === 'c2_enemy_infantry8') {
+                    facesLeftByDefault = true;
+                }
             }
 
             if (facesLeftByDefault) {
