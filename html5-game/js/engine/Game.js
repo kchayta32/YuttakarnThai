@@ -1551,12 +1551,22 @@ export class Game {
             // Unlock and save progress
             this.unlockNextMission();
 
+            // Check if this is the final mission of the campaign
+            const isFinalMission = !this.getNextMissionId();
+
             if (title) {
-                title.textContent = 'ชัยชนะ!';
+                title.textContent = isFinalMission ? 'จบภารกิจ!' : 'ชัยชนะ!';
                 title.className = '';
             }
-            if (desc) desc.textContent = 'คุณปกป้องพระนครได้สำเร็จ! (ทหารรอด: ' + survivingUnits.length + ' กอง)';
-            if (icon) icon.textContent = '🏆';
+
+            if (isFinalMission && this.currentMissionId === 'campaign2_mission4') {
+                // Special end-of-campaign message for Campaign 2's final mission
+                if (desc) desc.textContent = 'กองทัพพม่าพ่ายแพ้แล้ว! กรมพระราชวังบวรฯ นำทัพไทยผ่านด่านเจดีย์สามองค์อย่างมีชัย — ยุทธการท่าดินแดงสิ้นสุดลงด้วยชัยชนะของสยาม! 🎖️';
+                if (icon) icon.textContent = '🎖️';
+            } else {
+                if (desc) desc.textContent = 'คุณปกป้องพระนครได้สำเร็จ! (ทหารรอด: ' + survivingUnits.length + ' กอง)';
+                if (icon) icon.textContent = '🏆';
+            }
 
             // Show next mission button if there's a next mission
             const nextMissionId = this.getNextMissionId();
