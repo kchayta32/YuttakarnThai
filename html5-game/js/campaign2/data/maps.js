@@ -189,12 +189,9 @@ export const CAMPAIGN2_MAPS = {
         objectives: {
             victory: {
                 type: 'multi',
-                description: 'ทำลายค่ายพม่าทั้ง 3 แห่งและสังหารแม่ทัพพม่า',
+                description: 'กำจัดศัตรูทั้งหมด',
                 conditions: [
-                    { type: 'destroy_all_targets', target: 'c2_camp_thadindaeng', description: 'ทำลายค่ายท่าดินแดง' },
-                    { type: 'destroy_all_targets', target: 'c2_camp_samsob', description: 'ทำลายค่ายสามสบ' },
-                    { type: 'destroy_all_targets', target: 'c2_general_hq', description: 'ทำลายศูนย์บัญชาการ' },
-                    { type: 'kill_hero', target: 'c2_burmese_general', description: 'สังหารแม่ทัพพม่า' }
+                    { type: 'eliminate_all', description: 'กำจัดศัตรูทั้งหมด' }
                 ]
             },
             defeat: {
