@@ -837,10 +837,10 @@ export const CAMPAIGN1_MAPS = {
             { type: 'barracks', x: 3700, y: 1450, team: 0 },
             { type: 'farm', x: 3800, y: 1300, team: 0 },
             { type: 'farm', x: 3800, y: 1600, team: 0 },
-            // Burmese camp (target)
-            { type: 'burmese_camp', x: 200, y: 1450, team: 1 },
-            { type: 'burmese_camp', x: 100, y: 1300, team: 1 },
-            { type: 'burmese_camp', x: 100, y: 1600, team: 1 }
+            // Burmese camp (target) - Using smaller size (225) for Mission 7
+            { type: 'burmese_camp_m7', x: 500, y: 1300, team: 1 },
+            { type: 'burmese_camp_m7', x: 250, y: 1100, team: 1 },
+            { type: 'burmese_camp_m7', x: 250, y: 1500, team: 1 }
         ],
 
         features: [
