@@ -1019,7 +1019,9 @@ export class Game {
             const unit = selected[0];
 
             // --- Profile Picture Logic ---
-            if (unit.id === 'thai_king' || unit.nameEn === 'King Maha Chakkraphat') {
+            if (unit.portrait) {
+                document.getElementById('unit-portrait').innerHTML = `<img src="${unit.portrait}" alt="${unit.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;" onerror="this.style.display='none'; this.insertAdjacentHTML('afterend', '<span>${unit.icon}</span>');">`;
+            } else if (unit.id === 'thai_king' || unit.nameEn === 'King Maha Chakkraphat') {
                 /*
                  * TEXT PROMPT FOR IMAGE GENERATION (สมเด็จพระมหาจักรพรรดิ):
                  * "A majestic close-up portrait of King Maha Chakkraphat of Ayutthaya kingdom, wearing traditional royal golden armor and crown, regal and commanding expression. Thai historical art style, high quality, digital painting, fantasy portrait."
