@@ -229,8 +229,8 @@ export const CAMPAIGN2_MAPS = {
         ],
         buildings: [
             // ฐานชั่วคราว
-            { type: 'c2_town_hall', x: 300, y: 1000, team: 0 },
-            { type: 'c2_barracks', x: 900, y: 800, team: 0 },
+            { type: 'c2_town_hall', x: 180, y: 1000, team: 0 },
+            { type: 'c2_barracks', x: 900, y: 630, team: 0 },
 
             // ด่านเจดีย์สามองค์ (ปลายแมพ)
             { type: 'c2_three_pagodas_gate', x: 3800, y: 1000, team: 0 },
@@ -247,18 +247,14 @@ export const CAMPAIGN2_MAPS = {
         ],
         objectives: {
             victory: {
-                type: 'multi',
-                description: 'นำฮีโร่ไปถึงด่านเจดีย์สามองค์ภายใน 10 นาที และกวาดล้างศัตรูที่ขวางทาง',
-                conditions: [
-                    { type: 'hero_reach_gate', target: 'c2_three_pagodas_gate', description: 'นำฮีโร่ไปถึงด่านเจดีย์สามองค์' },
-                    { type: 'eliminate_all', description: 'กำจัดทหารพม่าที่ขวางทาง' }
-                ]
+                type: 'eliminate_all',
+                description: 'กำจัดศัตรูทั้งหมดและนำทัพสู่ชัยชนะ'
             },
             defeat: {
                 type: 'multi',
                 conditions: [
                     { type: 'lose_hero', target: 'c2_hero_prince', description: 'กรมพระราชวังบวรฯ สิ้นพระชนม์' },
-                    { type: 'timeout', timeLimit: 600, description: 'หมดเวลา 10 นาที ทัพเสริมพม่ามาถึงแล้ว!' }
+                    { type: 'lose_all_units', description: 'ยูนิตทั้งหมดถูกกำจัด' }
                 ]
             }
         }
