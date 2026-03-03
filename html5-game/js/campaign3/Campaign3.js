@@ -290,6 +290,64 @@ class Campaign3 {
         this.game.canvas.parentElement.appendChild(objectivesPanel);
 
         this.updateObjectivesDisplay();
+
+        // Create command bar for purchasing defenses
+        const commandBar = document.createElement('div');
+        commandBar.id = 'campaign3-commands';
+        commandBar.style.cssText = `
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        `;
+
+        commandBar.innerHTML = `
+            <button id="btn-buy-mine" style="
+                background: #444; border: 2px solid #555; color: white; padding: 10px;
+                border-radius: 5px; cursor: pointer; font-family: 'Kanit';
+            " title="ทอง: 50">
+                💣 วางทุ่นระเบิด (50 G)
+            </button>
+        `;
+        this.game.canvas.parentElement.appendChild(commandBar);
+
+        // Event listener for buying mine
+        document.getElementById('btn-buy-mine').addEventListener('click', () => {
+            // Activate placement mode
+            if (this.resources.gold >= 50) {
+                this.placementMode = "mine";
+                if (this.game.messageLog) this.game.addSystemMessage("เลือกพื้นที่วางทุ่นระเบิดในแม่น้ำ");
+
+                // Intercept next click on canvas
+                const placingHandler = (e) => {
+                    if (this.placementMode === "mine") {
+                        const rect = this.game.canvas.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+
+                        // Convert to world coords
+                        const worldX = (x / this.game.camera.zoom) + this.game.camera.x;
+                        const worldY = (y / this.game.camera.zoom) + this.game.camera.y;
+
+                        if (this.addNavalMine(worldX, worldY)) {
+                            this.placementMode = null;
+                            this.game.canvas.removeEventListener('mousedown', placingHandler);
+                        }
+                    }
+                };
+                // Remove any existing first to avoid duplicate calls
+                this.game.canvas.removeEventListener('mousedown', this.currentPlacingHandler);
+                this.currentPlacingHandler = placingHandler;
+                this.game.canvas.addEventListener('mousedown', placingHandler);
+            } else {
+                if (this.game.messageLog) this.game.addSystemMessage("ทองไม่เพียงพอ!");
+            }
+        });
     }
 
     /**
@@ -392,7 +450,7 @@ class Campaign3 {
             const minutes = Math.floor(remaining / 60);
             const seconds = Math.floor(remaining % 60);
             this.timerDisplay.textContent =
-            `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `⏱️ ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         }
     }
 
@@ -634,6 +692,25 @@ class Campaign3 {
             this.chainBarriers.push(barrier);
             this.resources.gold -= 100;
             this.updateResourceDisplay();
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Add naval mine
+     */
+    addNavalMine(x, y) {
+        // Double check cost here just in case
+        if (this.resources.gold >= 50) {
+            const mine = this.navalCombat.createNavalMine({ x: x, y: y });
+            this.playerShips.push(mine);
+            this.resources.gold -= 50;
+            this.updateResourceDisplay();
+
+            if (this.game.messageLog) {
+                this.game.addSystemMessage("วางทุ่นระเบิดสำเร็จ");
+            }
             return true;
         }
         return false;

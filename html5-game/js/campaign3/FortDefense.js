@@ -639,6 +639,22 @@ class FortDefense {
         const battery = this.gunBatteries.find(b => b.id === batteryId);
         if (!battery || battery.hp <= 0) return;
 
+        // Disappearing Gun Mechanic:
+        // If the gun is reloading, it's hidden in the pit and takes heavily reduced damage (or no damage)
+        if (battery.state === "reloading") {
+            // 90% damage reduction when hiding in the pit
+            damage = damage * 0.1;
+
+            // Optional: Create a "ping" effect to show it hit the armor plating
+            this.createEffect({
+                type: "damageText",
+                x: battery.x,
+                y: battery.y - 10,
+                duration: 500,
+                text: "ซ่อนตัว!"
+            });
+        }
+
         battery.hp -= damage;
 
         if (battery.hp <= 0) {

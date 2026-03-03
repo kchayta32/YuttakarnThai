@@ -164,6 +164,34 @@ class NavalCombat {
     }
 
     /**
+     * Create Naval Mine
+     */
+    createNavalMine(config) {
+        return {
+            id: `mine_${Date.now()}_${Math.random()}`,
+            team: 0,
+            type: "NavalMine",
+            x: config.x || 0,
+            y: config.y || 0,
+            width: 15,
+            height: 15,
+            hp: 20, // Low HP, can be destroyed easily
+            maxHp: 20,
+            armor: 0,
+            attack: config.attack || 400, // Massive damage
+            range: 25, // Detonation radius
+            speed: 0, // Stationary
+            angle: 0,
+
+            state: "active", // active, exploding, destroyed
+            target: null,
+            lastFireTime: 0,
+
+            spriteKey: "mine" // We'll add a fallback render for this
+        };
+    }
+
+    /**
      * Create a French attacking ship
      */
     createFrenchShip(config) {
@@ -269,8 +297,82 @@ class NavalCombat {
         // 3. Simple auto-attack for player ships if not manually controlled
         this.updatePlayerShipAutoAttacks(playerShips, enemyShips);
 
-        // 4. Update effects
+        // 4. Update Naval Mines
+        this.updateNavalMines(playerShips, enemyShips);
+
+        // 5. Update effects
         this.updateEffects(deltaTime);
+    }
+
+    /**
+     * Handle Naval Mines proximity detonation
+     */
+    updateNavalMines(playerShips, enemyShips) {
+        // Find all player-owned Naval Mines
+        const mines = playerShips.filter(s => s.type === "NavalMine" && s.state === "active");
+
+        mines.forEach(mine => {
+            // Check distance to enemy ships
+            let triggered = false;
+            for (const ship of enemyShips) {
+                if (ship.hp <= 0 || ship.state === "sinking") continue;
+
+                const dist = Math.hypot(ship.x - mine.x, ship.y - mine.y);
+                if (dist <= mine.range) {
+                    // Boom!
+                    this.detonateMine(mine, enemyShips);
+                    triggered = true;
+                    break;
+                }
+            }
+
+            if (!triggered && mine.hp <= 0) {
+                // Mine was destroyed by enemy fire
+                this.detonateMine(mine, enemyShips, true);
+            }
+        });
+    }
+
+    detonateMine(mine, enemyShips, premature = false) {
+        mine.state = "destroyed"; // Remove from active play easily
+
+        // Create massive explosion effect
+        this.createEffect({
+            type: "explosion",
+            x: mine.x,
+            y: mine.y,
+            duration: 800,
+            scale: 2.5
+        });
+
+        this.createEffect({
+            type: "splash",
+            x: mine.x,
+            y: mine.y,
+            duration: 1000,
+            scale: 2.0
+        });
+
+        if (this.game.soundManager) {
+            this.game.soundManager.play("explosion_huge");
+        }
+
+        // Deal AoE damage
+        const damageRadius = premature ? mine.range * 1.5 : mine.range * 2.5;
+        const damage = premature ? mine.attack * 0.5 : mine.attack; // Half damage if shot before trigger
+
+        enemyShips.forEach(ship => {
+            if (ship.hp <= 0 || ship.state === "sinking") return;
+            const dist = Math.hypot(ship.x - mine.x, ship.y - mine.y);
+            if (dist <= damageRadius) {
+                // Damage dropoff based on distance
+                const damagePercent = 1 - (dist / damageRadius);
+                const finalDamage = Math.max(1, damage * damagePercent);
+
+                // Pretend it was hit by a projectile for simplicity of reusing handleHit
+                this.handleHit(ship, { damage: finalDamage, x: ship.x, y: ship.y, scale: 1.5 });
+            }
+        });
     }
 
     /**
@@ -399,25 +501,50 @@ class NavalCombat {
             }
 
             // If enemy projectile, also check fort collision
-            if (!hit && proj.team === 1 && this.game.campaign3 && this.game.campaign3.fort) {
-                const fort = this.game.campaign3.fort;
-                if (fort.hp > 0 &&
-                    proj.x > fort.hitbox.x && proj.x < fort.hitbox.x + fort.hitbox.width &&
-                    proj.y > fort.hitbox.y && proj.y < fort.hitbox.y + fort.hitbox.height) {
+            if (!hit && proj.team === 1 && this.game.campaign3 && this.game.campaign3.fortDefense) {
+                const fortDef = this.game.campaign3.fortDefense;
 
-                    // Hit Fort
-                    this.createEffect({
-                        type: "explosion",
-                        x: proj.x,
-                        y: proj.y,
-                        duration: 300,
-                        scale: proj.scale * 1.5
-                    });
+                // 1. Check Gun Batteries first
+                if (fortDef.gunBatteries) {
+                    for (const battery of fortDef.gunBatteries) {
+                        if (battery.hp <= 0 || battery.state === "destroyed") continue;
 
-                    if (this.game.campaign3.fortDefense) {
-                        this.game.campaign3.fortDefense.takeDamage(proj.damage);
+                        if (Math.abs(proj.x - battery.x) < battery.width / 2 &&
+                            Math.abs(proj.y - battery.y) < battery.height / 2) {
+
+                            this.createEffect({
+                                type: "explosion",
+                                x: proj.x,
+                                y: proj.y,
+                                duration: 300,
+                                scale: proj.scale * 1.5
+                            });
+
+                            fortDef.damageBattery(battery.id, proj.damage);
+                            hit = true;
+                            break;
+                        }
                     }
-                    hit = true;
+                }
+
+                // 2. Check main fort if no battery was hit
+                if (!hit && fortDef.fort && fortDef.fort.hp > 0) {
+                    const fort = fortDef.fort;
+                    if (proj.x > fort.hitbox.x && proj.x < fort.hitbox.x + fort.hitbox.width &&
+                        proj.y > fort.hitbox.y && proj.y < fort.hitbox.y + fort.hitbox.height) {
+
+                        // Hit Fort
+                        this.createEffect({
+                            type: "explosion",
+                            x: proj.x,
+                            y: proj.y,
+                            duration: 300,
+                            scale: proj.scale * 1.5
+                        });
+
+                        fortDef.takeDamage(proj.damage);
+                        hit = true;
+                    }
                 }
             }
 
@@ -624,6 +751,32 @@ class NavalCombat {
             ctx.beginPath();
             ctx.arc(0, 0, ship.width / 2, 0, Math.PI * 2);
             ctx.fill();
+        } else if (ship.type === "NavalMine") {
+            // Draw a spiky circle for a mine
+            ctx.fillStyle = "#4a4a4a"; // Dark iron color
+            ctx.beginPath();
+            ctx.arc(0, 0, ship.width / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Add spikes
+            ctx.strokeStyle = "#333";
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                ctx.beginPath();
+                ctx.moveTo(Math.cos(angle) * (ship.width / 2 - 2), Math.sin(angle) * (ship.width / 2 - 2));
+                ctx.lineTo(Math.cos(angle) * (ship.width / 2 + 3), Math.sin(angle) * (ship.width / 2 + 3));
+                ctx.stroke();
+            }
+
+            // Render a blinking red light just for visual feedback if active
+            const now = Date.now();
+            if (ship.state === "active" && Math.floor(now / 500) % 2 === 0) {
+                ctx.fillStyle = "rgba(255, 0, 0, 0.8)";
+                ctx.beginPath();
+                ctx.arc(0, 0, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
     }
 
