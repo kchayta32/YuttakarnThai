@@ -458,6 +458,9 @@ class Campaign3 {
      * Update all game systems
      */
     update(deltaTime, now) {
+        // Update weather and tide
+        this.updateWeather(deltaTime);
+
         // Update river map
         this.riverMap.update(deltaTime);
 
@@ -466,20 +469,58 @@ class Campaign3 {
             this.fortDefense.update(this.fort, deltaTime);
         }
 
-        // Update naval combat
-        this.navalCombat.update(this.playerShips, this.frenchShips, deltaTime);
+        // Pass weather data to Naval Combat for accuracy/speed affecting
+        this.navalCombat.update(this.playerShips, this.frenchShips, deltaTime, this.weather);
 
         // Update chain barriers
         this.chainBarrierSystem.update(this.chainBarriers, deltaTime);
 
         // Update French AI
-        this.frenchAI.update(deltaTime);
+        this.frenchAI.update(deltaTime, this.weather);
 
         // Spawn enemy waves
         this.checkEnemySpawns(now);
 
         // Check objectives
         this.checkObjectives();
+    }
+
+    /**
+     * Update dynamic weather and river tide
+     */
+    updateWeather(deltaTime) {
+        if (!this.weather) {
+            this.weather = {
+                state: "clear", // clear, rain, fog
+                tideCurrent: 1.0, // 1.0 normally, < 1 slows ships, > 1 speeds up
+                timer: 0,
+                nextChange: 15000 + Math.random() * 10000 // initial change in 15-25s
+            };
+        }
+
+        this.weather.timer += deltaTime;
+
+        if (this.weather.timer >= this.weather.nextChange) {
+            // Change weather
+            const roll = Math.random();
+            if (roll < 0.4) {
+                this.weather.state = "clear";
+                this.weather.tideCurrent = 1.0;
+                if (this.game.messageLog) this.game.addSystemMessage("⛅ สภาพอากาศแจ่มใส ทัศนวิสัยปกติ กระแสน้ำสงบ");
+            } else if (roll < 0.7) {
+                this.weather.state = "rain";
+                this.weather.tideCurrent = 1.5; // River flows faster out to sea (pushes French back, speeds Siamese)
+                if (this.game.messageLog) this.game.addSystemMessage("🌧️ พายุฝนกระหน่ำ! กระแสน้ำเชี่ยวแรงขึ้น ทัศนวิสัยลดลง");
+            } else {
+                this.weather.state = "fog";
+                this.weather.tideCurrent = 0.8; // Slack tide
+                if (this.game.messageLog) this.game.addSystemMessage("🌫️ หมอกลงจัด! ความแม่นยำของปืนและระยะการมองเห็นลดลง");
+            }
+
+            this.weather.timer = 0;
+            this.weather.nextChange = 20000 + Math.random() * 20000; // Next change in 20-40s
+            this.updateObjectivesDisplay(); // Force UI update if needed
+        }
     }
 
     /**
@@ -624,6 +665,32 @@ class Campaign3 {
 
         // Render effects
         this.navalCombat.renderEffects();
+
+        // Render Weather Overlays
+        if (this.weather) {
+            if (this.weather.state === "rain") {
+                // Rain overlay
+                ctx.fillStyle = "rgba(0, 50, 100, 0.2)";
+                ctx.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
+
+                // Simple rain particles overlay (fake effect moving top right to bottom left)
+                ctx.strokeStyle = "rgba(200, 200, 255, 0.4)";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                const timeStr = Date.now() / 20;
+                for (let i = 0; i < 50; i++) {
+                    const x = ((i * 123 + timeStr * 15) % (this.game.canvas.width + 200)) - 100;
+                    const y = ((i * 321 + timeStr * 30) % this.game.canvas.height);
+                    ctx.moveTo(x, y);
+                    ctx.lineTo(x - 5, y + 15);
+                }
+                ctx.stroke();
+            } else if (this.weather.state === "fog") {
+                // Fog overlay
+                ctx.fillStyle = "rgba(200, 210, 220, 0.4)";
+                ctx.fillRect(0, 0, this.game.canvas.width, this.game.canvas.height);
+            }
+        }
     }
 
     /**

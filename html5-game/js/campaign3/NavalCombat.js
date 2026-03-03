@@ -286,7 +286,9 @@ class NavalCombat {
     /**
      * Main update loop for combat
      */
-    update(playerShips, enemyShips, deltaTime) {
+    update(playerShips, enemyShips, deltaTime, weather) {
+        this.weather = weather; // Store weather state
+
         // 1. Update projecties
         this.updateProjectiles(playerShips, enemyShips, deltaTime);
 
@@ -414,6 +416,12 @@ class NavalCombat {
             // Set default fire rate if missing
             if (!ship.fireRate) ship.fireRate = 2000;
 
+            // Modify range based on weather
+            let effectiveRange = ship.range;
+            if (this.weather && this.weather.state === "fog") {
+                effectiveRange *= 0.6; // 40% range reduction
+            }
+
             // Find target if none
             if (!ship.target || ship.target.hp <= 0) {
                 let closest = null;
@@ -423,7 +431,7 @@ class NavalCombat {
                     if (enemy.hp <= 0 || enemy.state === "sinking") return;
 
                     const dist = Math.hypot(enemy.x - ship.x, enemy.y - ship.y);
-                    if (dist < minDist && dist <= ship.range) {
+                    if (dist < minDist && dist <= effectiveRange) {
                         minDist = dist;
                         closest = enemy;
                     }
@@ -436,8 +444,19 @@ class NavalCombat {
             if (ship.target && now - ship.lastFireTime > ship.fireRate) {
                 // Check distance again
                 const dist = Math.hypot(ship.target.x - ship.x, ship.target.y - ship.y);
-                if (dist <= ship.range) {
-                    const angle = Math.atan2(ship.target.y - ship.y, ship.target.x - ship.x);
+                if (dist <= effectiveRange) {
+                    let angle = Math.atan2(ship.target.y - ship.y, ship.target.x - ship.x);
+
+                    // Add inaccuracy in fog/rain
+                    if (this.weather) {
+                        let spread = 0;
+                        if (this.weather.state === "fog") spread = 0.4;
+                        else if (this.weather.state === "rain") spread = 0.1;
+
+                        if (spread > 0) {
+                            angle += (Math.random() * spread) - (spread / 2);
+                        }
+                    }
 
                     this.fireProjectile(ship, {
                         x: ship.x,

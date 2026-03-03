@@ -89,9 +89,10 @@ class FrenchAI {
      * Main update loop for AI
      * @param {Number} deltaTime - Time since last update
      */
-    update(deltaTime) {
+    update(deltaTime, weather) {
         if (!this.campaign || !this.campaign.frenchShips) return;
 
+        this.weather = weather; // Store for use in sub-functions
         const now = Date.now();
 
         // High-level Tactical Decisions (runs periodically)
@@ -278,13 +279,18 @@ class FrenchAI {
         // Apply forward movement
         // Ships move slower if they are turning sharply
         const speedMultiplier = Math.max(0.2, 1 - (Math.abs(angleDiff) / Math.PI));
-        
+
         // Base speed from ship properties
         let moveSpeed = ship.speed || 1.0;
-        
+
+        // Apply weather tide modifier (high tide slows French advancing up river)
+        if (this.weather && this.weather.tideCurrent) {
+            moveSpeed /= this.weather.tideCurrent;
+        }
+
         // Scale to game coordinates (e.g., 50 pixels per second at speed 1.0)
-        const baseSpeedPx = 50; 
-        
+        const baseSpeedPx = 50;
+
         const velocity = moveSpeed * baseSpeedPx * speedMultiplier * deltaTime;
 
         // Apply movement vector
@@ -294,13 +300,13 @@ class FrenchAI {
         // Ensure ship is always generally moving "up" the screen (negative Y) unless retreating
         if (dy > 0 && this.tactics.currentObjective !== "retreat") {
             // Restrict downward movement
-            ship.y += dy * 0.2; 
+            ship.y += dy * 0.2;
         } else {
             ship.y += dy;
         }
-        
+
         ship.x += dx;
-        
+
         // Mark as moving for animations
         ship.isMoving = (velocity > 0.1);
     }
@@ -331,28 +337,28 @@ class FrenchAI {
                 // Check if aligned (broadside firing)
                 const targetAngle = Math.atan2(ship.target.y - ship.y, ship.target.x - ship.x);
                 let angleDiff = targetAngle - ship.angle;
-                
+
                 // Normalize
                 while (angleDiff < -Math.PI) angleDiff += Math.PI * 2;
                 while (angleDiff > Math.PI) angleDiff -= Math.PI * 2;
-                
+
                 // Torpedo boats fire forward, big ships fire broadsides (approx 90 degrees)
                 let canFire = false;
                 let fireAngle = ship.angle;
-                
+
                 if (ship.type === "TorpedoBoat") {
                     // Forward arc
                     canFire = Math.abs(angleDiff) < Math.PI / 4;
                     fireAngle = targetAngle; // Aim directly
                 } else {
                     // Broadside arc
-                    const isPort = Math.abs(angleDiff - Math.PI/2) < Math.PI/4;
-                    const isStarboard = Math.abs(angleDiff + Math.PI/2) < Math.PI/4;
-                    
+                    const isPort = Math.abs(angleDiff - Math.PI / 2) < Math.PI / 4;
+                    const isStarboard = Math.abs(angleDiff + Math.PI / 2) < Math.PI / 4;
+
                     if (isPort || isStarboard) {
                         canFire = true;
                         // Determine which broadside
-                        fireAngle = isPort ? ship.angle + Math.PI/2 : ship.angle - Math.PI/2;
+                        fireAngle = isPort ? ship.angle + Math.PI / 2 : ship.angle - Math.PI / 2;
                     }
                 }
 
@@ -369,15 +375,20 @@ class FrenchAI {
      */
     isValidTarget(target, attacker) {
         if (!target) return false;
-        
+
         // Target is dead
         if (target.hp !== undefined && target.hp <= 0) return false;
         if (target.state === "destroyed" || target.state === "sinking") return false;
-        
+
         // Out of range
+        let effectiveRange = attacker.range;
+        if (this.weather && this.weather.state === "fog") {
+            effectiveRange *= 0.6; // 40% reduced visibility/range
+        }
+
         const dist = Math.hypot(target.x - attacker.x, target.y - attacker.y);
-        if (dist > attacker.range) return false;
-        
+        if (dist > effectiveRange) return false;
+
         return true;
     }
 
@@ -445,7 +456,15 @@ class FrenchAI {
         if (!this.campaign.navalCombat) return;
 
         // Apply some inaccuracy based on difficulty
-        const spread = (1.5 - this.aggressiveness) * 0.1; // radians
+        let spread = (1.5 - this.aggressiveness) * 0.1; // radians
+
+        // Additional inaccuracy in fog/rain
+        if (this.weather && this.weather.state === "fog") {
+            spread += 0.2; // Wildly inaccurate in fog
+        } else if (this.weather && this.weather.state === "rain") {
+            spread += 0.05; // Slightly less accurate in rain
+        }
+
         const finalAngle = angle + (Math.random() * spread * 2 - spread);
 
         // Determine projectile type
@@ -485,44 +504,44 @@ class FrenchAI {
         if (Math.random() > 0.1) return;
 
         const incomingProj = this.campaign.fortDefense.projectiles || [];
-        
+
         for (const proj of incomingProj) {
             if (!proj.active) continue;
 
             const dist = Math.hypot(proj.x - ship.x, proj.y - ship.y);
-            
+
             // If projectile is close
             if (dist < 150) {
                 // Calculate time to impact
                 // Very simplified: assuming it's heading towards us
-                
+
                 // Vector to ship
                 const dx = ship.x - proj.x;
                 const dy = ship.y - proj.y;
-                
+
                 // Projectile velocity vector
                 const pvx = Math.cos(proj.angle);
                 const pvy = Math.sin(proj.angle);
-                
+
                 // Dot product to see if moving towards us
                 const dot = (dx * pvx + dy * pvy);
-                
+
                 if (dot > 0 && Math.random() < this.evasionSkill) {
                     // Evade! Turn perpendicular to incoming fire
-                    const evadeAngle = proj.angle + (Math.random() > 0.5 ? Math.PI/2 : -Math.PI/2);
-                    
+                    const evadeAngle = proj.angle + (Math.random() > 0.5 ? Math.PI / 2 : -Math.PI / 2);
+
                     // Force turn
                     ship.angle = evadeAngle;
-                    
+
                     // Small burst of speed
                     ship.x += Math.cos(evadeAngle) * 50 * deltaTime;
                     ship.y += Math.sin(evadeAngle) * 50 * deltaTime;
-                    
+
                     // Create wake effect showing sudden turn
                     if (this.campaign.navalCombat) {
                         this.campaign.navalCombat.createWakeEffect(ship);
                     }
-                    
+
                     break; // Only evade one thing at a time
                 }
             }
@@ -541,7 +560,7 @@ class FrenchAI {
         if (collisionData.collision) {
             // Found a barrier
             const barrier = collisionData.barrier;
-            
+
             // Focus fire on barrier segments if blocked
             if (this.aggressiveness > 0.5 && !ship.target) {
                 // Determine which segment is closest and attack it
