@@ -177,12 +177,84 @@ export class InputHandler {
     }
 
     onLeftClick() {
+        if (this.game.state === 'building_placement') {
+            this.placeBuilding(this.mouse.worldX, this.mouse.worldY);
+            return;
+        }
+
         // Start selection box
         this.selectionBox.active = true;
         this.selectionBox.startX = this.mouse.x;
         this.selectionBox.startY = this.mouse.y;
         this.selectionBox.endX = this.mouse.x;
         this.selectionBox.endY = this.mouse.y;
+    }
+
+    placeBuilding(x, y) {
+        // Find selected builder
+        const builder = this.game.getSelectedUnits().find(u => u.typeId === 'c2_worker' || u.type === 'worker');
+        if (!builder) {
+            this.game.state = 'playing';
+            return;
+        }
+
+        // Get building info 
+        const buildingType = this.game.buildingToPlace;
+        const unitData = this.game.UNIT_TYPES[buildingType.toUpperCase()];
+
+        if (!unitData) {
+            this.game.state = 'playing';
+            return;
+        }
+
+        // Snap to grid or just place
+        const snapX = Math.round(x / 50) * 50;
+        const snapY = Math.round(y / 50) * 50;
+        const size = unitData.size || 100;
+
+        // Collision check
+        let isOverlapping = false;
+        for (let b of this.game.buildings) {
+            if (Math.hypot(b.x - snapX, b.y - snapY) < (b.size + size) / 2) {
+                isOverlapping = true;
+                break;
+            }
+        }
+
+        if (isOverlapping) {
+            if (this.game.messageLog) {
+                this.game.addSystemMessage("ไม่สามารถสร้างทับสิ่งก่อสร้างอื่นได้!");
+            }
+            return; // Don't reset state so they can try again
+        }
+
+        // Check if affording
+        const cost = unitData.cost || { food: 0, gold: 0 };
+        if (this.game.resources.food >= cost.food && this.game.resources.gold >= cost.gold) {
+            this.game.resources.food -= cost.food;
+            this.game.resources.gold -= cost.gold;
+
+            // Command builder to move there and build (instant build for now but starts weak)
+            const building = new this.game.Building(snapX, snapY, buildingType, 0); // team 0
+
+            // Starts building from 10% HP
+            building.hp = Math.max(1, Math.floor((building.maxHp || unitData.hp) * 0.1));
+
+            this.game.buildings.push(building);
+            this.game.updateHUD();
+
+            if (this.game.messageLog) {
+                this.game.addSystemMessage(`สร้าง ${unitData.name} สำเร็จ`);
+            }
+        } else {
+            if (this.game.messageLog) {
+                this.game.addSystemMessage("ทรัพยากรไม่เพียงพอ!");
+            }
+        }
+
+        // Reset state
+        this.game.state = 'playing';
+        this.game.buildingToPlace = null;
     }
 
     onLeftRelease() {
@@ -260,6 +332,13 @@ export class InputHandler {
     }
 
     onRightClick() {
+        if (this.game.state === 'building_placement') {
+            this.game.state = 'playing';
+            this.game.buildingToPlace = null;
+            if (this.game.messageLog) this.game.addSystemMessage("ยกเลิกการสร้าง");
+            return;
+        }
+
         const selectedUnits = this.game.getSelectedUnits();
         if (selectedUnits.length === 0) return;
 

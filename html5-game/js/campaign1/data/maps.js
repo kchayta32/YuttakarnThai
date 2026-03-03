@@ -1,6 +1,6 @@
 // ===================================
 // RTS: ยุทธการไทย - Map Data v2
-// Campaign: สงครามช้างเผือก 1547
+// Campaign: สงครามพระเจ้าตะเบ็งชเวตี้ 1548
 // Complete map with obstacles
 // ===================================
 
@@ -158,7 +158,7 @@ export const CAMPAIGN1_MAPS = {
     },
 
     // =====================================================
-    // MISSION 2: ศึกท่าวาย (Battle of Tavoy) - January 1547
+    // MISSION 2: ศึกท่าวาย (Battle of Tavoy) - January 1548
     // Siamese forces capture the frontier town of Tavoy
     // =====================================================
     campaign1_mission2: {
@@ -166,7 +166,7 @@ export const CAMPAIGN1_MAPS = {
         name: 'ศึกท่าวาย',
         nameEn: 'Battle of Tavoy',
         description: 'นำกองทัพสยามยึดเมืองท่าวายจากพม่า!',
-        date: 'มกราคม พ.ศ. 2090',
+        date: 'มกราคม พ.ศ. 2091',
         width: 3200,
         height: 2400,
         fogOfWar: true,

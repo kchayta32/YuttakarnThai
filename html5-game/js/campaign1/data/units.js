@@ -274,6 +274,7 @@ export const CAMPAIGN1_UNITS = {
         speed: 1.5,
         attackSpeed: 2.0,
         visionRange: 16,
+        isHero: true,
         description: 'กษัตริย์แห่งสยาม',
         aoe: true
     },
@@ -282,6 +283,7 @@ export const CAMPAIGN1_UNITS = {
         name: 'สมเด็จพระสุริโยทัย',
         nameEn: 'Queen Suriyothai',
         icon: '👸',
+        portrait: 'images/units/mission6/queen_suriyothai.png',
         color: '#e67e22',
         hp: 1200,
         maxHp: 1200,
@@ -291,6 +293,7 @@ export const CAMPAIGN1_UNITS = {
         speed: 1.8,
         attackSpeed: 1.8,
         visionRange: 16,
+        isHero: true,
         description: 'วีรสตรีผู้ปกป้องพระสวามี',
         aoe: true
     },
@@ -309,6 +312,7 @@ export const CAMPAIGN1_UNITS = {
         attackSpeed: 2.0,
         visionRange: 16,
         isEnemy: true,
+        isHero: true,
         description: 'จอมทัพพม่าผู้เกรียงไกร',
         aoe: true
     },

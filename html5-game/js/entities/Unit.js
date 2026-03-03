@@ -359,8 +359,29 @@ export class Unit {
 
         // Attack if cooldown ready
         if (this.attackCooldown <= 0) {
+            // Apply wind-up delay logic for firearms
+            if (this.typeId.includes('musketeer') || this.typeId.includes('artillery')) {
+                if (!this.isWindingUp) {
+                    this.isWindingUp = true;
+                    this.windUpTimer = this.typeId.includes('artillery') ? 1.0 : 0.5; // 1s for cannon, 0.5s for musket
+                    // Trigger visual cue early
+                    if (this.game.unitRenderer) {
+                        this.game.unitRenderer.triggerAttackAnim(this);
+                    }
+                    return;
+                }
+            }
+
+            if (this.isWindingUp) {
+                this.windUpTimer -= deltaTime;
+                if (this.windUpTimer > 0) return; // Still winding up
+                this.isWindingUp = false; // Ready to fire
+            }
+
             if (this.range > 1.5) {
-                this.fireProjectile(this.target);
+                // If it's artillery, fire a cannonball, else fire an arrow/bullet
+                const projectileType = this.typeId.includes('artillery') ? 'cannonball' : 'arrow';
+                this.fireProjectile(this.target, projectileType);
             } else {
                 this.dealDamage(this.target);
             }
@@ -368,7 +389,7 @@ export class Unit {
         }
     }
 
-    fireProjectile(target) {
+    fireProjectile(target, type = 'arrow') {
         // Calculate damage before firing
         let damage = this.calculateDamage(target);
 
@@ -398,7 +419,7 @@ export class Unit {
         if (this.bonusVs && target.typeId) {
             for (const bonus of this.bonusVs) {
                 if (target.typeId.includes(bonus)) {
-                    damage *= 1.5;
+                    damage *= 2.0;
                     break;
                 }
             }

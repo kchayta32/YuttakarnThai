@@ -115,6 +115,7 @@ export class SpriteManager {
             'c2_hero_rama1': 'images/campain 2/ThaiForces/ตัวละครฮีโร่-รัชกาลที่1(Hero1-RamaI).png',
             'c2_swordsman': 'images/campain 2/ThaiForces/พลดาบ-พลโล่(ThaiForce-Swordsman-Shieldman).png',
             'c2_archer': 'images/campain 2/ThaiForces/พลธนู(ThaiForce-Archer).png',
+            'siamese_artillery': 'images/units/siamese_artillery.png',
 
             // Campaign 2 Burmese Units
             'c2_enemy_musketeer': 'images/campain 2/BurmeseForces/พลปืนไฟ(BurmeseForce-Musketeer).png',
@@ -221,7 +222,10 @@ export class SpriteManager {
             if (id.includes('c2_hero_prince')) return 'c2_hero_prince';
             if (id.includes('c2_swordsman')) return 'c2_swordsman';
             if (id.includes('c2_archer')) return 'c2_archer';
+            if (id.includes('c2_musketeer')) return 'portuguese_merc'; // Reusing Portuguese merc sprite for now
+            if (id.includes('c2_artillery')) return 'siamese_artillery';
             if (id.includes('c2_elephant')) return 'c2_elephant';
+            if (id.includes('c2_worker')) return 'worker';
             if (id.includes('thai_king')) return 'thai_king'; // New Hero
             if (id.includes('queen_suriyothai')) return 'queen_suriyothai'; // New Hero
             if (id.includes('portuguese_merc')) return 'portuguese_merc';

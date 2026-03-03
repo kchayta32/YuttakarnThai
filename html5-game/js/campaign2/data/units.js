@@ -1,5 +1,24 @@
 export const CAMPAIGN2_UNITS = {
     // === SIAM (Player) Units Campaign 2 ===
+    C2_WORKER: {
+        id: 'c2_worker',
+        name: 'ช่างก่อสร้าง',
+        nameEn: 'Builder',
+        icon: '🔨',
+        color: '#f39c12',
+        hp: 50,
+        maxHp: 50,
+        attack: 2,
+        defense: 1,
+        range: 1,
+        speed: 1.5,
+        attackSpeed: 2.0,
+        visionRange: 10,
+        cost: { food: 50, gold: 0 },
+        buildTime: 5,
+        type: 'worker', // Important for logic
+        description: 'หน่วยงานช่าง มีความสามารถสร้างสิ่งก่อสร้าง เช่น ค่ายขัดตาทัพ'
+    },
     C2_SWORDSMAN: {
         id: 'c2_swordsman',
         name: 'พลดาบ-พลโล่',
@@ -35,6 +54,44 @@ export const CAMPAIGN2_UNITS = {
         cost: { food: 30, gold: 20 },
         buildTime: 7,
         description: 'ทหารยิงไกล เหมาะกับการตั้งรับ'
+    },
+    C2_MUSKETEER: {
+        id: 'c2_musketeer',
+        name: 'พลปืนไฟสยาม',
+        nameEn: 'Siamese Musketeer',
+        icon: '🔫',
+        color: '#2980b9',
+        hp: 80,
+        maxHp: 80,
+        attack: 35, // High damage like Burmese counterpart
+        defense: 2,
+        range: 7,
+        speed: 1.9,
+        attackSpeed: 3.0, // Slow reload
+        visionRange: 14,
+        cost: { food: 40, gold: 40 },
+        buildTime: 12,
+        description: 'ทหารปืนไฟ พลังทำลายล้างสูงแต่บรรจุกระสุนช้า แม่นยำกว่าของศัตรู'
+    },
+    C2_ARTILLERY: {
+        id: 'c2_artillery',
+        name: 'ปืนใหญ่จ่ารงค์',
+        nameEn: 'Artillery',
+        icon: '💣',
+        color: '#34495e',
+        hp: 150,
+        maxHp: 150,
+        attack: 80,
+        defense: 5,
+        range: 12,
+        speed: 0.8,
+        attackSpeed: 5.0, // Very slow reload
+        visionRange: 16,
+        cost: { food: 80, gold: 150 },
+        buildTime: 25,
+        description: 'ปืนใหญ่ทำลายป้อมค่ายระยะไกล เคลื่อนที่ช้ามาก',
+        aoe: true,
+        bonusVs: ['building']
     },
     C2_ELEPHANT: {
         id: 'c2_elephant',
@@ -192,7 +249,7 @@ export const CAMPAIGN2_BUILDINGS = {
         name: 'ค่ายทหาร',
         icon: '🏛️',
         hp: 1200,
-        builds: ['c2_swordsman', 'c2_archer'],
+        builds: ['c2_worker', 'c2_swordsman', 'c2_archer', 'c2_musketeer', 'c2_artillery'],
         cost: { food: 0, gold: 150 },
         size: 400
     },
@@ -228,6 +285,18 @@ export const CAMPAIGN2_BUILDINGS = {
         size: 240,
         visionRange: 16,
         description: 'ใช้สำหรับสอดแนมและป้องกันค่ายเบื้องต้น'
+    },
+    C2_FORTIFICATION: {
+        id: 'c2_fortification',
+        name: 'ค่ายขัดตาทัพ (ป้อมไม้ซุง)',
+        icon: '🧱',
+        hp: 2500, // Very durable
+        attack: 0,
+        range: 0,
+        cost: { food: 100, gold: 50 },
+        size: 200,
+        visionRange: 8,
+        description: 'ป้อมไม้ซุง ป้องกันฐานที่มั่นได้อย่างแข็งแกร่ง ไม่มีพลังโจมตีแต่ทนทานสูงมาก'
     },
 
     // Enemy buildings

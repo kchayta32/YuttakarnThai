@@ -58,16 +58,57 @@ export class Projectile {
     onHit() {
         this.isDead = true;
 
-        // Check if target is still alive and nearby
-        if (this.target && this.target.state !== 'dead') {
-            const dist = Math.sqrt(
-                Math.pow(this.target.x - this.x, 2) +
-                Math.pow(this.target.y - this.y, 2)
-            );
+        // Visual effects on hit
+        if (this.type === 'cannonball') {
+            // Apply AOE damage
+            const aoeRadius = 80;
+            // Iterate over all units and buildings to deal AOE damage
+            const targets = [...this.game.units, ...this.game.buildings];
 
-            if (dist < this.hitRadius + this.target.size / 2) {
-                this.target.takeDamage(this.damage, this.attacker);
-                this.game.createDamageNumber(this.target.x, this.target.y, Math.round(this.damage));
+            for (const t of targets) {
+                if (t === this.attacker || t.team === this.attacker.team || t.state === 'dead') continue;
+
+                const dist = Math.sqrt(
+                    Math.pow(t.x - this.x, 2) +
+                    Math.pow(t.y - this.y, 2)
+                );
+
+                if (dist < aoeRadius + (t.size ? t.size / 2 : 20)) {
+                    // Reduce damage based on distance from epicenter
+                    const damageDropoff = Math.max(0.5, 1 - (dist / aoeRadius));
+                    const blastDamage = this.damage * damageDropoff;
+
+                    t.takeDamage(blastDamage, this.attacker);
+                    this.game.createDamageNumber(t.x, t.y, Math.round(blastDamage));
+                }
+            }
+
+            // Cannon impact visual
+            if (this.game.effects) {
+                this.game.effects.push({
+                    x: this.x,
+                    y: this.y,
+                    type: 'explosion',
+                    duration: 0.5,
+                    radius: aoeRadius,
+                    maxRadius: aoeRadius,
+                    life: 0.5
+                });
+            }
+        }
+        else {
+            // Standard single target hit (Arrow, Musket bullet)
+            // Check if target is still alive and nearby
+            if (this.target && this.target.state !== 'dead') {
+                const dist = Math.sqrt(
+                    Math.pow(this.target.x - this.x, 2) +
+                    Math.pow(this.target.y - this.y, 2)
+                );
+
+                if (dist < this.hitRadius + (this.target.size || 20) / 2) {
+                    this.target.takeDamage(this.damage, this.attacker);
+                    this.game.createDamageNumber(this.target.x, this.target.y, Math.round(this.damage));
+                }
             }
         }
     }

@@ -524,7 +524,7 @@ export class Game {
         if (this.selectedCampaign === 'tha_din_daeng' || this.currentMissionId?.startsWith('campaign2_')) {
             const campaignNameEl = document.querySelector('.campaign-name');
             const campaignYearEl = document.querySelector('.campaign-year');
-            
+
             if (campaignNameEl) {
                 campaignNameEl.textContent = 'สงครามท่าดินแดง';
             }
@@ -729,6 +729,28 @@ export class Game {
         for (const unit of this.units) {
             unit.update(deltaTime);
 
+            // Terrain Effects: Forest slows down Cavalry and Elephants
+            if (unit.typeId.includes('cavalry') || unit.typeId.includes('elephant')) {
+                let inForest = false;
+                if (this.currentMap && this.currentMap.features) {
+                    for (const feature of this.currentMap.features) {
+                        if (feature.type === 'forest' &&
+                            unit.x >= feature.x && unit.x <= feature.x + feature.width &&
+                            unit.y >= feature.y && unit.y <= feature.y + feature.height) {
+                            inForest = true;
+                            break;
+                        }
+                    }
+                }
+                if (inForest) {
+                    // Penalize speed by 50% in forest
+                    unit.currentSpeed = unit.typeData ? unit.typeData.speed * 0.5 : unit.currentSpeed * 0.5;
+                } else {
+                    // Restore normal speed
+                    unit.currentSpeed = unit.typeData ? unit.typeData.speed : unit.currentSpeed;
+                }
+            }
+
             // Custom logic for Campaign 2 Mission 2: Supply Carts
             if (this.currentMissionId === 'campaign2_mission2' && unit.typeId === 'c2_supply_cart' && unit.team !== 0) {
                 // Force AI carts to move down the road to escape
@@ -747,6 +769,28 @@ export class Game {
                 else if (unit.hp <= 0 && unit.state === 'dead' && !unit.countedAsDead && !unit.hasEscaped) {
                     unit.countedAsDead = true;
                     this.stats.deadSupplyCarts++;
+
+                    // --- NEW MECHANIC: Supply Line Rewards ---
+                    // Grant resources to player
+                    this.resources.food += 100;
+                    this.resources.gold += 50;
+
+                    // Show floating text effect
+                    if (this.effects) {
+                        this.createCommandEffect(unit.x, unit.y, 'gather'); // Basic visual pulse
+                        // Add floaty text for resources
+                        const textEffect = {
+                            x: unit.x,
+                            y: unit.y,
+                            type: 'text',
+                            text: '+100🍖 +50🪙',
+                            color: '#f1c40f',
+                            life: 2.0,
+                            duration: 2.0
+                        };
+                        this.effects.push(textEffect);
+                    }
+                    // ------------------------------------------
                 }
             }
         }
@@ -867,6 +911,40 @@ export class Game {
         // Debug: render pathfinding grid
         if (this.settings.debugMode && this.pathfinder) {
             this.pathfinder.renderDebug(ctx, this.camera);
+        }
+
+        // Draw building placement preview
+        if (this.state === 'building_placement' && this.buildingToPlace && this.input) {
+            const unitData = UNIT_TYPES[this.buildingToPlace.toUpperCase()];
+            if (unitData) {
+                const size = unitData.size || 100;
+                const snapX = Math.round(this.input.mouse.worldX / 50) * 50;
+                const snapY = Math.round(this.input.mouse.worldY / 50) * 50;
+
+                const screenX = (snapX - size / 2 - this.camera.x) * this.camera.zoom;
+                const screenY = (snapY - size / 2 - this.camera.y) * this.camera.zoom;
+                const drawSize = size * this.camera.zoom;
+
+                ctx.fillStyle = 'rgba(46, 204, 113, 0.4)'; // Green semi-transparent
+                ctx.strokeStyle = '#2ecc71';
+
+                // Simplified collision check preview
+                for (let b of this.buildings) {
+                    if (Math.hypot(b.x - snapX, b.y - snapY) < (b.size + size) / 2) {
+                        ctx.fillStyle = 'rgba(231, 76, 60, 0.4)'; // Red if overlap
+                        ctx.strokeStyle = '#e74c3c';
+                        break;
+                    }
+                }
+
+                ctx.fillRect(screenX, screenY, drawSize, drawSize);
+                ctx.strokeRect(screenX, screenY, drawSize, drawSize);
+
+                ctx.fillStyle = 'white';
+                ctx.font = `${14 * this.camera.zoom}px Kanit`;
+                ctx.textAlign = 'center';
+                ctx.fillText(unitData.icon, screenX + drawSize / 2, screenY + drawSize / 2 + 5 * this.camera.zoom);
+            }
         }
 
         ctx.restore();
@@ -1073,7 +1151,47 @@ export class Game {
             document.getElementById('unit-hp-bar').style.width = `${(unit.hp / unit.maxHp) * 100}%`;
             document.getElementById('unit-atk').textContent = unit.attack;
             document.getElementById('unit-def').textContent = unit.defense;
-            document.getElementById('selected-count').textContent = '';
+            // --- Custom Builder Logic for C2_WORKER ---
+            const commandGrid = document.getElementById('command-grid');
+            if (commandGrid) {
+                // Reset to default movement commands
+                commandGrid.innerHTML = `
+                <button class="cmd-btn" data-cmd="move" title="เคลื่อนที่ (M)">🚶</button>
+                <button class="cmd-btn" data-cmd="attack" title="โจมตี (A)">⚔️</button>
+                <button class="cmd-btn" data-cmd="stop" title="หยุด (S)">✋</button>
+                <button class="cmd-btn" data-cmd="hold" title="ยืนตำแหน่ง (H)">🛡️</button>
+            `;
+
+                // Re-attach event listeners for default commands
+                commandGrid.querySelectorAll('.cmd-btn').forEach(btn => {
+                    btn.onclick = () => this.executeCommand(btn.dataset.cmd);
+                });
+
+                if (unit.typeId === 'c2_worker' || unit.type === 'worker') {
+                    const buildBtn = document.createElement('button');
+                    buildBtn.className = 'cmd-btn build-btn';
+                    buildBtn.title = 'สร้างค่ายขัดตาทัพ (100🍖 50🪙)';
+                    buildBtn.innerHTML = '🧱';
+                    buildBtn.onclick = () => {
+                        if (this.resources.food >= 100 && this.resources.gold >= 50) {
+                            this.state = 'building_placement';
+                            this.buildingToPlace = 'c2_fortification';
+                            // Provide UI feedback
+                            buildBtn.style.backgroundColor = '#2ecc71';
+                            setTimeout(() => buildBtn.style.backgroundColor = '', 200);
+                            if (this.messageLog) this.addSystemMessage("เลือกพื้นที่สร้างค่ายขัดตาทัพ");
+                        } else {
+                            // Flash red
+                            buildBtn.style.backgroundColor = 'red';
+                            setTimeout(() => buildBtn.style.backgroundColor = '', 200);
+                            if (this.messageLog) this.addSystemMessage("ทรัพยากรไม่เพียงพอ!");
+                        }
+                    };
+                    commandGrid.appendChild(buildBtn);
+                }
+            }
+            // ------------------------------------------
+
         } else {
             document.getElementById('unit-portrait').innerHTML = `<span>👥</span>`;
             document.getElementById('unit-name').textContent = 'หลายหน่วย';
@@ -1085,6 +1203,21 @@ export class Game {
             document.getElementById('unit-atk').textContent = '-';
             document.getElementById('unit-def').textContent = '-';
             document.getElementById('selected-count').textContent = `เลือก ${selected.length} หน่วย`;
+
+            // --- Reset command grid for multi-select ---
+            const commandGrid = document.getElementById('command-grid');
+            if (commandGrid) {
+                commandGrid.innerHTML = `
+                <button class="cmd-btn" data-cmd="move" title="เคลื่อนที่ (M)">🚶</button>
+                <button class="cmd-btn" data-cmd="attack" title="โจมตี (A)">⚔️</button>
+                <button class="cmd-btn" data-cmd="stop" title="หยุด (S)">✋</button>
+                <button class="cmd-btn" data-cmd="hold" title="ยืนตำแหน่ง (H)">🛡️</button>
+            `;
+                commandGrid.querySelectorAll('.cmd-btn').forEach(btn => {
+                    btn.onclick = () => this.executeCommand(btn.dataset.cmd);
+                });
+            }
+            // ------------------------------------------
         }
     }
 
