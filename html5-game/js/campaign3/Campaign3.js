@@ -36,6 +36,10 @@ class Campaign3 {
             protectBangkok: { completed: true, description: "ป้องกันกรุงเทพฯ" }
         };
 
+        // Secondary objectives
+        this.activeSecondary = null;
+        this.nextSecondaryCheck = 45000 + Math.random() * 30000; // First check in 45-75s
+
         // Game Objects
         this.fort = null;
         this.playerShips = [];
@@ -236,6 +240,13 @@ class Campaign3 {
     setupUI() {
         console.log("🎨 Setting up UI...");
 
+        // Hint about repair feature
+        setTimeout(() => {
+            if (this.game && this.game.messageLog) {
+                this.game.addSystemMessage("💡 เคล็ดลับ: คุณสามารถลากคลุมทหารราบ แล้วคลิกขวาที่ป้อมหรือปืนเสือหมอบเพื่อสั่งซ่อมแซมได้!");
+            }
+        }, 10000); // 10 seconds into the campaign
+
         // Create timer display
         this.timerDisplay = document.createElement('div');
         this.timerDisplay.id = 'campaign3-timer';
@@ -370,9 +381,17 @@ class Campaign3 {
         if (objectivesList) {
             let html = '';
             for (const [key, obj] of Object.entries(this.objectives)) {
-                const icon = obj.completed ? '✅' : '';
+                const icon = obj.completed ? '✅' : '⬜';
                 html += `<div>${icon} ${obj.description}</div>`;
             }
+
+            // Render active secondary objective
+            if (this.activeSecondary) {
+                html += `<div style="margin-top: 10px; color: #FFD700; border-top: 1px dotted #FFD700; padding-top: 5px;">
+                    ⭐ ภารกิจสำรอง: ${this.activeSecondary.description}
+                </div>`;
+            }
+
             objectivesList.innerHTML = html;
         }
     }
@@ -483,6 +502,9 @@ class Campaign3 {
 
         // Check objectives
         this.checkObjectives();
+
+        // Secondary objectives loop
+        this.updateSecondaryObjectives(deltaTime);
     }
 
     /**
@@ -598,6 +620,124 @@ class Campaign3 {
         const cometeDestroyed = !this.frenchShips.some(s => s.type === "Comète");
         if (cometeDestroyed && this.currentTime > 120) {
             this.objectives.destroyComete.completed = true;
+        }
+
+        this.updateObjectivesDisplay();
+    }
+
+    /**
+     * Update dynamic secondary objectives
+     */
+    updateSecondaryObjectives(deltaTime) {
+        if (!this.activeSecondary) {
+            // Check for new spawn
+            this.nextSecondaryCheck -= deltaTime;
+            if (this.nextSecondaryCheck <= 0) {
+                this.spawnSecondaryObjective();
+                this.nextSecondaryCheck = 60000 + Math.random() * 60000; // Next check in 1-2 minutes after this one finishes
+            }
+        } else {
+            // Handle active objective
+            const obj = this.activeSecondary;
+
+            if (obj.type === "rescue_fishing") {
+                // Win if all fishing boats cross the bottom of the map successfully
+                // Lose if all fishing boats are destroyed
+                let surviving = 0;
+                let escaped = 0;
+
+                obj.units.forEach(boat => {
+                    if (boat.hp > 0 && boat.state !== "sinking") {
+                        if (boat.y > this.game.canvas.height - 50) {
+                            escaped++;
+                        } else {
+                            surviving++;
+                        }
+                    }
+                });
+
+                if (escaped > 0 && surviving === 0) {
+                    // Success!
+                    if (this.game.messageLog) this.game.addSystemMessage("✅ ภารกิจสำเร็จ: เรือประมงหนีรอดปลอดภัย! ได้รับ 200 เสบียง");
+                    this.resources.supplies += 200;
+                    this.updateResourceDisplay();
+                    this.activeSecondary = null;
+                    this.updateObjectivesDisplay();
+                    obj.units.forEach(u => u.state = "escaped"); // Hide them
+                } else if (surviving === 0 && escaped === 0) {
+                    // Failed!
+                    if (this.game.messageLog) this.game.addSystemMessage("❌ ภารกิจล้มเหลว: กองเรือประมงถูกทำลาย");
+                    this.activeSecondary = null;
+                    this.updateObjectivesDisplay();
+                } else {
+                    // Still ongoing, steer them down
+                    obj.units.forEach(boat => {
+                        if (boat.hp > 0 && boat.state !== "sinking") {
+                            boat.y += boat.speed * (deltaTime / 1000) * 60; // Simple downward movement
+                        }
+                    });
+                }
+            } else if (obj.type === "intercept_supply") {
+                // Target is one supply ship
+                const target = obj.units[0];
+
+                if (target.hp <= 0 || target.state === "sinking") {
+                    // Success!
+                    if (this.game.messageLog) this.game.addSystemMessage("✅ ภารกิจสำเร็จ: จมเรือเสบียงฝรั่งเศส! ได้รับ 200 ทอง");
+                    this.resources.gold += 200;
+                    this.updateResourceDisplay();
+                    this.activeSecondary = null;
+                    this.updateObjectivesDisplay();
+                } else if (target.y < -50) {
+                    // Escaped! (Failed)
+                    if (this.game.messageLog) this.game.addSystemMessage("❌ ภารกิจล้มเหลว: เรือเสบียงฝรั่งเศสหลบหนีไปได้");
+                    target.state = "escaped";
+                    this.activeSecondary = null;
+                    this.updateObjectivesDisplay();
+                } else {
+                    // Steer it up
+                    target.y -= target.speed * (deltaTime / 1000) * 60;
+                }
+            }
+        }
+    }
+
+    spawnSecondaryObjective() {
+        const roll = Math.random();
+
+        if (roll < 0.5) {
+            // Rescue Fishing Boats (Ally)
+            const count = Math.floor(Math.random() * 2) + 1; // 1 or 2 boats
+            const boats = [];
+            for (let i = 0; i < count; i++) {
+                const boat = this.navalCombat.createFishingBoat({
+                    x: this.game.canvas.width * 0.4 + (i * 100),
+                    y: -50 // Starts top
+                });
+                boats.push(boat);
+                this.playerShips.push(boat); // Adds to player side so they get targeted by French AI
+            }
+
+            this.activeSecondary = {
+                type: "rescue_fishing",
+                description: "คุ้มกันเรือประมงที่กำลังหนีลงใต้",
+                units: boats
+            };
+            if (this.game.messageLog) this.game.addSystemMessage("🚨 ภารกิจย่อย: เรือประมงหลงเข้ามาในพื้นที่ปะทะ! ช่วยคุ้มกันให้พวกเขาหนีรอด");
+        } else {
+            // Intercept Supply Ship (Enemy)
+            const ship = this.navalCombat.createSupplyShip({
+                x: this.game.canvas.width * 0.4 + (Math.random() * 200),
+                y: this.game.canvas.height + 50 // Starts bottom
+            });
+            this.frenchShips.push(ship);
+
+            this.activeSecondary = {
+                type: "intercept_supply",
+                description: "ทำลายเรือส่งเสบียงฝรั่งเศส",
+                units: [ship]
+            };
+            if (this.game.messageLog) this.game.addSystemMessage("🚨 ภารกิจย่อย: ตรวจพบเรือส่งเสบียงฝรั่งเศสกำลังแล่นขึ้นเหนือ! ทำลายมันซะ");
         }
 
         this.updateObjectivesDisplay();

@@ -378,7 +378,7 @@ class FrenchAI {
 
         // Target is dead
         if (target.hp !== undefined && target.hp <= 0) return false;
-        if (target.state === "destroyed" || target.state === "sinking") return false;
+        if (target.state === "destroyed" || target.state === "sinking" || target.state === "escaped") return false;
 
         // Out of range
         let effectiveRange = attacker.range;

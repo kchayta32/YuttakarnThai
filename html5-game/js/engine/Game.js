@@ -1410,6 +1410,13 @@ export class Game {
             building.selected = false;
         }
 
+        // Campaign 3 unique units
+        if (this.campaign && this.campaign.coastalSoldiers) {
+            for (const soldier of this.campaign.coastalSoldiers) {
+                soldier.selected = false;
+            }
+        }
+
         // Hide training panel
         this.selectedBuilding = null;
         document.getElementById('training-panel')?.classList.add('hidden');

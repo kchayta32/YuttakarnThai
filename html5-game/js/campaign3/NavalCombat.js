@@ -152,12 +152,15 @@ class NavalCombat {
             armor: 0,
             attack: config.attack || 15,
             range: config.range || 200,
-            speed: 0, // Stationary defenese usually
+            speed: config.speed || 30, // Need speed to walk to repair targets
             angle: 0,
 
             state: "idle",
-            target: null,
+            target: null, // Enemy target
+            repairTarget: null, // Friendly target to heal
             lastFireTime: 0,
+            lastRepairTime: 0,
+            isMoving: false,
 
             spriteKey: "soldier"
         };
@@ -234,6 +237,68 @@ class NavalCombat {
             isMoving: true,
 
             spriteKey: spriteKey,
+            lastWakeTime: 0
+        };
+    }
+
+    /**
+     * Create Fishing Boat (Secondary Objective)
+     */
+    createFishingBoat(config) {
+        return {
+            id: `fishing_boat_${Date.now()}_${Math.random()}`,
+            team: 0, // Ally
+            type: "FishingBoat",
+            x: config.x || 0,
+            y: config.y || 0,
+            width: config.width || 20,
+            height: config.height || 50,
+            hp: config.hp || 100,
+            maxHp: config.maxHp || 100,
+            armor: 0,
+            attack: 0, // Cannot attack
+            range: 0,
+            speed: config.speed || 1.0,
+            angle: Math.PI / 2, // Facing down (heading south)
+
+            state: "moving",
+            target: null,
+            lastFireTime: 0,
+            isMoving: true,
+
+            spriteKey: "fishingBoat", // Fallback will be rendered 
+            lastWakeTime: 0
+        };
+    }
+
+    /**
+     * Create Supply Ship (Secondary Objective)
+     */
+    createSupplyShip(config) {
+        return {
+            id: `supply_ship_${Date.now()}_${Math.random()}`,
+            team: 1, // Enemy
+            type: "SupplyShip",
+            x: config.x || 0,
+            y: config.y || 0,
+            width: config.width || 30,
+            height: config.height || 70,
+            hp: config.hp || 250,
+            maxHp: config.maxHp || 250,
+            armor: 5,
+            attack: 0, // Cannot attack (or very weak)
+            range: 0,
+            speed: config.speed || 1.2,
+            angle: -Math.PI / 2, // Facing up (heading north)
+
+            baseSpeed: config.speed || 1.2,
+
+            state: "moving",
+            target: null,
+            lastFireTime: 0,
+            isMoving: true,
+
+            spriteKey: "supplyShip",
             lastWakeTime: 0
         };
     }
@@ -428,7 +493,7 @@ class NavalCombat {
                 let minDist = Infinity;
 
                 enemyShips.forEach(enemy => {
-                    if (enemy.hp <= 0 || enemy.state === "sinking") return;
+                    if (enemy.hp <= 0 || enemy.state === "sinking" || enemy.state === "escaped") return;
 
                     const dist = Math.hypot(enemy.x - ship.x, enemy.y - ship.y);
                     if (dist < minDist && dist <= effectiveRange) {
@@ -468,6 +533,122 @@ class NavalCombat {
                     ship.lastFireTime = now;
                 } else {
                     ship.target = null; // Out of range, find new
+                }
+            }
+        });
+    }
+
+    /**
+     * Update logic for Coastal Soldiers (attacking or repairing)
+     */
+    updateCoastalSoldiers(soldiers, enemyShips, deltaTime) {
+        const now = Date.now();
+        const repairRate = 1000; // Repair tick every 1000ms
+        const repairAmount = 5;
+
+        soldiers.forEach(soldier => {
+            if (soldier.hp <= 0 || soldier.state === "dead") return;
+
+            // 1. Check if repairing
+            if (soldier.repairTarget) {
+                const target = soldier.repairTarget.target;
+
+                // If target is destroyed or fully healed, stop repairing
+                if (!target || target.state === "destroyed" || target.hp >= target.maxHp) {
+                    soldier.repairTarget = null;
+                    if (target) target.isRepairing = false; // Clear fort repairing state
+                    return;
+                }
+
+                // Move towards target
+                const dist = Math.hypot(target.x - soldier.x, target.y - soldier.y);
+                const repairRange = target.width ? target.width / 2 + 20 : 50; // Fort has width, batteries have radius
+
+                if (dist > repairRange) {
+                    // Walk to target
+                    const angle = Math.atan2(target.y - soldier.y, target.x - soldier.x);
+                    soldier.x += Math.cos(angle) * soldier.speed * deltaTime;
+                    soldier.y += Math.sin(angle) * soldier.speed * deltaTime;
+                    soldier.angle = angle;
+                    soldier.isMoving = true;
+
+                    if (soldier.repairTarget.type === 'fort') {
+                        target.isRepairing = false; // Not repairing yet, just walking
+                    }
+                } else {
+                    // Reached target, start repairing
+                    soldier.isMoving = false;
+
+                    if (now - (soldier.lastRepairTime || 0) > repairRate) {
+                        target.hp = Math.min(target.maxHp, target.hp + repairAmount);
+                        soldier.lastRepairTime = now;
+
+                        if (soldier.repairTarget.type === 'fort') {
+                            target.isRepairing = true;
+                            target.lastRepairTime = now;
+                        }
+
+                        // Create repair particle effect
+                        this.createEffect({
+                            type: "spark",
+                            x: target.x + (Math.random() * 40 - 20),
+                            y: target.y + (Math.random() * 40 - 20),
+                            duration: 300,
+                            scale: 0.5
+                        });
+                    }
+                }
+                return; // Skip attacking if busy repairing
+            }
+
+            // 2. Default logic: Auto-attack enemies
+            if (!soldier.fireRate) soldier.fireRate = 1500;
+
+            let effectiveRange = soldier.range;
+            if (this.weather && this.weather.state === "fog") {
+                effectiveRange *= 0.6;
+            }
+
+            // Find target
+            if (!soldier.target || soldier.target.hp <= 0) {
+                let closest = null;
+                let minDist = Infinity;
+                enemyShips.forEach(enemy => {
+                    if (enemy.hp <= 0 || enemy.state === "sinking") return;
+                    const dist = Math.hypot(enemy.x - soldier.x, enemy.y - soldier.y);
+                    if (dist < minDist && dist <= effectiveRange) {
+                        minDist = dist;
+                        closest = enemy;
+                    }
+                });
+                soldier.target = closest;
+            }
+
+            // Fire
+            if (soldier.target && now - (soldier.lastFireTime || 0) > soldier.fireRate) {
+                const dist = Math.hypot(soldier.target.x - soldier.x, soldier.target.y - soldier.y);
+                if (dist <= effectiveRange) {
+                    let angle = Math.atan2(soldier.target.y - soldier.y, soldier.target.x - soldier.x);
+
+                    if (this.weather) {
+                        let spread = 0.1; // Default inaccuracy
+                        if (this.weather.state === "fog") spread += 0.4;
+                        else if (this.weather.state === "rain") spread += 0.1;
+                        angle += (Math.random() * spread) - (spread / 2);
+                    }
+
+                    this.fireProjectile(soldier, {
+                        x: soldier.x,
+                        y: soldier.y,
+                        angle: angle,
+                        team: 0,
+                        type: "bullet",
+                        speed: 600,
+                        scale: 0.3
+                    });
+                    soldier.lastFireTime = now;
+                } else {
+                    soldier.target = null;
                 }
             }
         });
@@ -702,6 +883,33 @@ class NavalCombat {
                 ctx.rotate(ship.angle);
             }
 
+            // Draw selection ring
+            if (ship.selected) {
+                ctx.beginPath();
+                ctx.arc(0, 0, Math.max(ship.width, ship.height) * 0.8, 0, Math.PI * 2);
+                ctx.strokeStyle = "#00FF00";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw line to repair target if moving to repair
+                if (ship.repairTarget && ship.repairTarget.target) {
+                    // Must draw from world space so we invert rotation/translation momentarily
+                    ctx.restore();
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.moveTo(ship.x, ship.y);
+                    ctx.lineTo(ship.repairTarget.target.x, ship.repairTarget.target.y);
+                    ctx.strokeStyle = "rgba(0, 255, 0, 0.5)";
+                    ctx.setLineDash([5, 5]);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+
+                    // Re-apply original transform for sprite drawing
+                    ctx.translate(ship.x, ship.y);
+                    ctx.rotate(ship.angle);
+                }
+            }
+
             // Draw Sprite
             let sprite = null;
             if (ship.spriteKey && this.sprites.ships[ship.spriteKey]) {
@@ -770,6 +978,25 @@ class NavalCombat {
             ctx.beginPath();
             ctx.arc(0, 0, ship.width / 2, 0, Math.PI * 2);
             ctx.fill();
+        } else if (ship.type === "FishingBoat") {
+            ctx.fillStyle = "#8B4513"; // SaddleBrown wood color
+            ctx.fillRect(-ship.width / 2.5, -ship.height / 4, ship.width * 0.8, ship.height / 2);
+            // Little sail
+            ctx.fillStyle = "#FFF";
+            ctx.beginPath();
+            ctx.moveTo(0, ship.height / 4);
+            ctx.lineTo(-ship.width / 2, -ship.height / 4);
+            ctx.lineTo(ship.width / 2, -ship.height / 4);
+            ctx.closePath();
+            ctx.fill();
+        } else if (ship.type === "SupplyShip") {
+            // Big blocky cargo ship
+            ctx.fillStyle = "#8c4a4a";
+            ctx.fillRect(-ship.width / 2, -ship.height / 2, ship.width, ship.height);
+            ctx.fillStyle = "#A0522D"; // Crates
+            ctx.fillRect(-ship.width / 3, -ship.height / 3, ship.width * 0.6, ship.height * 0.6);
+            ctx.fillStyle = "#FFF"; // Some canvas covers
+            ctx.fillRect(-ship.width / 4, -ship.height / 4, ship.width * 0.5, ship.height * 0.5);
         } else if (ship.type === "NavalMine") {
             // Draw a spiky circle for a mine
             ctx.fillStyle = "#4a4a4a"; // Dark iron color

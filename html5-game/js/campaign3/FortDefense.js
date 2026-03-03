@@ -364,7 +364,7 @@ class FortDefense {
      * Check if target is valid (alive and in range)
      */
     isValidTarget(target, source) {
-        if (!target || target.hp <= 0) return false;
+        if (!target || target.hp <= 0 || target.state === "sinking" || target.state === "escaped") return false;
 
         const dist = Math.hypot(target.x - source.x, target.y - source.y);
         return dist <= source.range;
@@ -382,7 +382,7 @@ class FortDefense {
         let bestScore = -Infinity;
 
         enemyShips.forEach(ship => {
-            if (ship.hp <= 0 || ship.state === "sinking") return;
+            if (ship.hp <= 0 || ship.state === "sinking" || ship.state === "escaped") return;
 
             const dist = Math.hypot(ship.x - source.x, ship.y - source.y);
 

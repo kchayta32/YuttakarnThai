@@ -294,6 +294,19 @@ export class InputHandler {
             }
         }
 
+        // Check Campaign 3 Coastal Soldiers
+        if (this.game.campaign && this.game.campaign.coastalSoldiers) {
+            for (const soldier of this.game.campaign.coastalSoldiers) {
+                if (soldier.team === 0 && soldier.state !== 'dead' &&
+                    worldX > soldier.x - soldier.width / 2 && worldX < soldier.x + soldier.width / 2 &&
+                    worldY > soldier.y - soldier.height / 2 && worldY < soldier.y + soldier.height / 2) {
+                    soldier.selected = true;
+                    this.game.updateUnitPanel();
+                    return;
+                }
+            }
+        }
+
         // Check buildings
         for (const building of this.game.buildings) {
             if (building.team === 0 && building.containsPoint(worldX, worldY)) {
@@ -328,6 +341,18 @@ export class InputHandler {
             }
         }
 
+        // Select Campaign 3 Coastal Soldiers in box
+        if (this.game.campaign && this.game.campaign.coastalSoldiers) {
+            for (const soldier of this.game.campaign.coastalSoldiers) {
+                if (soldier.team === 0 && soldier.state !== 'dead') {
+                    if (soldier.x >= minX && soldier.x <= maxX &&
+                        soldier.y >= minY && soldier.y <= maxY) {
+                        soldier.selected = true;
+                    }
+                }
+            }
+        }
+
         this.game.updateUnitPanel();
     }
 
@@ -339,7 +364,15 @@ export class InputHandler {
             return;
         }
 
-        const selectedUnits = this.game.getSelectedUnits();
+        let selectedUnits = this.game.getSelectedUnits();
+
+        // Include Campaign 3 selected soldiers
+        if (this.game.campaign && this.game.campaign.coastalSoldiers) {
+            selectedUnits = selectedUnits.concat(
+                this.game.campaign.coastalSoldiers.filter(s => s.selected)
+            );
+        }
+
         if (selectedUnits.length === 0) return;
 
         const worldX = this.mouse.worldX;
@@ -354,12 +387,65 @@ export class InputHandler {
             }
         }
 
+        // Check if clicking on Fort/Battery for repair (Campaign 3)
+        let targetRepair = null;
+        if (this.game.campaign && this.game.campaign.fortDefense) {
+            const fd = this.game.campaign.fortDefense;
+
+            // Check fort main base
+            if (fd.fort &&
+                worldX > fd.fort.x - fd.fort.width / 2 && worldX < fd.fort.x + fd.fort.width / 2 &&
+                worldY > fd.fort.y - fd.fort.height / 2 && worldY < fd.fort.y + fd.fort.height / 2) {
+                targetRepair = { type: 'fort', target: fd.fort };
+            }
+
+            // Check gun batteries
+            if (!targetRepair) {
+                for (const battery of fd.gunBatteries) {
+                    if (Math.hypot(worldX - battery.x, worldY - battery.y) < battery.radius) {
+                        targetRepair = { type: 'battery', target: battery };
+                        break;
+                    }
+                }
+            }
+        }
+
         if (targetEnemy) {
             // Attack command
             for (const unit of selectedUnits) {
-                unit.attackTarget(targetEnemy);
+                if (typeof unit.attackTarget === 'function') {
+                    unit.attackTarget(targetEnemy);
+                } else {
+                    unit.target = targetEnemy; // Support for varied unit types
+                }
             }
             this.game.createCommandEffect(worldX, worldY, 'attack');
+        } else if (targetRepair) {
+            // Repair command
+            let validRepairers = 0;
+            for (const unit of selectedUnits) {
+                if (unit.type === 'coastal_soldier' || unit.type === 'worker') {
+                    unit.repairTarget = targetRepair;
+                    unit.target = null; // Clear attack target
+
+                    // Route them to the target
+                    if (this.game.pathfinder) {
+                        const path = this.game.pathfinder.findPath(unit.x, unit.y, targetRepair.target.x, targetRepair.target.y);
+                        unit.setPath(path);
+                    } else {
+                        unit.moveTo(targetRepair.target.x, targetRepair.target.y);
+                    }
+                    validRepairers++;
+                }
+            }
+            if (validRepairers > 0) {
+                this.game.createCommandEffect(worldX, worldY, 'move'); // Or a specific 'repair' effect
+                if (this.game.messageLog) this.game.addSystemMessage("ทหารราบกำลังเดินไปซ่อมแซมป้อม");
+            } else {
+                // Not repairers, just move
+                this.moveUnitsToPoint(selectedUnits, worldX, worldY);
+                this.game.createCommandEffect(worldX, worldY, 'move');
+            }
         } else {
             // Move command with pathfinding
             this.moveUnitsToPoint(selectedUnits, worldX, worldY);
